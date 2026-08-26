@@ -22,7 +22,6 @@ enum { CACHE_BITS = 7, CACHE_SIZE = 1 << CACHE_BITS, SRC_CAP = 8192 };
 FFProgram g_cache[CACHE_SIZE];
 char      g_src[SRC_CAP];
 GLuint    g_bound;
-uint32_t  g_bound_serial;
 
 inline uint32_t hash_key(const FFKey &k) {
     const unsigned char *p = (const unsigned char *) &k;
@@ -91,6 +90,8 @@ void locate(FFProgram &p) {
         if (loc >= 0) gles.glUniform1i(loc, u);
     }
     gles.glUseProgram(g_bound);
+    p.mat_serial = 0;
+    p.uni_serial = 0;
 }
 
 FFProgram *build(const FFKey &k, FFProgram &slot) {
@@ -143,13 +144,17 @@ FFProgram *ffp_program(const FFKey &k) {
 
 void ffp_invalidate() {
     g_bound = 0;
-    g_bound_serial = 0;
+    /* Program pengguna mungkin menimpa uniform kita, jadi seluruh cache
+       pengunggahan ikut dibatalkan. */
+    for (unsigned i = 0; i < CACHE_SIZE; ++i) {
+        g_cache[i].mat_serial = 0;
+        g_cache[i].uni_serial = 0;
+    }
 }
 
 void ffp_reset() {
     memset(g_cache, 0, sizeof g_cache);
     g_bound = 0;
-    g_bound_serial = 0;
 }
 
 bool ffp_bind(const FFKey &k) {
@@ -159,51 +164,58 @@ bool ffp_bind(const FFKey &k) {
     if (g_bound != p->prog) {
         gles.glUseProgram(p->prog);
         g_bound = p->prog;
-        g_bound_serial = 0;          /* paksa unggah ulang seluruh uniform */
     }
 
-    const bool dirty = (g_bound_serial != g_ff.serial);
-    g_bound_serial = g_ff.serial;
-
-    if (dirty && p->u_mvp >= 0) {
-        float mvp[16];
-        mat4_mul(mvp, g_ff.pr[g_ff.pr_top], g_ff.mv[g_ff.mv_top]);
-        gles.glUniformMatrix4fv(p->u_mvp, 1, GL_FALSE, mvp);
-    }
-    if (dirty && p->u_mv >= 0)
-        gles.glUniformMatrix4fv(p->u_mv, 1, GL_FALSE, g_ff.mv[g_ff.mv_top]);
-    if (dirty && p->u_nrm >= 0) {
-        float nrm[9];
-        mat4_normal_matrix(nrm, g_ff.mv[g_ff.mv_top]);
-        gles.glUniformMatrix3fv(p->u_nrm, 1, GL_FALSE, nrm);
-    }
-
-    if (p->u_color >= 0)     gles.glUniform4fv(p->u_color, 1, g_ff.a.cur_color);
-    if (p->u_alpha_ref >= 0) gles.glUniform1f(p->u_alpha_ref, g_ff.a.alpha_ref);
-
-    if (p->u_fog_color >= 0) {
-        gles.glUniform4fv(p->u_fog_color, 1, g_ff.a.fog_color);
-        gles.glUniform1f(p->u_fog_start, g_ff.a.fog_start);
-        gles.glUniform1f(p->u_fog_end, g_ff.a.fog_end);
-        gles.glUniform1f(p->u_fog_density, g_ff.a.fog_density);
-    }
-
-    if (p->u_lm_ambient >= 0) {
-        gles.glUniform4fv(p->u_lm_ambient, 1, g_ff.a.lm_ambient);
-        for (int i = 0; i < FF_MAX_LIGHTS; ++i) {
-            if (p->u_light_pos[i] < 0) continue;
-            gles.glUniform4fv(p->u_light_pos[i],  1, g_ff.a.light[i].position);
-            gles.glUniform4fv(p->u_light_diff[i], 1, g_ff.a.light[i].diffuse);
-            gles.glUniform4fv(p->u_light_amb[i],  1, g_ff.a.light[i].ambient);
+    /* Blok matriks: hanya diunggah ulang bila ada matriks yang berubah. */
+    if (p->mat_serial != g_ff.serial) {
+        p->mat_serial = g_ff.serial;
+        if (p->u_mvp >= 0) {
+            float mvp[16];
+            mat4_mul(mvp, g_ff.pr[g_ff.pr_top], g_ff.mv[g_ff.mv_top]);
+            gles.glUniformMatrix4fv(p->u_mvp, 1, GL_FALSE, mvp);
         }
+        if (p->u_mv >= 0)
+            gles.glUniformMatrix4fv(p->u_mv, 1, GL_FALSE, g_ff.mv[g_ff.mv_top]);
+        if (p->u_nrm >= 0) {
+            float nrm[9];
+            mat4_normal_matrix(nrm, g_ff.mv[g_ff.mv_top]);
+            gles.glUniformMatrix3fv(p->u_nrm, 1, GL_FALSE, nrm);
+        }
+        for (int u = 0; u < FF_MAX_TEX; ++u)
+            if (p->u_tex_mat[u] >= 0)
+                gles.glUniformMatrix4fv(p->u_tex_mat[u], 1, GL_FALSE, ff_tex_matrix(u));
     }
 
-    for (int u = 0; u < FF_MAX_TEX; ++u) {
-        const TexEnv &t = g_ff.a.tex[u];
-        if (p->u_tex_mat[u] >= 0)
-            gles.glUniformMatrix4fv(p->u_tex_mat[u], 1, GL_FALSE, ff_tex_matrix(u));
-        if (p->u_tg_s[u] >= 0) gles.glUniform4fv(p->u_tg_s[u], 1, t.gen_plane[0]);
-        if (p->u_tg_t[u] >= 0) gles.glUniform4fv(p->u_tg_t[u], 1, t.gen_plane[1]);
+    /* Blok sisanya: warna, uji alpha, kabut, cahaya, bidang texgen.
+       Dulu semuanya diunggah pada setiap draw call - sampai 50 panggilan
+       glUniform per gambar. Sekarang hanya saat state-nya benar-benar berubah. */
+    if (p->uni_serial != g_ff.uni_serial) {
+        p->uni_serial = g_ff.uni_serial;
+        if (p->u_color >= 0)     gles.glUniform4fv(p->u_color, 1, g_ff.a.cur_color);
+        if (p->u_alpha_ref >= 0) gles.glUniform1f(p->u_alpha_ref, g_ff.a.alpha_ref);
+
+        if (p->u_fog_color >= 0) {
+            gles.glUniform4fv(p->u_fog_color, 1, g_ff.a.fog_color);
+            gles.glUniform1f(p->u_fog_start, g_ff.a.fog_start);
+            gles.glUniform1f(p->u_fog_end, g_ff.a.fog_end);
+            gles.glUniform1f(p->u_fog_density, g_ff.a.fog_density);
+        }
+
+        if (p->u_lm_ambient >= 0) {
+            gles.glUniform4fv(p->u_lm_ambient, 1, g_ff.a.lm_ambient);
+            for (int i = 0; i < FF_MAX_LIGHTS; ++i) {
+                if (p->u_light_pos[i] < 0) continue;
+                gles.glUniform4fv(p->u_light_pos[i],  1, g_ff.a.light[i].position);
+                gles.glUniform4fv(p->u_light_diff[i], 1, g_ff.a.light[i].diffuse);
+                gles.glUniform4fv(p->u_light_amb[i],  1, g_ff.a.light[i].ambient);
+            }
+        }
+
+        for (int u = 0; u < FF_MAX_TEX; ++u) {
+            const TexEnv &t = g_ff.a.tex[u];
+            if (p->u_tg_s[u] >= 0) gles.glUniform4fv(p->u_tg_s[u], 1, t.gen_plane[0]);
+            if (p->u_tg_t[u] >= 0) gles.glUniform4fv(p->u_tg_t[u], 1, t.gen_plane[1]);
+        }
     }
     return true;
 }

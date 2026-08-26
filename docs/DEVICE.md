@@ -1,4 +1,4 @@
-# Uji Perangkat Pertama
+# Uji Perangkat
 
 Xiaomi M2003J15SC (Redmi Note 9), Mali-G52, Android 11, Zalith Launcher 1.4.1.4,
 Minecraft 1.12.2 + OptiFine HD U G5.
@@ -81,6 +81,88 @@ nilai kembalian `glCheckFramebufferStatus` (bukan masukan), satu positif palsu,
 satu bit mask `glPushAttrib`, dan satu argumen `glLogicOp` yang memang no-op.
 
 Audit ini sekarang berjalan sebagai bagian dari `tools/regen.py`.
+
+## Uji kedua: berjalan
+
+Build 0.6.1, perangkat yang sama. Tidak ada crash report.
+
+```
+[OptiFine] OpenGL: Oryon 0.6.1 on Mali-G52, version 2.1 Oryon, Oryon
+[OptiFine] Maximum texture size: 8192x8192        <- dulu -1x-1
+Created: 1024x512 textures-atlas                  <- dulu crash di sini
+[OptiFine] Animated sprites: 22
+Starting integrated minecraft server version 1.12.2
+Preparing spawn area: 0% ... 31% ... 75%
+NidzarMX logged in with entity id 243 at (1656.42, 67.0, 836.73)
+NidzarMX joined the game
+Grab: true
+```
+
+Ukuran tekstur maksimum sekarang terbaca 8192, atlas terjahit, dunia dimuat,
+dan pemain masuk ke permainan. Tidak ada lagi baris `GL ERROR` di seluruh log -
+perbaikan `GL_RGBA_MODE` dan `GL_POLYGON_MODE` menghapus `1280: Invalid enum`
+yang sebelumnya muncul di "Pre startup".
+
+`Grab: true` lalu `false` lalu `true` lagi menunjukkan pemain benar-benar
+berinteraksi: masuk dunia, membuka menu jeda, kembali bermain.
+
+### Catatan performa
+
+```
+[Server thread/WARN]: Can't keep up! Running 5900ms behind, skipping 118 tick(s)
+Changing view distance to 2, from 10
+```
+
+Ini thread server, bukan render, dan terjadi tepat saat pembuatan dunia di
+perangkat kelas menengah. Tetap jadi alasan untuk memangkas biaya jalur gambar,
+dan pemeriksaan pertama menemukan satu pemborosan besar:
+
+`ffp_bind()` mengunggah **setiap** uniform pada **setiap** draw call - warna,
+uji alpha, empat uniform kabut, sampai 24 uniform cahaya, dan 16 uniform texgen.
+Untuk kunci state terberat itu lebih dari 40 panggilan `glUniform` per gambar,
+dan Minecraft mengeluarkan ribuan gambar per frame.
+
+Sekarang uniform dipecah dua blok, masing-masing dijaga penanda serial
+per-program: blok matriks naik saat matriks berubah, blok sisanya naik saat
+warna, uji alpha, kabut, cahaya, atau bidang texgen berubah. Dalam keadaan
+tunak, biayanya turun jadi nol panggilan.
+
+## Uji ketiga: tangan, entitas, dan item hilang
+
+Terrain tampil, tetapi tangan pemain, entitas, dan item tidak. Ketiganya punya
+satu kesamaan yang terrain tidak punya: digambar lewat `ModelRenderer`.
+
+```java
+private void compileDisplayList(float scale) {
+    this.displayList = GLAllocation.generateDisplayLists(1);
+    GlStateManager.glNewList(this.displayList, GL11.GL_COMPILE);
+    for (ModelBox box : this.cubeList) {
+        box.render(bufferbuilder, scale);   // begin -> vertex -> draw, per KOTAK
+    }
+    GlStateManager.glEndList();
+}
+```
+
+Satu display list berisi **satu gambar per kotak model**, dan model biped punya
+enam. Perekam display list Oryon hanya menyimpan satu `RecDraw` - dialokasikan
+di `glNewList`, ditambahkan ke list di `glEndList`. Akibatnya `mode` dan `count`
+tertimpa oleh gambar terakhir, sementara daftar atributnya justru menumpuk dari
+semua gambar. Yang tersisa satu gambar rusak; entitas praktis tidak muncul.
+
+Sekarang tiap `submit()` menyimpan gambarnya sendiri lalu mengosongkan slot
+rekaman untuk gambar berikutnya.
+
+`tests/entity_test.cpp` meniru jalur itu apa adanya - nilai cahaya persis dari
+`RenderHelper.enableStandardItemLighting()`, tata letak vertex persis
+`OLDMODEL_POSITION_TEX_NORMAL`, tiga kotak dalam satu list, lalu satu list berisi
+dua belas kotak. Tes yang sama juga memeriksa pencahayaannya benar-benar
+dihitung: tiga kotak dengan normal berbeda harus menghasilkan tiga tingkat
+kecerahan yang berbeda, dan nilai harapannya dihitung dari rumus yang sama
+dengan shader - bukan angka yang ditanam.
+
+Menariknya, jalur langsung (tanpa display list) sudah benar sejak awal. Itu
+menjelaskan mengapa terrain baik-baik saja: terrain tidak pernah lewat display
+list.
 
 ## Catatan lingkup: OptiFine
 

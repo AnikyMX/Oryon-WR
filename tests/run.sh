@@ -25,3 +25,7 @@ LIBGL_ALWAYS_SOFTWARE=1 ./build/render_test
 echo
 echo "########## Tahap 6: tekstur, display list, shader Minecraft ##########"
 LIBGL_ALWAYS_SOFTWARE=1 ./build/stage6_test
+
+echo
+echo "########## Jalur entitas: display list + pencahayaan ##########"
+LIBGL_ALWAYS_SOFTWARE=1 ./build/entity_test

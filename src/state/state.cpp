@@ -10,7 +10,7 @@ State g_state;
    Lihat docs/ARCHITECTURE.md bagian 4 sebelum mengubah angka ini. */
 /* Naikkan tiap rilis: string ini muncul di log Minecraft, jadi bisa dipakai
    memastikan build mana yang sedang berjalan di perangkat. */
-#define ORYON_BUILD "0.6.1"
+#define ORYON_BUILD "0.6.3"
 
 static const char kVersion[]  = "2.1 Oryon";
 static const char kGlsl[]     = "1.20";

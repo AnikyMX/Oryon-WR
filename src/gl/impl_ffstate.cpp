@@ -123,6 +123,7 @@ ORYON_API void glAlphaFunc(GLenum func, GLclampf ref) {
     if (func < GL_NEVER || func > GL_ALWAYS) { set_error(GL_INVALID_ENUM); return; }
     A().alpha_func = func;
     A().alpha_ref  = ref < 0.0f ? 0.0f : (ref > 1.0f ? 1.0f : ref);
+    ff_touch_uniform();
 }
 
 /* ----------------------------------------------------------------- kabut -- */
@@ -135,9 +136,9 @@ void fog_scalar(GLenum pname, float v) {
         a.fog_mode = (uint8_t) (v == (float) GL_LINEAR ? FOG_LINEAR
                               : v == (float) GL_EXP2   ? FOG_EXP2 : FOG_EXP);
         return;
-    case GL_FOG_DENSITY: a.fog_density = v; return;
-    case GL_FOG_START:   a.fog_start = v; return;
-    case GL_FOG_END:     a.fog_end = v; return;
+    case GL_FOG_DENSITY: a.fog_density = v; ff_touch_uniform(); return;
+    case GL_FOG_START:   a.fog_start = v; ff_touch_uniform(); return;
+    case GL_FOG_END:     a.fog_end = v; ff_touch_uniform(); return;
     case GL_FOG_INDEX:   return;                 /* mode indeks warna: tidak ada */
     default: set_error(GL_INVALID_ENUM); return;
     }
@@ -149,7 +150,11 @@ ORYON_API void glFogi(GLenum pname, GLint param)   { fog_scalar(pname, (float) p
 
 ORYON_API void glFogfv(GLenum pname, const GLfloat *params) {
     if (!params) return;
-    if (pname == GL_FOG_COLOR) { memcpy(A().fog_color, params, 4 * sizeof(float)); return; }
+    if (pname == GL_FOG_COLOR) {
+        memcpy(A().fog_color, params, 4 * sizeof(float));
+        ff_touch_uniform();
+        return;
+    }
     fog_scalar(pname, params[0]);
 }
 
@@ -161,12 +166,15 @@ ORYON_API void glLightfv(GLenum light, GLenum pname, const GLfloat *params) {
     if (i < 0 || i >= FF_MAX_LIGHTS) { set_error(GL_INVALID_ENUM); return; }
     Light &L = A().light[i];
     switch (pname) {
-    case GL_AMBIENT:  memcpy(L.ambient, params, 4 * sizeof(float)); return;
-    case GL_DIFFUSE:  memcpy(L.diffuse, params, 4 * sizeof(float)); return;
+    case GL_AMBIENT:  memcpy(L.ambient, params, 4 * sizeof(float));
+                      ff_touch_uniform(); return;
+    case GL_DIFFUSE:  memcpy(L.diffuse, params, 4 * sizeof(float));
+                      ff_touch_uniform(); return;
     case GL_SPECULAR: return;   /* Minecraft menyetelnya hitam; shader mengabaikannya */
     case GL_POSITION:
         /* Aturan GL: posisi ditransformasi oleh modelview SAAT ditetapkan. */
         mat4_xform(L.position, g_ff.mv[g_ff.mv_top], params);
+        ff_touch_uniform();
         return;
     default:
         ORYON_LOG("glLightfv pname 0x%X diabaikan", pname);
@@ -178,6 +186,7 @@ ORYON_API void glLightModelfv(GLenum pname, const GLfloat *params) {
     if (!params) return;
     if (pname == GL_LIGHT_MODEL_AMBIENT) {
         memcpy(A().lm_ambient, params, 4 * sizeof(float));
+        ff_touch_uniform();
         return;
     }
     ORYON_LOG("glLightModelfv pname 0x%X diabaikan", pname);
@@ -286,6 +295,7 @@ ORYON_API void glTexGenfv(GLenum coord, GLenum pname, const GLfloat *params) {
 
     if (pname == GL_OBJECT_PLANE) {
         memcpy(t.gen_plane[c], params, 4 * sizeof(float));
+        ff_touch_uniform();
         return;
     }
     if (pname == GL_EYE_PLANE) {
@@ -298,6 +308,7 @@ ORYON_API void glTexGenfv(GLenum coord, GLenum pname, const GLfloat *params) {
         } else {
             memcpy(t.gen_plane[c], params, 4 * sizeof(float));
         }
+        ff_touch_uniform();
         return;
     }
     if (pname == GL_TEXTURE_GEN_MODE) {
@@ -333,6 +344,7 @@ ORYON_API void glClientActiveTextureARB(GLenum t) { set_client_active(t); }
 ORYON_API void glColor4f(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
     float *c = A().cur_color;
     c[0] = r; c[1] = g; c[2] = b; c[3] = a;
+    ff_touch_uniform();
     /* Tahap 5 menambahkan penerbitan per-vertex saat di antara glBegin/glEnd. */
 }
 
@@ -353,5 +365,6 @@ ORYON_API void glPushAttrib(GLbitfield mask) {
 ORYON_API void glPopAttrib(void) {
     if (g_ff.saved_top == 0) { set_error(GL_STACK_UNDERFLOW); return; }
     g_ff.a = g_ff.saved[--g_ff.saved_top];
+    ff_touch_uniform();
     gles.glActiveTexture((GLenum) (GL_TEXTURE0 + g_ff.a.active_tex));
 }

@@ -188,8 +188,33 @@ void draw_now(GLenum mode, GLsizei count) {
     gles.glDrawArrays(gles_mode(mode), 0, count);
 }
 
+void list_append(const RecDraw &r) {
+    DList &l = s_lists[s_rec_list - 1];
+    if (l.n >= l.cap) {
+        const unsigned cap = l.cap ? l.cap * 2 : 8;
+        RecDraw *p = (RecDraw *) realloc(l.draws, (size_t) cap * sizeof(RecDraw));
+        if (!p) return;
+        l.draws = p;
+        l.cap = cap;
+    }
+    l.draws[l.n++] = r;
+}
+
 void submit(GLenum mode, GLsizei count) {
-    if (s_rec) { s_rec->mode = mode; s_rec->count = count; return; }
+    if (s_rec) {
+        /* Satu display list bisa berisi BANYAK gambar. ModelRenderer milik
+           Minecraft merekam satu gambar per kotak model - model biped punya
+           enam - jadi menyimpan hanya satu berarti entitas, tangan, dan item
+           tidak pernah muncul. Tiap submit disimpan di sini, lalu slot rekaman
+           dikosongkan untuk gambar berikutnya. */
+        s_rec->mode = mode;
+        s_rec->count = count;
+        list_append(*s_rec);
+        s_rec->nattr = 0;
+        s_rec->own_vbo = 0;
+        s_rec->count = 0;
+        return;
+    }
     draw_now(mode, count);
 }
 
@@ -539,15 +564,7 @@ bool list_new(GLuint list, GLenum mode) {
 
 void list_end() {
     if (!s_rec) return;
-    DList &l = s_lists[s_rec_list - 1];
-    if (s_rec->count > 0) {
-        if (l.n >= l.cap) {
-            const unsigned cap = l.cap ? l.cap * 2 : 4;
-            RecDraw *p = (RecDraw *) realloc(l.draws, (size_t) cap * sizeof(RecDraw));
-            if (p) { l.draws = p; l.cap = cap; }
-        }
-        if (l.n < l.cap) l.draws[l.n++] = *s_rec;
-    }
+    /* Setiap gambar sudah disimpan saat submit; di sini hanya membereskan. */
     free(s_rec);
     s_rec = 0;
     if (s_rec_execute) list_call(s_rec_list);

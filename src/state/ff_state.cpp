@@ -15,6 +15,7 @@ void ff_init() {
     mat4_identity(g_ff.pr[0]);
     for (int u = 0; u < FF_MAX_TEX; ++u) mat4_identity(g_ff.tx[u][0]);
     g_ff.serial = 1;
+    g_ff.uni_serial = 1;
 
     FFAttribState &a = g_ff.a;
     a.fog_mode    = FOG_EXP;

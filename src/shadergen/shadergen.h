@@ -33,6 +33,8 @@ struct FFProgram {
     GLint  u_tex_mat[FF_MAX_TEX];
     GLint  u_tg_s[FF_MAX_TEX];
     GLint  u_tg_t[FF_MAX_TEX];
+    uint32_t mat_serial;   /* serial matriks terakhir yang diunggah */
+    uint32_t uni_serial;   /* serial uniform lain terakhir yang diunggah */
     bool   used;
 };
 

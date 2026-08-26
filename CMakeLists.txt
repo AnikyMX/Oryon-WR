@@ -107,4 +107,16 @@ if(ORYON_BUILD_TESTS AND NOT ANDROID)
         target_compile_definitions(stage6_test PRIVATE ORYON_DEBUG=1)
     endif()
     target_link_libraries(stage6_test PRIVATE EGL ${CMAKE_DL_LIBS} m)
+
+    add_executable(entity_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/entity_test.cpp"
+        ${ORYON_SOURCES})
+    target_include_directories(entity_test PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/include"
+        "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_compile_options(entity_test PRIVATE -fno-exceptions -fno-rtti)
+    if(ORYON_DEBUG)
+        target_compile_definitions(entity_test PRIVATE ORYON_DEBUG=1)
+    endif()
+    target_link_libraries(entity_test PRIVATE EGL ${CMAKE_DL_LIBS} m)
 endif()

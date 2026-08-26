@@ -16,7 +16,8 @@ Itu satu-satunya integrasi yang dibutuhkan.
 
 ## Status
 
-**Tahap 6 selesai**, plus perbaikan dari uji perangkat pertama (Mali-G52, Android 11).
+**Berjalan di perangkat.** Minecraft 1.12.2 + OptiFine masuk ke dunia di
+Xiaomi Redmi Note 9 (Mali-G52, Android 11) lewat Zalith Launcher.
 Lihat `docs/DEVICE.md`.
 
 | tahap | isi | status |
@@ -28,6 +29,8 @@ Lihat `docs/DEVICE.md`.
 | 5 | Mode langsung, client array, jalur gambar | selesai |
 | 6 | Tekstur, display list, GLSL Minecraft | selesai |
 | 6b | Tekstur proxy + audit enum (dari log perangkat) | selesai |
+| 6c | Uniform dijaga serial (dari catatan performa perangkat) | selesai |
+| 6d | Display list banyak-gambar (entitas hilang di perangkat) | selesai |
 
 ## Angka
 

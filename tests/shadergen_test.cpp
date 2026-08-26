@@ -249,6 +249,37 @@ int main(int argc, char **argv) {
     ok(ffp_bind(cases[13].k), "bind kedua (jalur cache) berhasil");
     ok(gles.glGetError() == GL_NO_ERROR, "tetap tanpa error GL");
 
+    /* ------------------------------------- penjagaan unggahan uniform ---- */
+    puts("\n== Unggahan uniform hanya saat state berubah ==");
+    {
+        FFKey k = cases[9].k;                 /* kunci dengan cahaya + warna */
+        FFProgram *p = ffp_program(k);
+        ok(p != 0, "program tersedia");
+        if (p) {
+            ffp_bind(k);
+            ok(p->uni_serial == g_ff.uni_serial && p->mat_serial == g_ff.serial,
+               "setelah bind pertama, kedua serial sinkron");
+
+            const uint32_t before = g_ff.uni_serial;
+            ffp_bind(k);
+            ok(g_ff.uni_serial == before && p->uni_serial == before,
+               "bind ulang tanpa perubahan state tidak mengunggah apa pun");
+
+            glColor4f(0.25f, 0.5f, 0.75f, 1.0f);
+            ok(g_ff.uni_serial != before, "glColor4f menandai uniform kotor");
+            ffp_bind(k);
+            ok(p->uni_serial == g_ff.uni_serial, "bind berikutnya menyusul serial baru");
+
+            const uint32_t m = g_ff.serial;
+            glMatrixMode(GL_MODELVIEW);
+            glTranslatef(1.0f, 0.0f, 0.0f);
+            ok(g_ff.serial != m, "glTranslatef menandai matriks kotor");
+            ok(p->uni_serial == g_ff.uni_serial,
+               "perubahan matriks TIDAK ikut mengotori blok uniform");
+            glLoadIdentity();
+        }
+    }
+
     if (dump) {
         for (int i = 0; i < ncase; ++i) {
             ffp_gen_vertex(cases[i].k, vs, sizeof vs);

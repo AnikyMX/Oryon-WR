@@ -99,7 +99,8 @@ struct FFState {
     float    mv[FF_MV_DEPTH][16];              int mv_top;
     float    pr[FF_PR_DEPTH][16];              int pr_top;
     float    tx[FF_MAX_TEX][FF_TX_DEPTH][16];  int tx_top[FF_MAX_TEX];
-    uint32_t serial;                           /* naik tiap matriks berubah */
+    uint32_t serial;      /* naik tiap matriks berubah */
+    uint32_t uni_serial;  /* naik tiap uniform non-matriks berubah */
 
     FFAttribState a;
 
@@ -113,6 +114,11 @@ ORYON_LOCAL void ff_init();
 ORYON_LOCAL float *ff_current_matrix();
 ORYON_LOCAL float *ff_tex_matrix(int unit);
 ORYON_LOCAL void ff_key(FFKey *out, uint16_t attr_tex, bool attr_color, bool attr_normal);
+
+/* Dipanggil tiap kali warna, uji alpha, kabut, cahaya, atau bidang texgen
+   berubah. Tanpa penanda ini, ffp_bind mengunggah ulang setiap uniform pada
+   SETIAP draw call - dan Minecraft mengeluarkan ribuan draw call per frame. */
+ORYON_INLINE void ff_touch_uniform() { ++g_ff.uni_serial; }
 
 }  /* namespace oryon */
 

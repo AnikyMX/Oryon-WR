@@ -1,0 +1,3326 @@
+{
+ "profile": [
+  "GL12",
+  "GL13",
+  "GL14",
+  "GL15",
+  "GL20",
+  "GL21",
+  "ARB_framebuffer_object"
+ ],
+ "gl_version_string": "2.1 Oryon",
+ "glsl_version_string": "1.20",
+ "export_count": 352,
+ "from_mc_callsites": 163,
+ "from_capability_flags": 189,
+ "strategy_counts": {
+  "direct": 117,
+  "immediate": 92,
+  "alias": 33,
+  "translate": 19,
+  "legacy_misc": 19,
+  "matrix": 15,
+  "texture": 13,
+  "buffer": 7,
+  "clientarr": 6,
+  "query": 5,
+  "texenv": 5,
+  "displaylist": 4,
+  "lighting": 4,
+  "draw": 4,
+  "fog": 3,
+  "capbits": 2,
+  "attribstack": 2,
+  "alphatest": 1,
+  "shader": 1
+ },
+ "missing_signature": [],
+ "exports": {
+  "glActiveTexture": {
+   "ret": "void",
+   "args": "GLenum texture",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glActiveTextureARB": {
+   "ret": "void",
+   "args": "GLenum texture",
+   "strategy": "alias",
+   "gles": "glActiveTexture",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glAlphaFunc": {
+   "ret": "void",
+   "args": "GLenum func, GLclampf ref",
+   "strategy": "alphatest",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glAttachObjectARB": {
+   "ret": "void",
+   "args": "GLhandleARB containerObj, GLhandleARB obj",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glAttachShader": {
+   "ret": "void",
+   "args": "GLuint program, GLuint shader",
+   "strategy": "direct",
+   "gles": "glAttachShader",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glBegin": {
+   "ret": "void",
+   "args": "GLenum mode",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBeginQuery": {
+   "ret": "void",
+   "args": "GLenum target, GLuint id",
+   "strategy": "direct",
+   "gles": "glBeginQuery",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glBindAttribLocation": {
+   "ret": "void",
+   "args": "GLuint program, GLuint index, const GLchar *name",
+   "strategy": "direct",
+   "gles": "glBindAttribLocation",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glBindBuffer": {
+   "ret": "void",
+   "args": "GLenum target, GLuint buffer",
+   "strategy": "buffer",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glBindBufferARB": {
+   "ret": "void",
+   "args": "GLenum target, GLuint buffer",
+   "strategy": "alias",
+   "gles": "glBindBuffer",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBindFramebuffer": {
+   "ret": "void",
+   "args": "GLenum target, GLuint framebuffer",
+   "strategy": "direct",
+   "gles": "glBindFramebuffer",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glBindFramebufferEXT": {
+   "ret": "void",
+   "args": "GLenum target, GLuint framebuffer",
+   "strategy": "alias",
+   "gles": "glBindFramebuffer",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBindRenderbuffer": {
+   "ret": "void",
+   "args": "GLenum target, GLuint renderbuffer",
+   "strategy": "direct",
+   "gles": "glBindRenderbuffer",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glBindRenderbufferEXT": {
+   "ret": "void",
+   "args": "GLenum target, GLuint renderbuffer",
+   "strategy": "alias",
+   "gles": "glBindRenderbuffer",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBindTexture": {
+   "ret": "void",
+   "args": "GLenum target, GLuint texture",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBlendColor": {
+   "ret": "void",
+   "args": "GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha",
+   "strategy": "direct",
+   "gles": "glBlendColor",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glBlendEquation": {
+   "ret": "void",
+   "args": "GLenum mode",
+   "strategy": "direct",
+   "gles": "glBlendEquation",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glBlendEquationSeparate": {
+   "ret": "void",
+   "args": "GLenum modeRGB, GLenum modeAlpha",
+   "strategy": "direct",
+   "gles": "glBlendEquationSeparate",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glBlendFunc": {
+   "ret": "void",
+   "args": "GLenum sfactor, GLenum dfactor",
+   "strategy": "direct",
+   "gles": "glBlendFunc",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBlendFuncSeparate": {
+   "ret": "void",
+   "args": "GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha",
+   "strategy": "direct",
+   "gles": "glBlendFuncSeparate",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glBlendFuncSeparateEXT": {
+   "ret": "void",
+   "args": "GLenum sfactorRGB, GLenum dfactorRGB, GLenum sfactorAlpha, GLenum dfactorAlpha",
+   "strategy": "alias",
+   "gles": "glBlendFuncSeparate",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBlitFramebuffer": {
+   "ret": "void",
+   "args": "GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter",
+   "strategy": "direct",
+   "gles": "glBlitFramebuffer",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glBufferData": {
+   "ret": "void",
+   "args": "GLenum target, GLsizeiptr size, const void *data, GLenum usage",
+   "strategy": "buffer",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glBufferDataARB": {
+   "ret": "void",
+   "args": "GLenum target, GLsizeiptrARB size, const void *data, GLenum usage",
+   "strategy": "alias",
+   "gles": "glBufferData",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glBufferSubData": {
+   "ret": "void",
+   "args": "GLenum target, GLintptr offset, GLsizeiptr size, const void *data",
+   "strategy": "buffer",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glCallList": {
+   "ret": "void",
+   "args": "GLuint list",
+   "strategy": "displaylist",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glCheckFramebufferStatus": {
+   "ret": "GLenum",
+   "args": "GLenum target",
+   "strategy": "direct",
+   "gles": "glCheckFramebufferStatus",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glCheckFramebufferStatusEXT": {
+   "ret": "GLenum",
+   "args": "GLenum target",
+   "strategy": "alias",
+   "gles": "glCheckFramebufferStatus",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glClear": {
+   "ret": "void",
+   "args": "GLbitfield mask",
+   "strategy": "direct",
+   "gles": "glClear",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glClearColor": {
+   "ret": "void",
+   "args": "GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha",
+   "strategy": "direct",
+   "gles": "glClearColor",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glClearDepth": {
+   "ret": "void",
+   "args": "GLclampd depth",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glClientActiveTexture": {
+   "ret": "void",
+   "args": "GLenum texture",
+   "strategy": "clientarr",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glClientActiveTextureARB": {
+   "ret": "void",
+   "args": "GLenum texture",
+   "strategy": "clientarr",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glColor4f": {
+   "ret": "void",
+   "args": "GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glColorMask": {
+   "ret": "void",
+   "args": "GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha",
+   "strategy": "direct",
+   "gles": "glColorMask",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glColorMaterial": {
+   "ret": "void",
+   "args": "GLenum face, GLenum mode",
+   "strategy": "lighting",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glColorPointer": {
+   "ret": "void",
+   "args": "GLint size, GLenum type, GLsizei stride, const GLvoid *ptr",
+   "strategy": "clientarr",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glCompileShader": {
+   "ret": "void",
+   "args": "GLuint shader",
+   "strategy": "direct",
+   "gles": "glCompileShader",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glCompileShaderARB": {
+   "ret": "void",
+   "args": "GLhandleARB shaderObj",
+   "strategy": "alias",
+   "gles": "glCompileShader",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glCompressedTexImage1D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLenum internalformat, GLsizei width, GLint border, GLsizei imageSize, const GLvoid *data",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glCompressedTexImage2D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glCompressedTexImage3D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLsizei imageSize, const GLvoid *data",
+   "strategy": "direct",
+   "gles": "glCompressedTexImage3D",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glCompressedTexSubImage1D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLsizei imageSize, const GLvoid *data",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glCompressedTexSubImage2D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid *data",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glCompressedTexSubImage3D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLsizei imageSize, const GLvoid *data",
+   "strategy": "direct",
+   "gles": "glCompressedTexSubImage3D",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glCopyTexSubImage2D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glCopyTexSubImage3D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLint x, GLint y, GLsizei width, GLsizei height",
+   "strategy": "direct",
+   "gles": "glCopyTexSubImage3D",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL12"
+   ]
+  },
+  "glCreateProgram": {
+   "ret": "GLuint",
+   "args": "void",
+   "strategy": "direct",
+   "gles": "glCreateProgram",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glCreateProgramObjectARB": {
+   "ret": "GLhandleARB",
+   "args": "void",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glCreateShader": {
+   "ret": "GLuint",
+   "args": "GLenum type",
+   "strategy": "direct",
+   "gles": "glCreateShader",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glCreateShaderObjectARB": {
+   "ret": "GLhandleARB",
+   "args": "GLenum shaderType",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glCullFace": {
+   "ret": "void",
+   "args": "GLenum mode",
+   "strategy": "direct",
+   "gles": "glCullFace",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDeleteBuffers": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *buffers",
+   "strategy": "direct",
+   "gles": "glDeleteBuffers",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glDeleteBuffersARB": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *buffers",
+   "strategy": "alias",
+   "gles": "glDeleteBuffers",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDeleteFramebuffers": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *framebuffers",
+   "strategy": "direct",
+   "gles": "glDeleteFramebuffers",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glDeleteFramebuffersEXT": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *framebuffers",
+   "strategy": "alias",
+   "gles": "glDeleteFramebuffers",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDeleteLists": {
+   "ret": "void",
+   "args": "GLuint list, GLsizei range",
+   "strategy": "displaylist",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDeleteObjectARB": {
+   "ret": "void",
+   "args": "GLhandleARB obj",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDeleteProgram": {
+   "ret": "void",
+   "args": "GLuint program",
+   "strategy": "direct",
+   "gles": "glDeleteProgram",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glDeleteQueries": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *ids",
+   "strategy": "direct",
+   "gles": "glDeleteQueries",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glDeleteRenderbuffers": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *renderbuffers",
+   "strategy": "direct",
+   "gles": "glDeleteRenderbuffers",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glDeleteRenderbuffersEXT": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *renderbuffers",
+   "strategy": "alias",
+   "gles": "glDeleteRenderbuffers",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDeleteShader": {
+   "ret": "void",
+   "args": "GLuint shader",
+   "strategy": "direct",
+   "gles": "glDeleteShader",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glDeleteTextures": {
+   "ret": "void",
+   "args": "GLsizei n, const GLuint *textures",
+   "strategy": "direct",
+   "gles": "glDeleteTextures",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDepthFunc": {
+   "ret": "void",
+   "args": "GLenum func",
+   "strategy": "direct",
+   "gles": "glDepthFunc",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDepthMask": {
+   "ret": "void",
+   "args": "GLboolean flag",
+   "strategy": "direct",
+   "gles": "glDepthMask",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDetachShader": {
+   "ret": "void",
+   "args": "GLuint program, GLuint shader",
+   "strategy": "direct",
+   "gles": "glDetachShader",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glDisable": {
+   "ret": "void",
+   "args": "GLenum cap",
+   "strategy": "capbits",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDisableClientState": {
+   "ret": "void",
+   "args": "GLenum cap",
+   "strategy": "clientarr",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDisableVertexAttribArray": {
+   "ret": "void",
+   "args": "GLuint index",
+   "strategy": "direct",
+   "gles": "glDisableVertexAttribArray",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glDrawArrays": {
+   "ret": "void",
+   "args": "GLenum mode, GLint first, GLsizei count",
+   "strategy": "draw",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glDrawBuffers": {
+   "ret": "void",
+   "args": "GLsizei n, const GLenum *bufs",
+   "strategy": "direct",
+   "gles": "glDrawBuffers",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glDrawRangeElements": {
+   "ret": "void",
+   "args": "GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices",
+   "strategy": "draw",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL12"
+   ]
+  },
+  "glEnable": {
+   "ret": "void",
+   "args": "GLenum cap",
+   "strategy": "capbits",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glEnableClientState": {
+   "ret": "void",
+   "args": "GLenum cap",
+   "strategy": "clientarr",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glEnableVertexAttribArray": {
+   "ret": "void",
+   "args": "GLuint index",
+   "strategy": "direct",
+   "gles": "glEnableVertexAttribArray",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glEnd": {
+   "ret": "void",
+   "args": "void",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glEndList": {
+   "ret": "void",
+   "args": "void",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glEndQuery": {
+   "ret": "void",
+   "args": "GLenum target",
+   "strategy": "direct",
+   "gles": "glEndQuery",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glFogCoordPointer": {
+   "ret": "void",
+   "args": "GLenum type, GLsizei stride, const void *pointer",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glFogCoordd": {
+   "ret": "void",
+   "args": "GLdouble coord",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glFogCoorddv": {
+   "ret": "void",
+   "args": "const GLdouble *coord",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glFogCoordf": {
+   "ret": "void",
+   "args": "GLfloat coord",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glFogCoordfv": {
+   "ret": "void",
+   "args": "const GLfloat *coord",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glFogf": {
+   "ret": "void",
+   "args": "GLenum pname, GLfloat param",
+   "strategy": "fog",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glFogfv": {
+   "ret": "void",
+   "args": "GLenum pname, const GLfloat *params",
+   "strategy": "fog",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glFogi": {
+   "ret": "void",
+   "args": "GLenum pname, GLint param",
+   "strategy": "fog",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glFramebufferRenderbuffer": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer",
+   "strategy": "direct",
+   "gles": "glFramebufferRenderbuffer",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glFramebufferRenderbufferEXT": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer",
+   "strategy": "alias",
+   "gles": "glFramebufferRenderbuffer",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glFramebufferTexture1D": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glFramebufferTexture2D": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level",
+   "strategy": "direct",
+   "gles": "glFramebufferTexture2D",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glFramebufferTexture2DEXT": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level",
+   "strategy": "alias",
+   "gles": "glFramebufferTexture2D",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glFramebufferTexture3D": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glFramebufferTextureLayer": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLuint texture, GLint level, GLint layer",
+   "strategy": "direct",
+   "gles": "glFramebufferTextureLayer",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glGenBuffers": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *buffers",
+   "strategy": "direct",
+   "gles": "glGenBuffers",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGenBuffersARB": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *buffers",
+   "strategy": "alias",
+   "gles": "glGenBuffers",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGenFramebuffers": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *framebuffers",
+   "strategy": "direct",
+   "gles": "glGenFramebuffers",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glGenFramebuffersEXT": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *framebuffers",
+   "strategy": "alias",
+   "gles": "glGenFramebuffers",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGenLists": {
+   "ret": "GLuint",
+   "args": "GLsizei range",
+   "strategy": "displaylist",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGenQueries": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *ids",
+   "strategy": "direct",
+   "gles": "glGenQueries",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGenRenderbuffers": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *renderbuffers",
+   "strategy": "direct",
+   "gles": "glGenRenderbuffers",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glGenRenderbuffersEXT": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *renderbuffers",
+   "strategy": "alias",
+   "gles": "glGenRenderbuffers",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGenTextures": {
+   "ret": "void",
+   "args": "GLsizei n, GLuint *textures",
+   "strategy": "direct",
+   "gles": "glGenTextures",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGenerateMipmap": {
+   "ret": "void",
+   "args": "GLenum target",
+   "strategy": "direct",
+   "gles": "glGenerateMipmap",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glGetActiveAttrib": {
+   "ret": "void",
+   "args": "GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name",
+   "strategy": "direct",
+   "gles": "glGetActiveAttrib",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetActiveUniform": {
+   "ret": "void",
+   "args": "GLuint program, GLuint index, GLsizei bufSize, GLsizei *length, GLint *size, GLenum *type, GLchar *name",
+   "strategy": "direct",
+   "gles": "glGetActiveUniform",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetAttachedShaders": {
+   "ret": "void",
+   "args": "GLuint program, GLsizei maxCount, GLsizei *count, GLuint *shaders",
+   "strategy": "direct",
+   "gles": "glGetAttachedShaders",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetAttribLocation": {
+   "ret": "GLint",
+   "args": "GLuint program, const GLchar *name",
+   "strategy": "direct",
+   "gles": "glGetAttribLocation",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetAttribLocationARB": {
+   "ret": "GLint",
+   "args": "GLhandleARB programObj, const GLcharARB *name",
+   "strategy": "alias",
+   "gles": "glGetAttribLocation",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetBufferParameteriv": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, GLint *params",
+   "strategy": "buffer",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGetBufferPointerv": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, void **params",
+   "strategy": "direct",
+   "gles": "glGetBufferPointerv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGetBufferSubData": {
+   "ret": "void",
+   "args": "GLenum target, GLintptr offset, GLsizeiptr size, void *data",
+   "strategy": "buffer",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGetCompressedTexImage": {
+   "ret": "void",
+   "args": "GLenum target, GLint lod, GLvoid *img",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glGetError": {
+   "ret": "GLenum",
+   "args": "void",
+   "strategy": "query",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetFloatv": {
+   "ret": "void",
+   "args": "GLenum pname, GLfloat *params",
+   "strategy": "query",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetFramebufferAttachmentParameteriv": {
+   "ret": "void",
+   "args": "GLenum target, GLenum attachment, GLenum pname, GLint *params",
+   "strategy": "direct",
+   "gles": "glGetFramebufferAttachmentParameteriv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glGetInfoLogARB": {
+   "ret": "void",
+   "args": "GLhandleARB obj, GLsizei maxLength, GLsizei *length, GLcharARB *infoLog",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetIntegerv": {
+   "ret": "void",
+   "args": "GLenum pname, GLint *params",
+   "strategy": "query",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetObjectParameterivARB": {
+   "ret": "void",
+   "args": "GLhandleARB obj, GLenum pname, GLint *params",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetProgramInfoLog": {
+   "ret": "void",
+   "args": "GLuint program, GLsizei bufSize, GLsizei *length, GLchar *infoLog",
+   "strategy": "direct",
+   "gles": "glGetProgramInfoLog",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetProgramiv": {
+   "ret": "void",
+   "args": "GLuint program, GLenum pname, GLint *params",
+   "strategy": "direct",
+   "gles": "glGetProgramiv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetQueryObjectiv": {
+   "ret": "void",
+   "args": "GLuint id, GLenum pname, GLint *params",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGetQueryObjectuiv": {
+   "ret": "void",
+   "args": "GLuint id, GLenum pname, GLuint *params",
+   "strategy": "direct",
+   "gles": "glGetQueryObjectuiv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGetQueryiv": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, GLint *params",
+   "strategy": "direct",
+   "gles": "glGetQueryiv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glGetRenderbufferParameteriv": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, GLint *params",
+   "strategy": "direct",
+   "gles": "glGetRenderbufferParameteriv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glGetShaderInfoLog": {
+   "ret": "void",
+   "args": "GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *infoLog",
+   "strategy": "direct",
+   "gles": "glGetShaderInfoLog",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetShaderSource": {
+   "ret": "void",
+   "args": "GLuint shader, GLsizei bufSize, GLsizei *length, GLchar *source",
+   "strategy": "direct",
+   "gles": "glGetShaderSource",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetShaderiv": {
+   "ret": "void",
+   "args": "GLuint shader, GLenum pname, GLint *params",
+   "strategy": "direct",
+   "gles": "glGetShaderiv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetString": {
+   "ret": "const GLubyte *",
+   "args": "GLenum name",
+   "strategy": "query",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetTexImage": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLenum format, GLenum type, GLvoid *pixels",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetTexLevelParameteriv": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLenum pname, GLint *params",
+   "strategy": "query",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetUniformLocation": {
+   "ret": "GLint",
+   "args": "GLuint program, const GLchar *name",
+   "strategy": "direct",
+   "gles": "glGetUniformLocation",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetUniformLocationARB": {
+   "ret": "GLint",
+   "args": "GLhandleARB programObj, const GLcharARB *name",
+   "strategy": "alias",
+   "gles": "glGetUniformLocation",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glGetUniformfv": {
+   "ret": "void",
+   "args": "GLuint program, GLint location, GLfloat *params",
+   "strategy": "direct",
+   "gles": "glGetUniformfv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetUniformiv": {
+   "ret": "void",
+   "args": "GLuint program, GLint location, GLint *params",
+   "strategy": "direct",
+   "gles": "glGetUniformiv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetVertexAttribPointerv": {
+   "ret": "void",
+   "args": "GLuint index, GLenum pname, void **pointer",
+   "strategy": "direct",
+   "gles": "glGetVertexAttribPointerv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetVertexAttribdv": {
+   "ret": "void",
+   "args": "GLuint index, GLenum pname, GLdouble *params",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetVertexAttribfv": {
+   "ret": "void",
+   "args": "GLuint index, GLenum pname, GLfloat *params",
+   "strategy": "direct",
+   "gles": "glGetVertexAttribfv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glGetVertexAttribiv": {
+   "ret": "void",
+   "args": "GLuint index, GLenum pname, GLint *params",
+   "strategy": "direct",
+   "gles": "glGetVertexAttribiv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glIsBuffer": {
+   "ret": "GLboolean",
+   "args": "GLuint buffer",
+   "strategy": "direct",
+   "gles": "glIsBuffer",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glIsFramebuffer": {
+   "ret": "GLboolean",
+   "args": "GLuint framebuffer",
+   "strategy": "direct",
+   "gles": "glIsFramebuffer",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glIsProgram": {
+   "ret": "GLboolean",
+   "args": "GLuint program",
+   "strategy": "direct",
+   "gles": "glIsProgram",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glIsQuery": {
+   "ret": "GLboolean",
+   "args": "GLuint id",
+   "strategy": "direct",
+   "gles": "glIsQuery",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glIsRenderbuffer": {
+   "ret": "GLboolean",
+   "args": "GLuint renderbuffer",
+   "strategy": "direct",
+   "gles": "glIsRenderbuffer",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glIsShader": {
+   "ret": "GLboolean",
+   "args": "GLuint shader",
+   "strategy": "direct",
+   "gles": "glIsShader",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glLightModelfv": {
+   "ret": "void",
+   "args": "GLenum pname, const GLfloat *params",
+   "strategy": "lighting",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glLightfv": {
+   "ret": "void",
+   "args": "GLenum light, GLenum pname, const GLfloat *params",
+   "strategy": "lighting",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glLineWidth": {
+   "ret": "void",
+   "args": "GLfloat width",
+   "strategy": "direct",
+   "gles": "glLineWidth",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glLinkProgram": {
+   "ret": "void",
+   "args": "GLuint program",
+   "strategy": "direct",
+   "gles": "glLinkProgram",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glLinkProgramARB": {
+   "ret": "void",
+   "args": "GLhandleARB programObj",
+   "strategy": "alias",
+   "gles": "glLinkProgram",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glLoadIdentity": {
+   "ret": "void",
+   "args": "void",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glLoadTransposeMatrixd": {
+   "ret": "void",
+   "args": "const GLdouble m[16]",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glLoadTransposeMatrixf": {
+   "ret": "void",
+   "args": "const GLfloat m[16]",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glLogicOp": {
+   "ret": "void",
+   "args": "GLenum opcode",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glMapBuffer": {
+   "ret": "void *",
+   "args": "GLenum target, GLenum access",
+   "strategy": "buffer",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glMatrixMode": {
+   "ret": "void",
+   "args": "GLenum mode",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glMultMatrixf": {
+   "ret": "void",
+   "args": "const GLfloat *m",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glMultTransposeMatrixd": {
+   "ret": "void",
+   "args": "const GLdouble m[16]",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultTransposeMatrixf": {
+   "ret": "void",
+   "args": "const GLfloat m[16]",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiDrawArrays": {
+   "ret": "void",
+   "args": "GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount",
+   "strategy": "draw",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glMultiDrawElements": {
+   "ret": "void",
+   "args": "GLenum mode, const GLsizei *count, GLenum type, const void *const*indices, GLsizei drawcount",
+   "strategy": "draw",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glMultiTexCoord1d": {
+   "ret": "void",
+   "args": "GLenum target, GLdouble s",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord1dv": {
+   "ret": "void",
+   "args": "GLenum target, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord1f": {
+   "ret": "void",
+   "args": "GLenum target, GLfloat s",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord1fv": {
+   "ret": "void",
+   "args": "GLenum target, const GLfloat *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord1i": {
+   "ret": "void",
+   "args": "GLenum target, GLint s",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord1iv": {
+   "ret": "void",
+   "args": "GLenum target, const GLint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord1s": {
+   "ret": "void",
+   "args": "GLenum target, GLshort s",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord1sv": {
+   "ret": "void",
+   "args": "GLenum target, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2d": {
+   "ret": "void",
+   "args": "GLenum target, GLdouble s, GLdouble t",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2dv": {
+   "ret": "void",
+   "args": "GLenum target, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2f": {
+   "ret": "void",
+   "args": "GLenum target, GLfloat s, GLfloat t",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2fARB": {
+   "ret": "void",
+   "args": "GLenum target, GLfloat s, GLfloat t",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glMultiTexCoord2fv": {
+   "ret": "void",
+   "args": "GLenum target, const GLfloat *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2i": {
+   "ret": "void",
+   "args": "GLenum target, GLint s, GLint t",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2iv": {
+   "ret": "void",
+   "args": "GLenum target, const GLint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2s": {
+   "ret": "void",
+   "args": "GLenum target, GLshort s, GLshort t",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord2sv": {
+   "ret": "void",
+   "args": "GLenum target, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3d": {
+   "ret": "void",
+   "args": "GLenum target, GLdouble s, GLdouble t, GLdouble r",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3dv": {
+   "ret": "void",
+   "args": "GLenum target, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3f": {
+   "ret": "void",
+   "args": "GLenum target, GLfloat s, GLfloat t, GLfloat r",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3fv": {
+   "ret": "void",
+   "args": "GLenum target, const GLfloat *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3i": {
+   "ret": "void",
+   "args": "GLenum target, GLint s, GLint t, GLint r",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3iv": {
+   "ret": "void",
+   "args": "GLenum target, const GLint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3s": {
+   "ret": "void",
+   "args": "GLenum target, GLshort s, GLshort t, GLshort r",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord3sv": {
+   "ret": "void",
+   "args": "GLenum target, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4d": {
+   "ret": "void",
+   "args": "GLenum target, GLdouble s, GLdouble t, GLdouble r, GLdouble q",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4dv": {
+   "ret": "void",
+   "args": "GLenum target, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4f": {
+   "ret": "void",
+   "args": "GLenum target, GLfloat s, GLfloat t, GLfloat r, GLfloat q",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4fv": {
+   "ret": "void",
+   "args": "GLenum target, const GLfloat *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4i": {
+   "ret": "void",
+   "args": "GLenum target, GLint s, GLint t, GLint r, GLint q",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4iv": {
+   "ret": "void",
+   "args": "GLenum target, const GLint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4s": {
+   "ret": "void",
+   "args": "GLenum target, GLshort s, GLshort t, GLshort r, GLshort q",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glMultiTexCoord4sv": {
+   "ret": "void",
+   "args": "GLenum target, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glNewList": {
+   "ret": "void",
+   "args": "GLuint list, GLenum mode",
+   "strategy": "displaylist",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glNormal3f": {
+   "ret": "void",
+   "args": "GLfloat nx, GLfloat ny, GLfloat nz",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glNormalPointer": {
+   "ret": "void",
+   "args": "GLenum type, GLsizei stride, const GLvoid *ptr",
+   "strategy": "clientarr",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glOrtho": {
+   "ret": "void",
+   "args": "GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near_val, GLdouble far_val",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glPixelStorei": {
+   "ret": "void",
+   "args": "GLenum pname, GLint param",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glPointParameterf": {
+   "ret": "void",
+   "args": "GLenum pname, GLfloat param",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glPointParameterfv": {
+   "ret": "void",
+   "args": "GLenum pname, const GLfloat *params",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glPointParameteri": {
+   "ret": "void",
+   "args": "GLenum pname, GLint param",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glPointParameteriv": {
+   "ret": "void",
+   "args": "GLenum pname, const GLint *params",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glPolygonMode": {
+   "ret": "void",
+   "args": "GLenum face, GLenum mode",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glPolygonOffset": {
+   "ret": "void",
+   "args": "GLfloat factor, GLfloat units",
+   "strategy": "direct",
+   "gles": "glPolygonOffset",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glPopAttrib": {
+   "ret": "void",
+   "args": "void",
+   "strategy": "attribstack",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glPopMatrix": {
+   "ret": "void",
+   "args": "void",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glPushAttrib": {
+   "ret": "void",
+   "args": "GLbitfield mask",
+   "strategy": "attribstack",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glPushMatrix": {
+   "ret": "void",
+   "args": "void",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glReadPixels": {
+   "ret": "void",
+   "args": "GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid *pixels",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glRenderbufferStorage": {
+   "ret": "void",
+   "args": "GLenum target, GLenum internalformat, GLsizei width, GLsizei height",
+   "strategy": "direct",
+   "gles": "glRenderbufferStorage",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glRenderbufferStorageEXT": {
+   "ret": "void",
+   "args": "GLenum target, GLenum internalformat, GLsizei width, GLsizei height",
+   "strategy": "alias",
+   "gles": "glRenderbufferStorage",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glRenderbufferStorageMultisample": {
+   "ret": "void",
+   "args": "GLenum target, GLsizei samples, GLenum internalformat, GLsizei width, GLsizei height",
+   "strategy": "direct",
+   "gles": "glRenderbufferStorageMultisample",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "ARB_framebuffer_object"
+   ]
+  },
+  "glRotatef": {
+   "ret": "void",
+   "args": "GLfloat angle, GLfloat x, GLfloat y, GLfloat z",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glSampleCoverage": {
+   "ret": "void",
+   "args": "GLclampf value, GLboolean invert",
+   "strategy": "direct",
+   "gles": "glSampleCoverage",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL13"
+   ]
+  },
+  "glScaled": {
+   "ret": "void",
+   "args": "GLdouble x, GLdouble y, GLdouble z",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glScalef": {
+   "ret": "void",
+   "args": "GLfloat x, GLfloat y, GLfloat z",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glSecondaryColor3b": {
+   "ret": "void",
+   "args": "GLbyte red, GLbyte green, GLbyte blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3bv": {
+   "ret": "void",
+   "args": "const GLbyte *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3d": {
+   "ret": "void",
+   "args": "GLdouble red, GLdouble green, GLdouble blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3dv": {
+   "ret": "void",
+   "args": "const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3f": {
+   "ret": "void",
+   "args": "GLfloat red, GLfloat green, GLfloat blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3fv": {
+   "ret": "void",
+   "args": "const GLfloat *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3i": {
+   "ret": "void",
+   "args": "GLint red, GLint green, GLint blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3iv": {
+   "ret": "void",
+   "args": "const GLint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3s": {
+   "ret": "void",
+   "args": "GLshort red, GLshort green, GLshort blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3sv": {
+   "ret": "void",
+   "args": "const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3ub": {
+   "ret": "void",
+   "args": "GLubyte red, GLubyte green, GLubyte blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3ubv": {
+   "ret": "void",
+   "args": "const GLubyte *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3ui": {
+   "ret": "void",
+   "args": "GLuint red, GLuint green, GLuint blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3uiv": {
+   "ret": "void",
+   "args": "const GLuint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3us": {
+   "ret": "void",
+   "args": "GLushort red, GLushort green, GLushort blue",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColor3usv": {
+   "ret": "void",
+   "args": "const GLushort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glSecondaryColorPointer": {
+   "ret": "void",
+   "args": "GLint size, GLenum type, GLsizei stride, const void *pointer",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glShadeModel": {
+   "ret": "void",
+   "args": "GLenum mode",
+   "strategy": "lighting",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glShaderSource": {
+   "ret": "void",
+   "args": "GLuint shader, GLsizei count, const GLchar *const*string, const GLint *length",
+   "strategy": "shader",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glShaderSourceARB": {
+   "ret": "void",
+   "args": "GLhandleARB shaderObj, GLsizei count, const GLcharARB **string, const GLint *length",
+   "strategy": "alias",
+   "gles": "glShaderSource",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glStencilFuncSeparate": {
+   "ret": "void",
+   "args": "GLenum face, GLenum func, GLint ref, GLuint mask",
+   "strategy": "direct",
+   "gles": "glStencilFuncSeparate",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glStencilMaskSeparate": {
+   "ret": "void",
+   "args": "GLenum face, GLuint mask",
+   "strategy": "direct",
+   "gles": "glStencilMaskSeparate",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glStencilOpSeparate": {
+   "ret": "void",
+   "args": "GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass",
+   "strategy": "direct",
+   "gles": "glStencilOpSeparate",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glTexCoord2f": {
+   "ret": "void",
+   "args": "GLfloat s, GLfloat t",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexCoordPointer": {
+   "ret": "void",
+   "args": "GLint size, GLenum type, GLsizei stride, const GLvoid *ptr",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexEnvf": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, GLfloat param",
+   "strategy": "texenv",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexEnvfv": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, const GLfloat *params",
+   "strategy": "texenv",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexEnvi": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, GLint param",
+   "strategy": "texenv",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexGenfv": {
+   "ret": "void",
+   "args": "GLenum coord, GLenum pname, const GLfloat *params",
+   "strategy": "texenv",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexGeni": {
+   "ret": "void",
+   "args": "GLenum coord, GLenum pname, GLint param",
+   "strategy": "texenv",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexImage2D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *pixels",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexImage3D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint internalFormat, GLsizei width, GLsizei height, GLsizei depth, GLint border, GLenum format, GLenum type, const GLvoid *pixels",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL12"
+   ]
+  },
+  "glTexParameterf": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, GLfloat param",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexParameteri": {
+   "ret": "void",
+   "args": "GLenum target, GLenum pname, GLint param",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexSubImage2D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTexSubImage3D": {
+   "ret": "void",
+   "args": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint zoffset, GLsizei width, GLsizei height, GLsizei depth, GLenum format, GLenum type, const GLvoid *pixels",
+   "strategy": "texture",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL12"
+   ]
+  },
+  "glTranslated": {
+   "ret": "void",
+   "args": "GLdouble x, GLdouble y, GLdouble z",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glTranslatef": {
+   "ret": "void",
+   "args": "GLfloat x, GLfloat y, GLfloat z",
+   "strategy": "matrix",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform1f": {
+   "ret": "void",
+   "args": "GLint location, GLfloat v0",
+   "strategy": "direct",
+   "gles": "glUniform1f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform1fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniform1fv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform1fvARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "alias",
+   "gles": "glUniform1fv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform1i": {
+   "ret": "void",
+   "args": "GLint location, GLint v0",
+   "strategy": "direct",
+   "gles": "glUniform1i",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform1iARB": {
+   "ret": "void",
+   "args": "GLint location, GLint v0",
+   "strategy": "alias",
+   "gles": "glUniform1i",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform1iv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "direct",
+   "gles": "glUniform1iv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform1ivARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "alias",
+   "gles": "glUniform1iv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform2f": {
+   "ret": "void",
+   "args": "GLint location, GLfloat v0, GLfloat v1",
+   "strategy": "direct",
+   "gles": "glUniform2f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform2fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniform2fv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform2fvARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "alias",
+   "gles": "glUniform2fv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform2i": {
+   "ret": "void",
+   "args": "GLint location, GLint v0, GLint v1",
+   "strategy": "direct",
+   "gles": "glUniform2i",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform2iv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "direct",
+   "gles": "glUniform2iv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform2ivARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "alias",
+   "gles": "glUniform2iv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform3f": {
+   "ret": "void",
+   "args": "GLint location, GLfloat v0, GLfloat v1, GLfloat v2",
+   "strategy": "direct",
+   "gles": "glUniform3f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform3fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniform3fv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform3fvARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "alias",
+   "gles": "glUniform3fv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform3i": {
+   "ret": "void",
+   "args": "GLint location, GLint v0, GLint v1, GLint v2",
+   "strategy": "direct",
+   "gles": "glUniform3i",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform3iv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "direct",
+   "gles": "glUniform3iv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform3ivARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "alias",
+   "gles": "glUniform3iv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform4f": {
+   "ret": "void",
+   "args": "GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3",
+   "strategy": "direct",
+   "gles": "glUniform4f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform4fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniform4fv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform4fvARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLfloat *value",
+   "strategy": "alias",
+   "gles": "glUniform4fv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniform4i": {
+   "ret": "void",
+   "args": "GLint location, GLint v0, GLint v1, GLint v2, GLint v3",
+   "strategy": "direct",
+   "gles": "glUniform4i",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform4iv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "direct",
+   "gles": "glUniform4iv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniform4ivARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, const GLint *value",
+   "strategy": "alias",
+   "gles": "glUniform4iv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniformMatrix2fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix2fv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniformMatrix2fvARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "alias",
+   "gles": "glUniformMatrix2fv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniformMatrix2x3fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix2x3fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL21"
+   ]
+  },
+  "glUniformMatrix2x4fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix2x4fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL21"
+   ]
+  },
+  "glUniformMatrix3fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix3fv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniformMatrix3fvARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "alias",
+   "gles": "glUniformMatrix3fv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniformMatrix3x2fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix3x2fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL21"
+   ]
+  },
+  "glUniformMatrix3x4fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix3x4fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL21"
+   ]
+  },
+  "glUniformMatrix4fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix4fv",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUniformMatrix4fvARB": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "alias",
+   "gles": "glUniformMatrix4fv",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glUniformMatrix4x2fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix4x2fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL21"
+   ]
+  },
+  "glUniformMatrix4x3fv": {
+   "ret": "void",
+   "args": "GLint location, GLsizei count, GLboolean transpose, const GLfloat *value",
+   "strategy": "direct",
+   "gles": "glUniformMatrix4x3fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL21"
+   ]
+  },
+  "glUnmapBuffer": {
+   "ret": "GLboolean",
+   "args": "GLenum target",
+   "strategy": "buffer",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL15"
+   ]
+  },
+  "glUseProgram": {
+   "ret": "void",
+   "args": "GLuint program",
+   "strategy": "direct",
+   "gles": "glUseProgram",
+   "called_by_mc": true,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glUseProgramObjectARB": {
+   "ret": "void",
+   "args": "GLhandleARB programObj",
+   "strategy": "translate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glValidateProgram": {
+   "ret": "void",
+   "args": "GLuint program",
+   "strategy": "direct",
+   "gles": "glValidateProgram",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertex3f": {
+   "ret": "void",
+   "args": "GLfloat x, GLfloat y, GLfloat z",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glVertexAttrib1d": {
+   "ret": "void",
+   "args": "GLuint index, GLdouble x",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib1dv": {
+   "ret": "void",
+   "args": "GLuint index, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib1f": {
+   "ret": "void",
+   "args": "GLuint index, GLfloat x",
+   "strategy": "direct",
+   "gles": "glVertexAttrib1f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib1fv": {
+   "ret": "void",
+   "args": "GLuint index, const GLfloat *v",
+   "strategy": "direct",
+   "gles": "glVertexAttrib1fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib1s": {
+   "ret": "void",
+   "args": "GLuint index, GLshort x",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib1sv": {
+   "ret": "void",
+   "args": "GLuint index, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib2d": {
+   "ret": "void",
+   "args": "GLuint index, GLdouble x, GLdouble y",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib2dv": {
+   "ret": "void",
+   "args": "GLuint index, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib2f": {
+   "ret": "void",
+   "args": "GLuint index, GLfloat x, GLfloat y",
+   "strategy": "direct",
+   "gles": "glVertexAttrib2f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib2fv": {
+   "ret": "void",
+   "args": "GLuint index, const GLfloat *v",
+   "strategy": "direct",
+   "gles": "glVertexAttrib2fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib2s": {
+   "ret": "void",
+   "args": "GLuint index, GLshort x, GLshort y",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib2sv": {
+   "ret": "void",
+   "args": "GLuint index, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib3d": {
+   "ret": "void",
+   "args": "GLuint index, GLdouble x, GLdouble y, GLdouble z",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib3dv": {
+   "ret": "void",
+   "args": "GLuint index, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib3f": {
+   "ret": "void",
+   "args": "GLuint index, GLfloat x, GLfloat y, GLfloat z",
+   "strategy": "direct",
+   "gles": "glVertexAttrib3f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib3fv": {
+   "ret": "void",
+   "args": "GLuint index, const GLfloat *v",
+   "strategy": "direct",
+   "gles": "glVertexAttrib3fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib3s": {
+   "ret": "void",
+   "args": "GLuint index, GLshort x, GLshort y, GLshort z",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib3sv": {
+   "ret": "void",
+   "args": "GLuint index, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4Nbv": {
+   "ret": "void",
+   "args": "GLuint index, const GLbyte *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4Niv": {
+   "ret": "void",
+   "args": "GLuint index, const GLint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4Nsv": {
+   "ret": "void",
+   "args": "GLuint index, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4Nub": {
+   "ret": "void",
+   "args": "GLuint index, GLubyte x, GLubyte y, GLubyte z, GLubyte w",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4Nubv": {
+   "ret": "void",
+   "args": "GLuint index, const GLubyte *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4Nuiv": {
+   "ret": "void",
+   "args": "GLuint index, const GLuint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4Nusv": {
+   "ret": "void",
+   "args": "GLuint index, const GLushort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4bv": {
+   "ret": "void",
+   "args": "GLuint index, const GLbyte *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4d": {
+   "ret": "void",
+   "args": "GLuint index, GLdouble x, GLdouble y, GLdouble z, GLdouble w",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4dv": {
+   "ret": "void",
+   "args": "GLuint index, const GLdouble *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4f": {
+   "ret": "void",
+   "args": "GLuint index, GLfloat x, GLfloat y, GLfloat z, GLfloat w",
+   "strategy": "direct",
+   "gles": "glVertexAttrib4f",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4fv": {
+   "ret": "void",
+   "args": "GLuint index, const GLfloat *v",
+   "strategy": "direct",
+   "gles": "glVertexAttrib4fv",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4iv": {
+   "ret": "void",
+   "args": "GLuint index, const GLint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4s": {
+   "ret": "void",
+   "args": "GLuint index, GLshort x, GLshort y, GLshort z, GLshort w",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4sv": {
+   "ret": "void",
+   "args": "GLuint index, const GLshort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4ubv": {
+   "ret": "void",
+   "args": "GLuint index, const GLubyte *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4uiv": {
+   "ret": "void",
+   "args": "GLuint index, const GLuint *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttrib4usv": {
+   "ret": "void",
+   "args": "GLuint index, const GLushort *v",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexAttribPointer": {
+   "ret": "void",
+   "args": "GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer",
+   "strategy": "direct",
+   "gles": "glVertexAttribPointer",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL20"
+   ]
+  },
+  "glVertexPointer": {
+   "ret": "void",
+   "args": "GLint size, GLenum type, GLsizei stride, const GLvoid *ptr",
+   "strategy": "immediate",
+   "gles": "",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glViewport": {
+   "ret": "void",
+   "args": "GLint x, GLint y, GLsizei width, GLsizei height",
+   "strategy": "direct",
+   "gles": "glViewport",
+   "called_by_mc": true,
+   "needed_by_flag": []
+  },
+  "glWindowPos2d": {
+   "ret": "void",
+   "args": "GLdouble x, GLdouble y",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos2dv": {
+   "ret": "void",
+   "args": "const GLdouble *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos2f": {
+   "ret": "void",
+   "args": "GLfloat x, GLfloat y",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos2fv": {
+   "ret": "void",
+   "args": "const GLfloat *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos2i": {
+   "ret": "void",
+   "args": "GLint x, GLint y",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos2iv": {
+   "ret": "void",
+   "args": "const GLint *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos2s": {
+   "ret": "void",
+   "args": "GLshort x, GLshort y",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos2sv": {
+   "ret": "void",
+   "args": "const GLshort *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3d": {
+   "ret": "void",
+   "args": "GLdouble x, GLdouble y, GLdouble z",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3dv": {
+   "ret": "void",
+   "args": "const GLdouble *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3f": {
+   "ret": "void",
+   "args": "GLfloat x, GLfloat y, GLfloat z",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3fv": {
+   "ret": "void",
+   "args": "const GLfloat *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3i": {
+   "ret": "void",
+   "args": "GLint x, GLint y, GLint z",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3iv": {
+   "ret": "void",
+   "args": "const GLint *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3s": {
+   "ret": "void",
+   "args": "GLshort x, GLshort y, GLshort z",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  },
+  "glWindowPos3sv": {
+   "ret": "void",
+   "args": "const GLshort *v",
+   "strategy": "legacy_misc",
+   "gles": "",
+   "called_by_mc": false,
+   "needed_by_flag": [
+    "GL14"
+   ]
+  }
+ }
+}

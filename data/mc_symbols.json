@@ -1,0 +1,1716 @@
+{
+ "canonical_source": "d6444515-lwjglglfwclasses.jar",
+ "callsite_source": "d226ff97-1.12.2.jar",
+ "bootstrap": [
+  "glGetError",
+  "glGetString",
+  "glGetIntegerv"
+ ],
+ "symbol_count": 163,
+ "symbols": {
+  "glActiveTexture": [
+   "GL13.glActiveTexture"
+  ],
+  "glActiveTextureARB": [
+   "ARBMultitexture.glActiveTextureARB"
+  ],
+  "glAlphaFunc": [
+   "GL11.glAlphaFunc"
+  ],
+  "glAttachObjectARB": [
+   "ARBShaderObjects.glAttachObjectARB"
+  ],
+  "glAttachShader": [
+   "GL20.glAttachShader"
+  ],
+  "glBegin": [
+   "GL11.glBegin"
+  ],
+  "glBindBuffer": [
+   "GL15.glBindBuffer"
+  ],
+  "glBindBufferARB": [
+   "ARBVertexBufferObject.glBindBufferARB"
+  ],
+  "glBindFramebuffer": [
+   "ARBFramebufferObject.glBindFramebuffer",
+   "GL30.glBindFramebuffer"
+  ],
+  "glBindFramebufferEXT": [
+   "EXTFramebufferObject.glBindFramebufferEXT"
+  ],
+  "glBindRenderbuffer": [
+   "ARBFramebufferObject.glBindRenderbuffer",
+   "GL30.glBindRenderbuffer"
+  ],
+  "glBindRenderbufferEXT": [
+   "EXTFramebufferObject.glBindRenderbufferEXT"
+  ],
+  "glBindTexture": [
+   "GL11.glBindTexture"
+  ],
+  "glBlendEquation": [
+   "GL14.glBlendEquation"
+  ],
+  "glBlendFunc": [
+   "GL11.glBlendFunc"
+  ],
+  "glBlendFuncSeparate": [
+   "GL14.glBlendFuncSeparate"
+  ],
+  "glBlendFuncSeparateEXT": [
+   "EXTBlendFuncSeparate.glBlendFuncSeparateEXT"
+  ],
+  "glBufferData": [
+   "GL15.glBufferData"
+  ],
+  "glBufferDataARB": [
+   "ARBVertexBufferObject.glBufferDataARB"
+  ],
+  "glCallList": [
+   "GL11.glCallList"
+  ],
+  "glCheckFramebufferStatus": [
+   "ARBFramebufferObject.glCheckFramebufferStatus",
+   "GL30.glCheckFramebufferStatus"
+  ],
+  "glCheckFramebufferStatusEXT": [
+   "EXTFramebufferObject.glCheckFramebufferStatusEXT"
+  ],
+  "glClear": [
+   "GL11.glClear"
+  ],
+  "glClearColor": [
+   "GL11.glClearColor"
+  ],
+  "glClearDepth": [
+   "GL11.glClearDepth"
+  ],
+  "glClientActiveTexture": [
+   "GL13.glClientActiveTexture"
+  ],
+  "glClientActiveTextureARB": [
+   "ARBMultitexture.glClientActiveTextureARB"
+  ],
+  "glColor4f": [
+   "GL11.glColor4f"
+  ],
+  "glColorMask": [
+   "GL11.glColorMask"
+  ],
+  "glColorMaterial": [
+   "GL11.glColorMaterial"
+  ],
+  "glColorPointer": [
+   "GL11.glColorPointer"
+  ],
+  "glCompileShader": [
+   "GL20.glCompileShader"
+  ],
+  "glCompileShaderARB": [
+   "ARBShaderObjects.glCompileShaderARB"
+  ],
+  "glCopyTexSubImage2D": [
+   "GL11.glCopyTexSubImage2D"
+  ],
+  "glCreateProgram": [
+   "GL20.glCreateProgram"
+  ],
+  "glCreateProgramObjectARB": [
+   "ARBShaderObjects.glCreateProgramObjectARB"
+  ],
+  "glCreateShader": [
+   "GL20.glCreateShader"
+  ],
+  "glCreateShaderObjectARB": [
+   "ARBShaderObjects.glCreateShaderObjectARB"
+  ],
+  "glCullFace": [
+   "GL11.glCullFace"
+  ],
+  "glDeleteBuffers": [
+   "GL15.glDeleteBuffers"
+  ],
+  "glDeleteBuffersARB": [
+   "ARBVertexBufferObject.glDeleteBuffersARB"
+  ],
+  "glDeleteFramebuffers": [
+   "ARBFramebufferObject.glDeleteFramebuffers",
+   "GL30.glDeleteFramebuffers"
+  ],
+  "glDeleteFramebuffersEXT": [
+   "EXTFramebufferObject.glDeleteFramebuffersEXT"
+  ],
+  "glDeleteLists": [
+   "GL11.glDeleteLists"
+  ],
+  "glDeleteObjectARB": [
+   "ARBShaderObjects.glDeleteObjectARB"
+  ],
+  "glDeleteProgram": [
+   "GL20.glDeleteProgram"
+  ],
+  "glDeleteRenderbuffers": [
+   "ARBFramebufferObject.glDeleteRenderbuffers",
+   "GL30.glDeleteRenderbuffers"
+  ],
+  "glDeleteRenderbuffersEXT": [
+   "EXTFramebufferObject.glDeleteRenderbuffersEXT"
+  ],
+  "glDeleteShader": [
+   "GL20.glDeleteShader"
+  ],
+  "glDeleteTextures": [
+   "GL11.glDeleteTextures"
+  ],
+  "glDepthFunc": [
+   "GL11.glDepthFunc"
+  ],
+  "glDepthMask": [
+   "GL11.glDepthMask"
+  ],
+  "glDisable": [
+   "GL11.glDisable"
+  ],
+  "glDisableClientState": [
+   "GL11.glDisableClientState"
+  ],
+  "glDrawArrays": [
+   "GL11.glDrawArrays"
+  ],
+  "glEnable": [
+   "GL11.glEnable"
+  ],
+  "glEnableClientState": [
+   "GL11.glEnableClientState"
+  ],
+  "glEnd": [
+   "GL11.glEnd"
+  ],
+  "glEndList": [
+   "GL11.glEndList"
+  ],
+  "glFogf": [
+   "GL11.glFogf"
+  ],
+  "glFogfv": [
+   "GL11.glFog"
+  ],
+  "glFogi": [
+   "GL11.glFogi"
+  ],
+  "glFramebufferRenderbuffer": [
+   "ARBFramebufferObject.glFramebufferRenderbuffer",
+   "GL30.glFramebufferRenderbuffer"
+  ],
+  "glFramebufferRenderbufferEXT": [
+   "EXTFramebufferObject.glFramebufferRenderbufferEXT"
+  ],
+  "glFramebufferTexture2D": [
+   "ARBFramebufferObject.glFramebufferTexture2D",
+   "GL30.glFramebufferTexture2D"
+  ],
+  "glFramebufferTexture2DEXT": [
+   "EXTFramebufferObject.glFramebufferTexture2DEXT"
+  ],
+  "glGenBuffers": [
+   "GL15.glGenBuffers"
+  ],
+  "glGenBuffersARB": [
+   "ARBVertexBufferObject.glGenBuffersARB"
+  ],
+  "glGenFramebuffers": [
+   "ARBFramebufferObject.glGenFramebuffers",
+   "GL30.glGenFramebuffers"
+  ],
+  "glGenFramebuffersEXT": [
+   "EXTFramebufferObject.glGenFramebuffersEXT"
+  ],
+  "glGenLists": [
+   "GL11.glGenLists"
+  ],
+  "glGenRenderbuffers": [
+   "ARBFramebufferObject.glGenRenderbuffers",
+   "GL30.glGenRenderbuffers"
+  ],
+  "glGenRenderbuffersEXT": [
+   "EXTFramebufferObject.glGenRenderbuffersEXT"
+  ],
+  "glGenTextures": [
+   "GL11.glGenTextures"
+  ],
+  "glGetAttribLocation": [
+   "GL20.glGetAttribLocation"
+  ],
+  "glGetAttribLocationARB": [
+   "ARBVertexShader.glGetAttribLocationARB"
+  ],
+  "glGetError": [
+   "<bootstrap LWJGL>",
+   "GL11.glGetError"
+  ],
+  "glGetFloatv": [
+   "GL11.glGetFloat"
+  ],
+  "glGetInfoLogARB": [
+   "ARBShaderObjects.glGetInfoLogARB"
+  ],
+  "glGetIntegerv": [
+   "<bootstrap LWJGL>",
+   "GL11.glGetInteger"
+  ],
+  "glGetObjectParameterivARB": [
+   "ARBShaderObjects.glGetObjectParameteriARB"
+  ],
+  "glGetProgramInfoLog": [
+   "GL20.glGetProgramInfoLog"
+  ],
+  "glGetProgramiv": [
+   "GL20.glGetProgrami"
+  ],
+  "glGetShaderInfoLog": [
+   "GL20.glGetShaderInfoLog"
+  ],
+  "glGetShaderiv": [
+   "GL20.glGetShaderi"
+  ],
+  "glGetString": [
+   "<bootstrap LWJGL>",
+   "GL11.glGetString"
+  ],
+  "glGetTexImage": [
+   "GL11.glGetTexImage"
+  ],
+  "glGetTexLevelParameteriv": [
+   "GL11.glGetTexLevelParameteri"
+  ],
+  "glGetUniformLocation": [
+   "GL20.glGetUniformLocation"
+  ],
+  "glGetUniformLocationARB": [
+   "ARBShaderObjects.glGetUniformLocationARB"
+  ],
+  "glLightModelfv": [
+   "GL11.glLightModel"
+  ],
+  "glLightfv": [
+   "GL11.glLight"
+  ],
+  "glLineWidth": [
+   "GL11.glLineWidth"
+  ],
+  "glLinkProgram": [
+   "GL20.glLinkProgram"
+  ],
+  "glLinkProgramARB": [
+   "ARBShaderObjects.glLinkProgramARB"
+  ],
+  "glLoadIdentity": [
+   "GL11.glLoadIdentity"
+  ],
+  "glLogicOp": [
+   "GL11.glLogicOp"
+  ],
+  "glMatrixMode": [
+   "GL11.glMatrixMode"
+  ],
+  "glMultMatrixf": [
+   "GL11.glMultMatrix"
+  ],
+  "glMultiTexCoord2f": [
+   "GL13.glMultiTexCoord2f"
+  ],
+  "glMultiTexCoord2fARB": [
+   "ARBMultitexture.glMultiTexCoord2fARB"
+  ],
+  "glNewList": [
+   "GL11.glNewList"
+  ],
+  "glNormal3f": [
+   "GL11.glNormal3f"
+  ],
+  "glNormalPointer": [
+   "GL11.glNormalPointer"
+  ],
+  "glOrtho": [
+   "GL11.glOrtho"
+  ],
+  "glPixelStorei": [
+   "GL11.glPixelStorei"
+  ],
+  "glPolygonMode": [
+   "GL11.glPolygonMode"
+  ],
+  "glPolygonOffset": [
+   "GL11.glPolygonOffset"
+  ],
+  "glPopAttrib": [
+   "GL11.glPopAttrib"
+  ],
+  "glPopMatrix": [
+   "GL11.glPopMatrix"
+  ],
+  "glPushAttrib": [
+   "GL11.glPushAttrib"
+  ],
+  "glPushMatrix": [
+   "GL11.glPushMatrix"
+  ],
+  "glReadPixels": [
+   "GL11.glReadPixels"
+  ],
+  "glRenderbufferStorage": [
+   "ARBFramebufferObject.glRenderbufferStorage",
+   "GL30.glRenderbufferStorage"
+  ],
+  "glRenderbufferStorageEXT": [
+   "EXTFramebufferObject.glRenderbufferStorageEXT"
+  ],
+  "glRotatef": [
+   "GL11.glRotatef"
+  ],
+  "glScaled": [
+   "GL11.glScaled"
+  ],
+  "glScalef": [
+   "GL11.glScalef"
+  ],
+  "glShadeModel": [
+   "GL11.glShadeModel"
+  ],
+  "glShaderSource": [
+   "GL20.glShaderSource"
+  ],
+  "glShaderSourceARB": [
+   "ARBShaderObjects.glShaderSourceARB"
+  ],
+  "glTexCoord2f": [
+   "GL11.glTexCoord2f"
+  ],
+  "glTexCoordPointer": [
+   "GL11.glTexCoordPointer"
+  ],
+  "glTexEnvf": [
+   "GL11.glTexEnvf"
+  ],
+  "glTexEnvfv": [
+   "GL11.glTexEnv"
+  ],
+  "glTexEnvi": [
+   "GL11.glTexEnvi"
+  ],
+  "glTexGenfv": [
+   "GL11.glTexGen"
+  ],
+  "glTexGeni": [
+   "GL11.glTexGeni"
+  ],
+  "glTexImage2D": [
+   "GL11.glTexImage2D"
+  ],
+  "glTexParameterf": [
+   "GL11.glTexParameterf"
+  ],
+  "glTexParameteri": [
+   "GL11.glTexParameteri"
+  ],
+  "glTexSubImage2D": [
+   "GL11.glTexSubImage2D"
+  ],
+  "glTranslated": [
+   "GL11.glTranslated"
+  ],
+  "glTranslatef": [
+   "GL11.glTranslatef"
+  ],
+  "glUniform1fv": [
+   "GL20.glUniform1"
+  ],
+  "glUniform1fvARB": [
+   "ARBShaderObjects.glUniform1ARB"
+  ],
+  "glUniform1i": [
+   "GL20.glUniform1i"
+  ],
+  "glUniform1iARB": [
+   "ARBShaderObjects.glUniform1iARB"
+  ],
+  "glUniform1iv": [
+   "GL20.glUniform1"
+  ],
+  "glUniform1ivARB": [
+   "ARBShaderObjects.glUniform1ARB"
+  ],
+  "glUniform2fv": [
+   "GL20.glUniform2"
+  ],
+  "glUniform2fvARB": [
+   "ARBShaderObjects.glUniform2ARB"
+  ],
+  "glUniform2iv": [
+   "GL20.glUniform2"
+  ],
+  "glUniform2ivARB": [
+   "ARBShaderObjects.glUniform2ARB"
+  ],
+  "glUniform3fv": [
+   "GL20.glUniform3"
+  ],
+  "glUniform3fvARB": [
+   "ARBShaderObjects.glUniform3ARB"
+  ],
+  "glUniform3iv": [
+   "GL20.glUniform3"
+  ],
+  "glUniform3ivARB": [
+   "ARBShaderObjects.glUniform3ARB"
+  ],
+  "glUniform4fv": [
+   "GL20.glUniform4"
+  ],
+  "glUniform4fvARB": [
+   "ARBShaderObjects.glUniform4ARB"
+  ],
+  "glUniform4iv": [
+   "GL20.glUniform4"
+  ],
+  "glUniform4ivARB": [
+   "ARBShaderObjects.glUniform4ARB"
+  ],
+  "glUniformMatrix2fv": [
+   "GL20.glUniformMatrix2"
+  ],
+  "glUniformMatrix2fvARB": [
+   "ARBShaderObjects.glUniformMatrix2ARB"
+  ],
+  "glUniformMatrix3fv": [
+   "GL20.glUniformMatrix3"
+  ],
+  "glUniformMatrix3fvARB": [
+   "ARBShaderObjects.glUniformMatrix3ARB"
+  ],
+  "glUniformMatrix4fv": [
+   "GL20.glUniformMatrix4"
+  ],
+  "glUniformMatrix4fvARB": [
+   "ARBShaderObjects.glUniformMatrix4ARB"
+  ],
+  "glUseProgram": [
+   "GL20.glUseProgram"
+  ],
+  "glUseProgramObjectARB": [
+   "ARBShaderObjects.glUseProgramObjectARB"
+  ],
+  "glVertex3f": [
+   "GL11.glVertex3f"
+  ],
+  "glVertexPointer": [
+   "GL11.glVertexPointer"
+  ],
+  "glViewport": [
+   "GL11.glViewport"
+  ]
+ },
+ "resolution": {
+  "ARBFramebufferObject.glBindFramebuffer": {
+   "symbols": [
+    "glBindFramebuffer"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glBindRenderbuffer": {
+   "symbols": [
+    "glBindRenderbuffer"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glCheckFramebufferStatus": {
+   "symbols": [
+    "glCheckFramebufferStatus"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glDeleteFramebuffers": {
+   "symbols": [
+    "glDeleteFramebuffers"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glDeleteRenderbuffers": {
+   "symbols": [
+    "glDeleteRenderbuffers"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glFramebufferRenderbuffer": {
+   "symbols": [
+    "glFramebufferRenderbuffer"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glFramebufferTexture2D": {
+   "symbols": [
+    "glFramebufferTexture2D"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glGenFramebuffers": {
+   "symbols": [
+    "glGenFramebuffers"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glGenRenderbuffers": {
+   "symbols": [
+    "glGenRenderbuffers"
+   ],
+   "reason": "langsung"
+  },
+  "ARBFramebufferObject.glRenderbufferStorage": {
+   "symbols": [
+    "glRenderbufferStorage"
+   ],
+   "reason": "langsung"
+  },
+  "ARBMultitexture.glActiveTextureARB": {
+   "symbols": [
+    "glActiveTextureARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBMultitexture.glClientActiveTextureARB": {
+   "symbols": [
+    "glClientActiveTextureARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBMultitexture.glMultiTexCoord2fARB": {
+   "symbols": [
+    "glMultiTexCoord2fARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glAttachObjectARB": {
+   "symbols": [
+    "glAttachObjectARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glCompileShaderARB": {
+   "symbols": [
+    "glCompileShaderARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glCreateProgramObjectARB": {
+   "symbols": [
+    "glCreateProgramObjectARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glCreateShaderObjectARB": {
+   "symbols": [
+    "glCreateShaderObjectARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glDeleteObjectARB": {
+   "symbols": [
+    "glDeleteObjectARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glGetInfoLogARB": {
+   "symbols": [
+    "glGetInfoLogARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glGetObjectParameteriARB": {
+   "symbols": [
+    "glGetObjectParameterivARB"
+   ],
+   "reason": "skalar->vektor (i -> iv)"
+  },
+  "ARBShaderObjects.glGetUniformLocationARB": {
+   "symbols": [
+    "glGetUniformLocationARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glLinkProgramARB": {
+   "symbols": [
+    "glLinkProgramARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glShaderSourceARB": {
+   "symbols": [
+    "glShaderSourceARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glUniform1ARB": {
+   "symbols": [
+    "glUniform1fvARB",
+    "glUniform1ivARB"
+   ],
+   "reason": "uniform vektor"
+  },
+  "ARBShaderObjects.glUniform1iARB": {
+   "symbols": [
+    "glUniform1iARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBShaderObjects.glUniform2ARB": {
+   "symbols": [
+    "glUniform2fvARB",
+    "glUniform2ivARB"
+   ],
+   "reason": "uniform vektor"
+  },
+  "ARBShaderObjects.glUniform3ARB": {
+   "symbols": [
+    "glUniform3fvARB",
+    "glUniform3ivARB"
+   ],
+   "reason": "uniform vektor"
+  },
+  "ARBShaderObjects.glUniform4ARB": {
+   "symbols": [
+    "glUniform4fvARB",
+    "glUniform4ivARB"
+   ],
+   "reason": "uniform vektor"
+  },
+  "ARBShaderObjects.glUniformMatrix2ARB": {
+   "symbols": [
+    "glUniformMatrix2fvARB"
+   ],
+   "reason": "matriks uniform -> bentuk fv"
+  },
+  "ARBShaderObjects.glUniformMatrix3ARB": {
+   "symbols": [
+    "glUniformMatrix3fvARB"
+   ],
+   "reason": "matriks uniform -> bentuk fv"
+  },
+  "ARBShaderObjects.glUniformMatrix4ARB": {
+   "symbols": [
+    "glUniformMatrix4fvARB"
+   ],
+   "reason": "matriks uniform -> bentuk fv"
+  },
+  "ARBShaderObjects.glUseProgramObjectARB": {
+   "symbols": [
+    "glUseProgramObjectARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBVertexBufferObject.glBindBufferARB": {
+   "symbols": [
+    "glBindBufferARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBVertexBufferObject.glBufferDataARB": {
+   "symbols": [
+    "glBufferDataARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBVertexBufferObject.glDeleteBuffersARB": {
+   "symbols": [
+    "glDeleteBuffersARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBVertexBufferObject.glGenBuffersARB": {
+   "symbols": [
+    "glGenBuffersARB"
+   ],
+   "reason": "langsung"
+  },
+  "ARBVertexShader.glGetAttribLocationARB": {
+   "symbols": [
+    "glGetAttribLocationARB"
+   ],
+   "reason": "langsung"
+  },
+  "EXTBlendFuncSeparate.glBlendFuncSeparateEXT": {
+   "symbols": [
+    "glBlendFuncSeparateEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glBindFramebufferEXT": {
+   "symbols": [
+    "glBindFramebufferEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glBindRenderbufferEXT": {
+   "symbols": [
+    "glBindRenderbufferEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glCheckFramebufferStatusEXT": {
+   "symbols": [
+    "glCheckFramebufferStatusEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glDeleteFramebuffersEXT": {
+   "symbols": [
+    "glDeleteFramebuffersEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glDeleteRenderbuffersEXT": {
+   "symbols": [
+    "glDeleteRenderbuffersEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glFramebufferRenderbufferEXT": {
+   "symbols": [
+    "glFramebufferRenderbufferEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glFramebufferTexture2DEXT": {
+   "symbols": [
+    "glFramebufferTexture2DEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glGenFramebuffersEXT": {
+   "symbols": [
+    "glGenFramebuffersEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glGenRenderbuffersEXT": {
+   "symbols": [
+    "glGenRenderbuffersEXT"
+   ],
+   "reason": "langsung"
+  },
+  "EXTFramebufferObject.glRenderbufferStorageEXT": {
+   "symbols": [
+    "glRenderbufferStorageEXT"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glAlphaFunc": {
+   "symbols": [
+    "glAlphaFunc"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glBegin": {
+   "symbols": [
+    "glBegin"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glBindTexture": {
+   "symbols": [
+    "glBindTexture"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glBlendFunc": {
+   "symbols": [
+    "glBlendFunc"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glCallList": {
+   "symbols": [
+    "glCallList"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glClear": {
+   "symbols": [
+    "glClear"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glClearColor": {
+   "symbols": [
+    "glClearColor"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glClearDepth": {
+   "symbols": [
+    "glClearDepth"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glColor4f": {
+   "symbols": [
+    "glColor4f"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glColorMask": {
+   "symbols": [
+    "glColorMask"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glColorMaterial": {
+   "symbols": [
+    "glColorMaterial"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glColorPointer": {
+   "symbols": [
+    "glColorPointer"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glCopyTexSubImage2D": {
+   "symbols": [
+    "glCopyTexSubImage2D"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glCullFace": {
+   "symbols": [
+    "glCullFace"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glDeleteLists": {
+   "symbols": [
+    "glDeleteLists"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glDeleteTextures": {
+   "symbols": [
+    "glDeleteTextures"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glDepthFunc": {
+   "symbols": [
+    "glDepthFunc"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glDepthMask": {
+   "symbols": [
+    "glDepthMask"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glDisable": {
+   "symbols": [
+    "glDisable"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glDisableClientState": {
+   "symbols": [
+    "glDisableClientState"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glDrawArrays": {
+   "symbols": [
+    "glDrawArrays"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glEnable": {
+   "symbols": [
+    "glEnable"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glEnableClientState": {
+   "symbols": [
+    "glEnableClientState"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glEnd": {
+   "symbols": [
+    "glEnd"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glEndList": {
+   "symbols": [
+    "glEndList"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glFog": {
+   "symbols": [
+    "glFogfv"
+   ],
+   "reason": "overload Java -> bentuk vektor"
+  },
+  "GL11.glFogf": {
+   "symbols": [
+    "glFogf"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glFogi": {
+   "symbols": [
+    "glFogi"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glGenLists": {
+   "symbols": [
+    "glGenLists"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glGenTextures": {
+   "symbols": [
+    "glGenTextures"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glGetError": {
+   "symbols": [
+    "glGetError"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glGetFloat": {
+   "symbols": [
+    "glGetFloatv"
+   ],
+   "reason": "nama sudah bertipe -> +v"
+  },
+  "GL11.glGetInteger": {
+   "symbols": [
+    "glGetIntegerv"
+   ],
+   "reason": "nama sudah bertipe -> +v"
+  },
+  "GL11.glGetString": {
+   "symbols": [
+    "glGetString"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glGetTexImage": {
+   "symbols": [
+    "glGetTexImage"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glGetTexLevelParameteri": {
+   "symbols": [
+    "glGetTexLevelParameteriv"
+   ],
+   "reason": "skalar->vektor (i -> iv)"
+  },
+  "GL11.glLight": {
+   "symbols": [
+    "glLightfv"
+   ],
+   "reason": "overload Java -> bentuk vektor"
+  },
+  "GL11.glLightModel": {
+   "symbols": [
+    "glLightModelfv"
+   ],
+   "reason": "overload Java -> bentuk vektor"
+  },
+  "GL11.glLineWidth": {
+   "symbols": [
+    "glLineWidth"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glLoadIdentity": {
+   "symbols": [
+    "glLoadIdentity"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glLogicOp": {
+   "symbols": [
+    "glLogicOp"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glMatrixMode": {
+   "symbols": [
+    "glMatrixMode"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glMultMatrix": {
+   "symbols": [
+    "glMultMatrixf"
+   ],
+   "reason": "matriks -> bentuk bertipe"
+  },
+  "GL11.glNewList": {
+   "symbols": [
+    "glNewList"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glNormal3f": {
+   "symbols": [
+    "glNormal3f"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glNormalPointer": {
+   "symbols": [
+    "glNormalPointer"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glOrtho": {
+   "symbols": [
+    "glOrtho"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glPixelStorei": {
+   "symbols": [
+    "glPixelStorei"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glPolygonMode": {
+   "symbols": [
+    "glPolygonMode"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glPolygonOffset": {
+   "symbols": [
+    "glPolygonOffset"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glPopAttrib": {
+   "symbols": [
+    "glPopAttrib"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glPopMatrix": {
+   "symbols": [
+    "glPopMatrix"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glPushAttrib": {
+   "symbols": [
+    "glPushAttrib"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glPushMatrix": {
+   "symbols": [
+    "glPushMatrix"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glReadPixels": {
+   "symbols": [
+    "glReadPixels"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glRotatef": {
+   "symbols": [
+    "glRotatef"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glScaled": {
+   "symbols": [
+    "glScaled"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glScalef": {
+   "symbols": [
+    "glScalef"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glShadeModel": {
+   "symbols": [
+    "glShadeModel"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexCoord2f": {
+   "symbols": [
+    "glTexCoord2f"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexCoordPointer": {
+   "symbols": [
+    "glTexCoordPointer"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexEnv": {
+   "symbols": [
+    "glTexEnvfv"
+   ],
+   "reason": "overload Java -> bentuk vektor"
+  },
+  "GL11.glTexEnvf": {
+   "symbols": [
+    "glTexEnvf"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexEnvi": {
+   "symbols": [
+    "glTexEnvi"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexGen": {
+   "symbols": [
+    "glTexGenfv"
+   ],
+   "reason": "overload Java -> bentuk vektor"
+  },
+  "GL11.glTexGeni": {
+   "symbols": [
+    "glTexGeni"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexImage2D": {
+   "symbols": [
+    "glTexImage2D"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexParameterf": {
+   "symbols": [
+    "glTexParameterf"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexParameteri": {
+   "symbols": [
+    "glTexParameteri"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTexSubImage2D": {
+   "symbols": [
+    "glTexSubImage2D"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTranslated": {
+   "symbols": [
+    "glTranslated"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glTranslatef": {
+   "symbols": [
+    "glTranslatef"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glVertex3f": {
+   "symbols": [
+    "glVertex3f"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glVertexPointer": {
+   "symbols": [
+    "glVertexPointer"
+   ],
+   "reason": "langsung"
+  },
+  "GL11.glViewport": {
+   "symbols": [
+    "glViewport"
+   ],
+   "reason": "langsung"
+  },
+  "GL13.glActiveTexture": {
+   "symbols": [
+    "glActiveTexture"
+   ],
+   "reason": "langsung"
+  },
+  "GL13.glClientActiveTexture": {
+   "symbols": [
+    "glClientActiveTexture"
+   ],
+   "reason": "langsung"
+  },
+  "GL13.glMultiTexCoord2f": {
+   "symbols": [
+    "glMultiTexCoord2f"
+   ],
+   "reason": "langsung"
+  },
+  "GL14.glBlendEquation": {
+   "symbols": [
+    "glBlendEquation"
+   ],
+   "reason": "langsung"
+  },
+  "GL14.glBlendFuncSeparate": {
+   "symbols": [
+    "glBlendFuncSeparate"
+   ],
+   "reason": "langsung"
+  },
+  "GL15.glBindBuffer": {
+   "symbols": [
+    "glBindBuffer"
+   ],
+   "reason": "langsung"
+  },
+  "GL15.glBufferData": {
+   "symbols": [
+    "glBufferData"
+   ],
+   "reason": "langsung"
+  },
+  "GL15.glDeleteBuffers": {
+   "symbols": [
+    "glDeleteBuffers"
+   ],
+   "reason": "langsung"
+  },
+  "GL15.glGenBuffers": {
+   "symbols": [
+    "glGenBuffers"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glAttachShader": {
+   "symbols": [
+    "glAttachShader"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glCompileShader": {
+   "symbols": [
+    "glCompileShader"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glCreateProgram": {
+   "symbols": [
+    "glCreateProgram"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glCreateShader": {
+   "symbols": [
+    "glCreateShader"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glDeleteProgram": {
+   "symbols": [
+    "glDeleteProgram"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glDeleteShader": {
+   "symbols": [
+    "glDeleteShader"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glGetAttribLocation": {
+   "symbols": [
+    "glGetAttribLocation"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glGetProgramInfoLog": {
+   "symbols": [
+    "glGetProgramInfoLog"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glGetProgrami": {
+   "symbols": [
+    "glGetProgramiv"
+   ],
+   "reason": "skalar->vektor (i -> iv)"
+  },
+  "GL20.glGetShaderInfoLog": {
+   "symbols": [
+    "glGetShaderInfoLog"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glGetShaderi": {
+   "symbols": [
+    "glGetShaderiv"
+   ],
+   "reason": "skalar->vektor (i -> iv)"
+  },
+  "GL20.glGetUniformLocation": {
+   "symbols": [
+    "glGetUniformLocation"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glLinkProgram": {
+   "symbols": [
+    "glLinkProgram"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glShaderSource": {
+   "symbols": [
+    "glShaderSource"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glUniform1": {
+   "symbols": [
+    "glUniform1fv",
+    "glUniform1iv"
+   ],
+   "reason": "uniform vektor"
+  },
+  "GL20.glUniform1i": {
+   "symbols": [
+    "glUniform1i"
+   ],
+   "reason": "langsung"
+  },
+  "GL20.glUniform2": {
+   "symbols": [
+    "glUniform2fv",
+    "glUniform2iv"
+   ],
+   "reason": "uniform vektor"
+  },
+  "GL20.glUniform3": {
+   "symbols": [
+    "glUniform3fv",
+    "glUniform3iv"
+   ],
+   "reason": "uniform vektor"
+  },
+  "GL20.glUniform4": {
+   "symbols": [
+    "glUniform4fv",
+    "glUniform4iv"
+   ],
+   "reason": "uniform vektor"
+  },
+  "GL20.glUniformMatrix2": {
+   "symbols": [
+    "glUniformMatrix2fv"
+   ],
+   "reason": "matriks uniform -> bentuk fv"
+  },
+  "GL20.glUniformMatrix3": {
+   "symbols": [
+    "glUniformMatrix3fv"
+   ],
+   "reason": "matriks uniform -> bentuk fv"
+  },
+  "GL20.glUniformMatrix4": {
+   "symbols": [
+    "glUniformMatrix4fv"
+   ],
+   "reason": "matriks uniform -> bentuk fv"
+  },
+  "GL20.glUseProgram": {
+   "symbols": [
+    "glUseProgram"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glBindFramebuffer": {
+   "symbols": [
+    "glBindFramebuffer"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glBindRenderbuffer": {
+   "symbols": [
+    "glBindRenderbuffer"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glCheckFramebufferStatus": {
+   "symbols": [
+    "glCheckFramebufferStatus"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glDeleteFramebuffers": {
+   "symbols": [
+    "glDeleteFramebuffers"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glDeleteRenderbuffers": {
+   "symbols": [
+    "glDeleteRenderbuffers"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glFramebufferRenderbuffer": {
+   "symbols": [
+    "glFramebufferRenderbuffer"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glFramebufferTexture2D": {
+   "symbols": [
+    "glFramebufferTexture2D"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glGenFramebuffers": {
+   "symbols": [
+    "glGenFramebuffers"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glGenRenderbuffers": {
+   "symbols": [
+    "glGenRenderbuffers"
+   ],
+   "reason": "langsung"
+  },
+  "GL30.glRenderbufferStorage": {
+   "symbols": [
+    "glRenderbufferStorage"
+   ],
+   "reason": "langsung"
+  }
+ },
+ "per_class": {
+  "ARBFramebufferObject": [
+   "glBindFramebuffer",
+   "glBindRenderbuffer",
+   "glCheckFramebufferStatus",
+   "glDeleteFramebuffers",
+   "glDeleteRenderbuffers",
+   "glFramebufferRenderbuffer",
+   "glFramebufferTexture2D",
+   "glGenFramebuffers",
+   "glGenRenderbuffers",
+   "glRenderbufferStorage"
+  ],
+  "ARBMultitexture": [
+   "glActiveTextureARB",
+   "glClientActiveTextureARB",
+   "glMultiTexCoord2fARB"
+  ],
+  "ARBShaderObjects": [
+   "glAttachObjectARB",
+   "glCompileShaderARB",
+   "glCreateProgramObjectARB",
+   "glCreateShaderObjectARB",
+   "glDeleteObjectARB",
+   "glGetInfoLogARB",
+   "glGetObjectParameterivARB",
+   "glGetUniformLocationARB",
+   "glLinkProgramARB",
+   "glShaderSourceARB",
+   "glUniform1fvARB",
+   "glUniform1iARB",
+   "glUniform1ivARB",
+   "glUniform2fvARB",
+   "glUniform2ivARB",
+   "glUniform3fvARB",
+   "glUniform3ivARB",
+   "glUniform4fvARB",
+   "glUniform4ivARB",
+   "glUniformMatrix2fvARB",
+   "glUniformMatrix3fvARB",
+   "glUniformMatrix4fvARB",
+   "glUseProgramObjectARB"
+  ],
+  "ARBVertexBufferObject": [
+   "glBindBufferARB",
+   "glBufferDataARB",
+   "glDeleteBuffersARB",
+   "glGenBuffersARB"
+  ],
+  "ARBVertexShader": [
+   "glGetAttribLocationARB"
+  ],
+  "EXTBlendFuncSeparate": [
+   "glBlendFuncSeparateEXT"
+  ],
+  "EXTFramebufferObject": [
+   "glBindFramebufferEXT",
+   "glBindRenderbufferEXT",
+   "glCheckFramebufferStatusEXT",
+   "glDeleteFramebuffersEXT",
+   "glDeleteRenderbuffersEXT",
+   "glFramebufferRenderbufferEXT",
+   "glFramebufferTexture2DEXT",
+   "glGenFramebuffersEXT",
+   "glGenRenderbuffersEXT",
+   "glRenderbufferStorageEXT"
+  ],
+  "GL11": [
+   "glAlphaFunc",
+   "glBegin",
+   "glBindTexture",
+   "glBlendFunc",
+   "glCallList",
+   "glClear",
+   "glClearColor",
+   "glClearDepth",
+   "glColor4f",
+   "glColorMask",
+   "glColorMaterial",
+   "glColorPointer",
+   "glCopyTexSubImage2D",
+   "glCullFace",
+   "glDeleteLists",
+   "glDeleteTextures",
+   "glDepthFunc",
+   "glDepthMask",
+   "glDisable",
+   "glDisableClientState",
+   "glDrawArrays",
+   "glEnable",
+   "glEnableClientState",
+   "glEnd",
+   "glEndList",
+   "glFogf",
+   "glFogfv",
+   "glFogi",
+   "glGenLists",
+   "glGenTextures",
+   "glGetError",
+   "glGetFloatv",
+   "glGetIntegerv",
+   "glGetString",
+   "glGetTexImage",
+   "glGetTexLevelParameteriv",
+   "glLightModelfv",
+   "glLightfv",
+   "glLineWidth",
+   "glLoadIdentity",
+   "glLogicOp",
+   "glMatrixMode",
+   "glMultMatrixf",
+   "glNewList",
+   "glNormal3f",
+   "glNormalPointer",
+   "glOrtho",
+   "glPixelStorei",
+   "glPolygonMode",
+   "glPolygonOffset",
+   "glPopAttrib",
+   "glPopMatrix",
+   "glPushAttrib",
+   "glPushMatrix",
+   "glReadPixels",
+   "glRotatef",
+   "glScaled",
+   "glScalef",
+   "glShadeModel",
+   "glTexCoord2f",
+   "glTexCoordPointer",
+   "glTexEnvf",
+   "glTexEnvfv",
+   "glTexEnvi",
+   "glTexGenfv",
+   "glTexGeni",
+   "glTexImage2D",
+   "glTexParameterf",
+   "glTexParameteri",
+   "glTexSubImage2D",
+   "glTranslated",
+   "glTranslatef",
+   "glVertex3f",
+   "glVertexPointer",
+   "glViewport"
+  ],
+  "GL13": [
+   "glActiveTexture",
+   "glClientActiveTexture",
+   "glMultiTexCoord2f"
+  ],
+  "GL14": [
+   "glBlendEquation",
+   "glBlendFuncSeparate"
+  ],
+  "GL15": [
+   "glBindBuffer",
+   "glBufferData",
+   "glDeleteBuffers",
+   "glGenBuffers"
+  ],
+  "GL20": [
+   "glAttachShader",
+   "glCompileShader",
+   "glCreateProgram",
+   "glCreateShader",
+   "glDeleteProgram",
+   "glDeleteShader",
+   "glGetAttribLocation",
+   "glGetProgramInfoLog",
+   "glGetProgramiv",
+   "glGetShaderInfoLog",
+   "glGetShaderiv",
+   "glGetUniformLocation",
+   "glLinkProgram",
+   "glShaderSource",
+   "glUniform1fv",
+   "glUniform1i",
+   "glUniform1iv",
+   "glUniform2fv",
+   "glUniform2iv",
+   "glUniform3fv",
+   "glUniform3iv",
+   "glUniform4fv",
+   "glUniform4iv",
+   "glUniformMatrix2fv",
+   "glUniformMatrix3fv",
+   "glUniformMatrix4fv",
+   "glUseProgram"
+  ],
+  "GL30": [
+   "glBindFramebuffer",
+   "glBindRenderbuffer",
+   "glCheckFramebufferStatus",
+   "glDeleteFramebuffers",
+   "glDeleteRenderbuffers",
+   "glFramebufferRenderbuffer",
+   "glFramebufferTexture2D",
+   "glGenFramebuffers",
+   "glGenRenderbuffers",
+   "glRenderbufferStorage"
+  ]
+ },
+ "unresolved": []
+}

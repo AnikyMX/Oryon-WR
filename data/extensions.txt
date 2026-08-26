@@ -1,0 +1,36 @@
+# Ekstensi yang DIIKLANKAN Oryon lewat glGetString(GL_EXTENSIONS).
+#
+# Aturan: hanya boleh dicantumkan bila (a) ekstensi itu tidak punya entry point
+# sama sekali dan fiturnya memang ada di GLES 3.2, atau (b) SELURUH entry
+# point-nya ada di daftar ekspor. tools/gen_extensions.py menegakkan aturan ini
+# dan gagal bila dilanggar. Mengiklankan yang tidak lengkap membuat LWJGL
+# menandai flag-nya false dan membanjiri log dengan reportMissing.
+
+# --- tercakup penuh oleh daftar ekspor ---
+GL_ARB_framebuffer_object
+GL_EXT_blend_func_separate
+
+# --- tanpa entry point; fitur ada di GLES 3.2 ---
+GL_ARB_compatibility
+GL_ARB_depth_texture
+GL_ARB_shadow
+GL_ARB_texture_non_power_of_two
+GL_ARB_texture_cube_map
+GL_ARB_texture_border_clamp
+GL_ARB_texture_env_combine
+GL_ARB_fragment_shader
+GL_ARB_half_float_pixel
+GL_ARB_half_float_vertex
+GL_ARB_pixel_buffer_object
+GL_ARB_map_buffer_alignment
+GL_ARB_seamless_cube_map
+GL_ARB_explicit_attrib_location
+GL_ARB_depth_buffer_float
+GL_ARB_framebuffer_sRGB
+GL_EXT_framebuffer_sRGB
+GL_EXT_texture_sRGB
+GL_EXT_packed_depth_stencil
+GL_EXT_blend_subtract
+GL_EXT_stencil_wrap
+GL_EXT_texture_lod_bias
+GL_EXT_rescale_normal

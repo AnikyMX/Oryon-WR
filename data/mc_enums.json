@@ -1,0 +1,308 @@
+{
+ "source": "d226ff97-1.12.2.jar",
+ "classes": 3310,
+ "calls": {
+  "DisplayMode.<init>": [
+   {
+    "value": 1,
+    "hex": "0x1",
+    "names": [
+     "GL_ARB_imaging",
+     "GL_ARB_multitexture",
+     "GL_ATI_blend_equation_separate",
+     "GL_CLIENT_PIXEL_STORE_BIT",
+     "GL_CONTEXT_CORE_PROFILE_BIT",
+     "GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT",
+     "GL_CURRENT_BIT",
+     "GL_LINES",
+     "GL_MAP_READ_BIT",
+     "GL_MESA_packed_depth_stencil",
+     "GL_OES_EGL_image",
+     "GL_ONE",
+     "GL_SYNC_FLUSH_COMMANDS_BIT",
+     "GL_TRUE",
+     "GL_VERSION_1_1",
+     "GL_VERSION_1_2",
+     "GL_VERSION_1_3"
+    ],
+    "count": 2
+   },
+   {
+    "value": 2560,
+    "hex": "0xa00",
+    "names": [
+     "GL_COEFF"
+    ],
+    "count": 1
+   },
+   {
+    "value": 1600,
+    "hex": "0x640",
+    "names": [],
+    "count": 1
+   },
+   {
+    "value": 2880,
+    "hex": "0xb40",
+    "names": [
+     "GL_POLYGON_MODE"
+    ],
+    "count": 1
+   },
+   {
+    "value": 1800,
+    "hex": "0x708",
+    "names": [],
+    "count": 1
+   }
+  ],
+  "GL11.glBindTexture": [
+   {
+    "value": 3553,
+    "hex": "0xde1",
+    "names": [
+     "GL_TEXTURE_2D"
+    ],
+    "count": 1
+   }
+  ],
+  "GL11.glFogf": [
+   {
+    "value": 2914,
+    "hex": "0xb62",
+    "names": [
+     "GL_FOG_DENSITY"
+    ],
+    "count": 1
+   },
+   {
+    "value": 2915,
+    "hex": "0xb63",
+    "names": [
+     "GL_FOG_START"
+    ],
+    "count": 1
+   },
+   {
+    "value": 2916,
+    "hex": "0xb64",
+    "names": [
+     "GL_FOG_END"
+    ],
+    "count": 1
+   }
+  ],
+  "GL11.glFogi": [
+   {
+    "value": 2917,
+    "hex": "0xb65",
+    "names": [
+     "GL_FOG_MODE"
+    ],
+    "count": 1
+   }
+  ],
+  "GL11.glGetString": [
+   {
+    "value": 7936,
+    "hex": "0x1f00",
+    "names": [
+     "GL_VENDOR"
+    ],
+    "count": 1
+   }
+  ],
+  "GL11.glPushAttrib": [
+   {
+    "value": 8256,
+    "hex": "0x2040",
+    "names": [],
+    "count": 1
+   }
+  ],
+  "GL11.glTexGeni": [
+   {
+    "value": 9472,
+    "hex": "0x2500",
+    "names": [
+     "GL_TEXTURE_GEN_MODE"
+    ],
+    "count": 1
+   }
+  ],
+  "PixelFormat.withDepthBits": [
+   {
+    "value": 24,
+    "hex": "0x18",
+    "names": [],
+    "count": 1
+   }
+  ]
+ },
+ "tokens": {
+  "GL_POINTS": {
+   "count": 410,
+   "classes": 10
+  },
+  "GL_LINES": {
+   "count": 324,
+   "classes": 10
+  },
+  "GL_LINE_LOOP": {
+   "count": 113,
+   "classes": 8
+  },
+  "GL_LINE_STRIP": {
+   "count": 44,
+   "classes": 6
+  },
+  "GL_TRIANGLES": {
+   "count": 35,
+   "classes": 6
+  },
+  "GL_QUAD_STRIP": {
+   "count": 33,
+   "classes": 7
+  },
+  "GL_TEXTURE_ENV": {
+   "count": 33,
+   "classes": 2
+  },
+  "GL_TRIANGLE_STRIP": {
+   "count": 23,
+   "classes": 5
+  },
+  "GL_QUADS": {
+   "count": 21,
+   "classes": 5
+  },
+  "GL_TEXTURE_2D": {
+   "count": 16,
+   "classes": 4
+  },
+  "GL_TRIANGLE_FAN": {
+   "count": 15,
+   "classes": 5
+  },
+  "GL_POLYGON": {
+   "count": 11,
+   "classes": 4
+  },
+  "GL_GREATER": {
+   "count": 8,
+   "classes": 2
+  },
+  "GL_LIGHT0": {
+   "count": 8,
+   "classes": 3
+  },
+  "GL_MODULATE": {
+   "count": 6,
+   "classes": 2
+  },
+  "GL_SMOOTH": {
+   "count": 5,
+   "classes": 4
+  },
+  "GL_LINEAR": {
+   "count": 5,
+   "classes": 3
+  },
+  "GL_EYE_LINEAR": {
+   "count": 4,
+   "classes": 1
+  },
+  "GL_OBJECT_LINEAR": {
+   "count": 4,
+   "classes": 1
+  },
+  "GL_TEXTURE_ENV_MODE": {
+   "count": 3,
+   "classes": 2
+  },
+  "GL_COMBINE": {
+   "count": 3,
+   "classes": 2
+  },
+  "GL_REPLACE": {
+   "count": 2,
+   "classes": 1
+  },
+  "GL_AMBIENT": {
+   "count": 2,
+   "classes": 2
+  },
+  "GL_DIFFUSE": {
+   "count": 2,
+   "classes": 1
+  },
+  "GL_SPECULAR": {
+   "count": 2,
+   "classes": 1
+  },
+  "GL_FRONT": {
+   "count": 2,
+   "classes": 2
+  },
+  "GL_FILL": {
+   "count": 2,
+   "classes": 1
+  },
+  "GL_FLAT": {
+   "count": 2,
+   "classes": 1
+  },
+  "GL_LEQUAL": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_LIGHTING": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_NORMALIZE": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_RESCALE_NORMAL": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_ALWAYS": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_LIGHT_MODEL_AMBIENT": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_POSITION": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_FRONT_AND_BACK": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_AMBIENT_AND_DIFFUSE": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_LESS": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_EXP": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_TEXTURE_LOD_BIAS": {
+   "count": 1,
+   "classes": 1
+  },
+  "GL_BACK": {
+   "count": 1,
+   "classes": 1
+  }
+ }
+}

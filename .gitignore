@@ -1,0 +1,13 @@
+build/
+out/
+*.so
+*.o
+*.a
+.cache/
+compile_commands.json
+__pycache__/
+*.pyc
+.venv/
+
+# Aset Minecraft yang dibangkitkan untuk tes; tidak untuk disebarkan.
+tests/mc_shaders.inc

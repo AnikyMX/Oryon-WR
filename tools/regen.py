@@ -46,6 +46,8 @@ if "--jars" in sys.argv:
 if jars:
     run(EXTRACT[0][0], jars[0])
     run(EXTRACT[1][0], jars[1], "1.12.2")
+    run("extract_mc_enums.py", jars[1])
+    run("audit_enums.py", jars[1])      # gagal bila ada enum non-GLES tak tertangani
 else:
     print("(melewati ekstraksi jar; memakai data/*.json yang sudah ada)")
 

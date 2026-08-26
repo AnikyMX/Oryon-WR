@@ -57,6 +57,12 @@ ORYON_API void glGetIntegerv(GLenum pname, GLint *params) {
     case GL_MAJOR_VERSION:               *params = 2; return;
     case GL_MINOR_VERSION:               *params = 1; return;
 
+    /* Kueri khas GL desktop yang tidak dikenal GLES. Diteruskan, driver akan
+       memasang GL_INVALID_ENUM - dan Minecraft memeriksa glGetError tiap frame,
+       lalu melaporkannya sebagai "GL ERROR" yang tidak ada sangkut pautnya. */
+    case GL_RGBA_MODE:                   *params = GL_TRUE; return;
+    case GL_POLYGON_MODE:                params[0] = GL_FILL;
+                                         params[1] = GL_FILL; return;
     case GL_MATRIX_MODE:                 *params = (GLint) g_ff.mode; return;
     case GL_MODELVIEW_STACK_DEPTH:       *params = g_ff.mv_top + 1; return;
     case GL_PROJECTION_STACK_DEPTH:      *params = g_ff.pr_top + 1; return;

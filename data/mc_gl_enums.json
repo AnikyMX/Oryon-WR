@@ -1,0 +1,1455 @@
+{
+ "source": "d226ff97-1.12.2.jar",
+ "total": 126,
+ "benign": {
+  "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER": "nilai KEMBALIAN glCheckFramebufferStatus, dipetakan ke string; bukan masukan",
+  "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER": "nilai KEMBALIAN glCheckFramebufferStatus, dipetakan ke string; bukan masukan",
+  "GL_COEFF": "positif palsu: 2560 dipakai sebagai lebar layar di konstruktor DisplayMode",
+  "GL_HINT_BIT": "bit mask glPushAttrib; granularitas mask memang diabaikan",
+  "GL_COPY": "argumen glLogicOp; GLES tidak punya operasi logika, jadi no-op"
+ },
+ "not_in_gles": 65,
+ "unhandled": [],
+ "enums": [
+  {
+   "value": "0x2300",
+   "names": [
+    "GL_TEXTURE_ENV"
+   ],
+   "count": 33,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xde1",
+   "names": [
+    "GL_TEXTURE_2D"
+   ],
+   "count": 23,
+   "classes": 7,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1700",
+   "names": [
+    "GL_MODELVIEW"
+   ],
+   "count": 20,
+   "classes": 5,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1701",
+   "names": [
+    "GL_PROJECTION"
+   ],
+   "count": 15,
+   "classes": 4,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x204",
+   "names": [
+    "GL_GREATER"
+   ],
+   "count": 13,
+   "classes": 5,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x4000",
+   "names": [
+    "GL_COLOR_BUFFER_BIT",
+    "GL_LIGHT0"
+   ],
+   "count": 8,
+   "classes": 3,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1702",
+   "names": [
+    "GL_TEXTURE"
+   ],
+   "count": 8,
+   "classes": 4,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8074",
+   "names": [
+    "GL_VERTEX_ARRAY"
+   ],
+   "count": 8,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1d01",
+   "names": [
+    "GL_SMOOTH"
+   ],
+   "count": 7,
+   "classes": 6,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2601",
+   "names": [
+    "GL_LINEAR"
+   ],
+   "count": 7,
+   "classes": 4,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x302",
+   "names": [
+    "GL_SRC_ALPHA"
+   ],
+   "count": 6,
+   "classes": 2,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x2100",
+   "names": [
+    "GL_MODULATE"
+   ],
+   "count": 6,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2801",
+   "names": [
+    "GL_TEXTURE_MIN_FILTER"
+   ],
+   "count": 5,
+   "classes": 4,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x2800",
+   "names": [
+    "GL_TEXTURE_MAG_FILTER"
+   ],
+   "count": 5,
+   "classes": 4,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8571",
+   "names": [
+    "GL_COMBINE_RGB",
+    "GL_COMBINE_RGB_ARB"
+   ],
+   "count": 5,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8580",
+   "names": [
+    "GL_SOURCE0_RGB",
+    "GL_SOURCE0_RGB_ARB",
+    "GL_SRC0_RGB"
+   ],
+   "count": 5,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8576",
+   "names": [
+    "GL_CONSTANT",
+    "GL_CONSTANT_ARB"
+   ],
+   "count": 5,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8590",
+   "names": [
+    "GL_OPERAND0_RGB",
+    "GL_OPERAND0_RGB_ARB"
+   ],
+   "count": 5,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8572",
+   "names": [
+    "GL_COMBINE_ALPHA",
+    "GL_COMBINE_ALPHA_ARB"
+   ],
+   "count": 5,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8588",
+   "names": [
+    "GL_SOURCE0_ALPHA",
+    "GL_SOURCE0_ALPHA_ARB",
+    "GL_SRC0_ALPHA"
+   ],
+   "count": 5,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8598",
+   "names": [
+    "GL_OPERAND0_ALPHA",
+    "GL_OPERAND0_ALPHA_ARB"
+   ],
+   "count": 5,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x800",
+   "names": [
+    "GL_EXP",
+    "GL_VIEWPORT_BIT"
+   ],
+   "count": 5,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x203",
+   "names": [
+    "GL_LEQUAL"
+   ],
+   "count": 4,
+   "classes": 4,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1d00",
+   "names": [
+    "GL_FLAT"
+   ],
+   "count": 4,
+   "classes": 3,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x300",
+   "names": [
+    "GL_SRC_COLOR"
+   ],
+   "count": 4,
+   "classes": 2,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2400",
+   "names": [
+    "GL_EYE_LINEAR"
+   ],
+   "count": 4,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2502",
+   "names": [
+    "GL_EYE_PLANE"
+   ],
+   "count": 4,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2401",
+   "names": [
+    "GL_OBJECT_LINEAR"
+   ],
+   "count": 4,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2901",
+   "names": [
+    "GL_REPEAT"
+   ],
+   "count": 4,
+   "classes": 2,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8578",
+   "names": [
+    "GL_PREVIOUS",
+    "GL_PREVIOUS_ARB"
+   ],
+   "count": 4,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1f00",
+   "names": [
+    "GL_VENDOR"
+   ],
+   "count": 3,
+   "classes": 3,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2200",
+   "names": [
+    "GL_TEXTURE_ENV_MODE"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8570",
+   "names": [
+    "GL_COMBINE",
+    "GL_COMBINE_ARB"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xb65",
+   "names": [
+    "GL_FOG_MODE"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xb66",
+   "names": [
+    "GL_FOG_COLOR"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2802",
+   "names": [
+    "GL_TEXTURE_WRAP_S"
+   ],
+   "count": 3,
+   "classes": 3,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2803",
+   "names": [
+    "GL_TEXTURE_WRAP_T"
+   ],
+   "count": 3,
+   "classes": 3,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8581",
+   "names": [
+    "GL_SOURCE1_RGB",
+    "GL_SOURCE1_RGB_ARB",
+    "GL_SRC1_RGB"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8582",
+   "names": [
+    "GL_SOURCE2_RGB",
+    "GL_SOURCE2_RGB_ARB",
+    "GL_SRC2_RGB"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8589",
+   "names": [
+    "GL_SOURCE1_ALPHA",
+    "GL_SOURCE1_ALPHA_ARB",
+    "GL_SRC1_ALPHA"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x858a",
+   "names": [
+    "GL_SOURCE2_ALPHA",
+    "GL_SOURCE2_ALPHA_ARB",
+    "GL_SRC2_ALPHA"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8591",
+   "names": [
+    "GL_OPERAND1_RGB",
+    "GL_OPERAND1_RGB_ARB"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8592",
+   "names": [
+    "GL_OPERAND2_RGB",
+    "GL_OPERAND2_RGB_ARB"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8599",
+   "names": [
+    "GL_OPERAND1_ALPHA",
+    "GL_OPERAND1_ALPHA_ARB"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x859a",
+   "names": [
+    "GL_OPERAND2_ALPHA",
+    "GL_OPERAND2_ALPHA_ARB"
+   ],
+   "count": 3,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1300",
+   "names": [
+    "GL_COMPILE"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8078",
+   "names": [
+    "GL_TEXTURE_COORD_ARRAY"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1406",
+   "names": [
+    "GL_FLOAT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8d40",
+   "names": [
+    "GL_FRAMEBUFFER",
+    "GL_FRAMEBUFFER_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8d41",
+   "names": [
+    "GL_RENDERBUFFER",
+    "GL_RENDERBUFFER_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8ce0",
+   "names": [
+    "GL_COLOR_ATTACHMENT0",
+    "GL_COLOR_ATTACHMENT0_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8d00",
+   "names": [
+    "GL_DEPTH_ATTACHMENT",
+    "GL_DEPTH_ATTACHMENT_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8cd5",
+   "names": [
+    "GL_FRAMEBUFFER_COMPLETE",
+    "GL_FRAMEBUFFER_COMPLETE_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8cd6",
+   "names": [
+    "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT",
+    "GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8cd7",
+   "names": [
+    "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT",
+    "GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8cdb",
+   "names": [
+    "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER",
+    "GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": false,
+   "handled": false,
+   "benign": true
+  },
+  {
+   "value": "0x8cdc",
+   "names": [
+    "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER",
+    "GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT"
+   ],
+   "count": 3,
+   "classes": 1,
+   "in_gles": false,
+   "handled": false,
+   "benign": true
+  },
+  {
+   "value": "0x1f02",
+   "names": [
+    "GL_VERSION"
+   ],
+   "count": 2,
+   "classes": 2,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8064",
+   "names": [
+    "GL_PROXY_TEXTURE_2D"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1908",
+   "names": [
+    "GL_RGBA"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x80e1",
+   "names": [
+    "GL_BGRA",
+    "GL_BGRA_EXT"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8367",
+   "names": [
+    "GL_UNSIGNED_INT_8_8_8_8_REV"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2201",
+   "names": [
+    "GL_TEXTURE_ENV_COLOR"
+   ],
+   "count": 2,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1e01",
+   "names": [
+    "GL_REPLACE"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2600",
+   "names": [
+    "GL_NEAREST"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x207",
+   "names": [
+    "GL_ALWAYS"
+   ],
+   "count": 2,
+   "classes": 2,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1200",
+   "names": [
+    "GL_AMBIENT"
+   ],
+   "count": 2,
+   "classes": 2,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1201",
+   "names": [
+    "GL_DIFFUSE"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1202",
+   "names": [
+    "GL_SPECULAR"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x404",
+   "names": [
+    "GL_FRONT"
+   ],
+   "count": 2,
+   "classes": 2,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x1b02",
+   "names": [
+    "GL_FILL"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8076",
+   "names": [
+    "GL_COLOR_ARRAY"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x400",
+   "names": [
+    "GL_FRONT_LEFT",
+    "GL_STENCIL_BUFFER_BIT"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x2900",
+   "names": [
+    "GL_CLAMP"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xc31",
+   "names": [
+    "GL_RGBA_MODE"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x84c0",
+   "names": [
+    "GL_TEXTURE0",
+    "GL_TEXTURE0_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x84c1",
+   "names": [
+    "GL_TEXTURE1",
+    "GL_TEXTURE1_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x84c2",
+   "names": [
+    "GL_TEXTURE2",
+    "GL_TEXTURE2_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8575",
+   "names": [
+    "GL_INTERPOLATE",
+    "GL_INTERPOLATE_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8577",
+   "names": [
+    "GL_PRIMARY_COLOR",
+    "GL_PRIMARY_COLOR_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8b82",
+   "names": [
+    "GL_LINK_STATUS",
+    "GL_OBJECT_LINK_STATUS_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8b81",
+   "names": [
+    "GL_COMPILE_STATUS",
+    "GL_OBJECT_COMPILE_STATUS_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8b31",
+   "names": [
+    "GL_VERTEX_SHADER",
+    "GL_VERTEX_SHADER_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8b30",
+   "names": [
+    "GL_FRAGMENT_SHADER",
+    "GL_FRAGMENT_SHADER_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x88e4",
+   "names": [
+    "GL_STATIC_DRAW",
+    "GL_STATIC_DRAW_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8892",
+   "names": [
+    "GL_ARRAY_BUFFER",
+    "GL_ARRAY_BUFFER_ARB"
+   ],
+   "count": 2,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8b4a",
+   "names": [
+    "GL_MAX_VERTEX_UNIFORM_COMPONENTS",
+    "GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8b49",
+   "names": [
+    "GL_MAX_FRAGMENT_UNIFORM_COMPONENTS",
+    "GL_MAX_FRAGMENT_UNIFORM_COMPONENTS_ARB"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8869",
+   "names": [
+    "GL_MAX_VERTEX_ATTRIBS"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8b4c",
+   "names": [
+    "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",
+    "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8872",
+   "names": [
+    "GL_MAX_TEXTURE_IMAGE_UNITS"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x88ff",
+   "names": [
+    "GL_MAX_ARRAY_TEXTURE_LAYERS"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x1401",
+   "names": [
+    "GL_UNSIGNED_BYTE"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1000",
+   "names": [
+    "GL_TEXTURE_WIDTH",
+    "GL_TRANSFORM_BIT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xa00",
+   "names": [
+    "GL_COEFF"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": false,
+   "benign": true
+  },
+  {
+   "value": "0xb40",
+   "names": [
+    "GL_POLYGON_MODE"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1f01",
+   "names": [
+    "GL_RENDERER"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xba6",
+   "names": [
+    "GL_MODELVIEW_MATRIX"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xba7",
+   "names": [
+    "GL_PROJECTION_MATRIX"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xba2",
+   "names": [
+    "GL_VIEWPORT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0xd05",
+   "names": [
+    "GL_PACK_ALIGNMENT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xcf5",
+   "names": [
+    "GL_UNPACK_ALIGNMENT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x202",
+   "names": [
+    "GL_EQUAL"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xb62",
+   "names": [
+    "GL_FOG_DENSITY"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xb63",
+   "names": [
+    "GL_FOG_START"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xb64",
+   "names": [
+    "GL_FOG_END"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x2500",
+   "names": [
+    "GL_TEXTURE_GEN_MODE"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xb50",
+   "names": [
+    "GL_LIGHTING"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xba1",
+   "names": [
+    "GL_NORMALIZE"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x803a",
+   "names": [
+    "GL_RESCALE_NORMAL"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8000",
+   "names": [
+    "GL_HINT_BIT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": false,
+   "benign": true
+  },
+  {
+   "value": "0xb53",
+   "names": [
+    "GL_LIGHT_MODEL_AMBIENT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x1203",
+   "names": [
+    "GL_POSITION"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x408",
+   "names": [
+    "GL_FRONT_AND_BACK"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x1602",
+   "names": [
+    "GL_AMBIENT_AND_DIFFUSE"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x201",
+   "names": [
+    "GL_LESS"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8006",
+   "names": [
+    "GL_FUNC_ADD",
+    "GL_FUNC_ADD_EXT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x1503",
+   "names": [
+    "GL_COPY"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": false,
+   "benign": true
+  },
+  {
+   "value": "0x2702",
+   "names": [
+    "GL_NEAREST_MIPMAP_LINEAR"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x813d",
+   "names": [
+    "GL_TEXTURE_MAX_LEVEL"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x813b",
+   "names": [
+    "GL_TEXTURE_MAX_LOD"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x813a",
+   "names": [
+    "GL_TEXTURE_MIN_LOD"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  },
+  {
+   "value": "0x8501",
+   "names": [
+    "GL_TEXTURE_LOD_BIAS",
+    "GL_TEXTURE_LOD_BIAS_EXT"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x8573",
+   "names": [
+    "GL_RGB_SCALE",
+    "GL_RGB_SCALE_ARB"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0xd1c",
+   "names": [
+    "GL_ALPHA_SCALE"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": false,
+   "handled": true,
+   "benign": false
+  },
+  {
+   "value": "0x405",
+   "names": [
+    "GL_BACK"
+   ],
+   "count": 1,
+   "classes": 1,
+   "in_gles": true,
+   "handled": false,
+   "benign": false
+  }
+ ]
+}

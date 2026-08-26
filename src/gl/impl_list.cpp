@@ -25,6 +25,8 @@ ORYON_API void glDeleteLists(GLuint list, GLsizei range) {
     if (ensure_init()) list_delete(list, range);
 }
 
+/* mode: GL_COMPILE (satu-satunya yang dipakai 1.12.2) atau
+   GL_COMPILE_AND_EXECUTE, yang juga didukung. */
 ORYON_API void glNewList(GLuint list, GLenum mode) {
     if (!ensure_init()) return;
     if (list_compiling()) { set_error(GL_INVALID_OPERATION); return; }

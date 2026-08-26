@@ -44,6 +44,50 @@ GLint     s_unpack_align = 4;
 GLint     s_unpack_row   = 0;
 GLuint    s_bound_tex[FF_MAX_TEX];
 
+/* Tekstur proxy: fitur GL desktop yang tidak ada sama sekali di GLES.
+   Minecraft.getGLMaximumTextureSize() memakainya untuk mengukur atlas:
+
+       for (int i = 16384; i > 0; i >>= 1) {
+           glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, i, i, ...);
+           if (glGetTexLevelParameteri(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH) != 0)
+               return i;
+       }
+       return -1;
+
+   Diteruskan apa adanya, GLES menolaknya, kueri balik selalu 0, dan fungsi itu
+   mengembalikan -1. Atlas lalu berukuran 0x0 dan game crash saat menjahit
+   tekstur. Karena itu proxy dijawab di sini, tanpa pernah menyentuh driver. */
+GLint s_proxy_w, s_proxy_h;
+GLint s_max_tex;
+
+bool is_proxy(GLenum target) {
+    return target == GL_PROXY_TEXTURE_2D || target == GL_PROXY_TEXTURE_1D ||
+           target == GL_PROXY_TEXTURE_3D || target == GL_PROXY_TEXTURE_CUBE_MAP;
+}
+
+GLint max_texture_size() {
+    if (!s_max_tex) {
+        gles.glGetIntegerv(GL_MAX_TEXTURE_SIZE, &s_max_tex);
+        if (s_max_tex <= 0) s_max_tex = 2048;   /* driver bungkam: nilai aman */
+    }
+    return s_max_tex;
+}
+
+/* Target tekstur yang benar-benar dikenal GLES 3.2. */
+bool gles_tex_target(GLenum t) {
+    switch (t) {
+    case GL_TEXTURE_2D: case GL_TEXTURE_3D: case GL_TEXTURE_2D_ARRAY:
+    case GL_TEXTURE_CUBE_MAP:
+    case GL_TEXTURE_CUBE_MAP_POSITIVE_X: case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+    case GL_TEXTURE_CUBE_MAP_POSITIVE_Y: case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+    case GL_TEXTURE_CUBE_MAP_POSITIVE_Z: case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+    case GL_TEXTURE_2D_MULTISAMPLE: case GL_TEXTURE_BUFFER:
+        return true;
+    default:
+        return false;
+    }
+}
+
 void probe() {
     if (s_probed) return;
     s_probed = true;
@@ -163,6 +207,19 @@ ORYON_API void glTexImage2D(GLenum target, GLint level, GLint internalformat,
                             GLsizei width, GLsizei height, GLint border,
                             GLenum format, GLenum type, const GLvoid *pixels) {
     if (!ensure_init()) return;
+
+    if (is_proxy(target)) {
+        const GLint max = max_texture_size();
+        const bool fits = width > 0 && height > 0 && width <= max && height <= max;
+        s_proxy_w = fits ? width : 0;
+        s_proxy_h = fits ? height : 0;
+        return;                       /* jangan pernah sampai ke driver */
+    }
+    if (!gles_tex_target(target)) {
+        ORYON_LOG("glTexImage2D target 0x%X tidak ada di GLES, diabaikan", target);
+        return;
+    }
+
     Fmt f;
     resolve(internalformat, format, type, &f);
     const void *data = f.swap_rb ? swizzle(pixels, width, height) : pixels;
@@ -182,6 +239,7 @@ ORYON_API void glTexSubImage2D(GLenum target, GLint level, GLint xoffset,
                                GLint yoffset, GLsizei width, GLsizei height,
                                GLenum format, GLenum type, const GLvoid *pixels) {
     if (!ensure_init()) return;
+    if (is_proxy(target) || !gles_tex_target(target)) return;
     Fmt f;
     resolve(GL_RGBA, format, type, &f);
     const void *data = f.swap_rb ? swizzle(pixels, width, height) : pixels;
@@ -248,6 +306,7 @@ ORYON_API void glCompressedTexSubImage2D(GLenum target, GLint level, GLint xoffs
 
 ORYON_API void glTexParameteri(GLenum target, GLenum pname, GLint param) {
     if (!ensure_init()) return;
+    if (!gles_tex_target(target)) return;
     switch (pname) {
     case GL_TEXTURE_WRAP_S: case GL_TEXTURE_WRAP_T: case GL_TEXTURE_WRAP_R:
         gles.glTexParameteri(target, pname, fix_wrap(param));
@@ -263,6 +322,7 @@ ORYON_API void glTexParameteri(GLenum target, GLenum pname, GLint param) {
 
 ORYON_API void glTexParameterf(GLenum target, GLenum pname, GLfloat param) {
     if (!ensure_init()) return;
+    if (!gles_tex_target(target)) return;
     if (pname == GL_TEXTURE_LOD_BIAS) {
         /* GLES tidak punya bias LOD per-tekstur. 1.12.2 hanya menuliskan 0
            sebagai bagian dari reset state, jadi diam saja bila memang 0. */
@@ -317,6 +377,17 @@ ORYON_API void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height,
 ORYON_API void glGetTexLevelParameteriv(GLenum target, GLint level, GLenum pname,
                                         GLint *params) {
     if (!ensure_init() || !params) return;
+
+    if (is_proxy(target)) {
+        switch (pname) {
+        case GL_TEXTURE_WIDTH:  *params = s_proxy_w; return;
+        case GL_TEXTURE_HEIGHT: *params = s_proxy_h; return;
+        case GL_TEXTURE_DEPTH:  *params = s_proxy_w ? 1 : 0; return;
+        default:                *params = 0; return;
+        }
+    }
+    if (!gles_tex_target(target)) { *params = 0; return; }
+
     if (gles.glGetTexLevelParameteriv) {
         gles.glGetTexLevelParameteriv(target, level, pname, params);
         return;

@@ -16,7 +16,8 @@ Itu satu-satunya integrasi yang dibutuhkan.
 
 ## Status
 
-**Tahap 6 selesai** - tekstur, display list, dan 35 shader bawaan Minecraft berjalan.
+**Tahap 6 selesai**, plus perbaikan dari uji perangkat pertama (Mali-G52, Android 11).
+Lihat `docs/DEVICE.md`.
 
 | tahap | isi | status |
 |---|---|---|
@@ -26,6 +27,7 @@ Itu satu-satunya integrasi yang dibutuhkan.
 | 4 | State fixed-function + generator shader | selesai |
 | 5 | Mode langsung, client array, jalur gambar | selesai |
 | 6 | Tekstur, display list, GLSL Minecraft | selesai |
+| 6b | Tekstur proxy + audit enum (dari log perangkat) | selesai |
 
 ## Angka
 

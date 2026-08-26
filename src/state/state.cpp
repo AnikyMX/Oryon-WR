@@ -8,6 +8,10 @@ State g_state;
 
 /* Versi yang dilaporkan menentukan jalur render yang dipilih Minecraft.
    Lihat docs/ARCHITECTURE.md bagian 4 sebelum mengubah angka ini. */
+/* Naikkan tiap rilis: string ini muncul di log Minecraft, jadi bisa dipakai
+   memastikan build mana yang sedang berjalan di perangkat. */
+#define ORYON_BUILD "0.6.1"
+
 static const char kVersion[]  = "2.1 Oryon";
 static const char kGlsl[]     = "1.20";
 static const char kVendor[]   = "Oryon";
@@ -28,7 +32,7 @@ void state_init() {
 
     char *w = s_renderer;
     char *end = s_renderer + sizeof(s_renderer) - 1;
-    for (const char *p = "Oryon on "; *p && w < end; ++p) *w++ = *p;
+    for (const char *p = "Oryon " ORYON_BUILD " on "; *p && w < end; ++p) *w++ = *p;
     if (real) {
         for (const char *p = real; *p && w < end; ++p) *w++ = *p;
     } else {

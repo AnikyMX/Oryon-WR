@@ -213,6 +213,11 @@ uint8_t effective_env(const TexEnv &t) {
         t.src1_rgb == GL_PREVIOUS && t.op1_rgb == GL_SRC_COLOR)
         return ENV_MODULATE;
 
+    /* Konfigurasi di luar dua pola di atas - misalnya GL_INTERPOLATE dengan
+       GL_PRIMARY_COLOR dan GL_CONSTANT - tidak dibangkitkan sebagai cabang
+       shader tersendiri. 1.12.2 hanya memakainya untuk menuliskan nilai bawaan,
+       jadi GL_MODULATE adalah hasil yang sama; kalau ternyata bukan, baris log
+       inilah yang memberitahu. */
     ORYON_LOG("combiner texenv tidak dikenal (rgb=0x%X src0=0x%X src1=0x%X), "
               "memakai GL_MODULATE", t.combine_rgb, t.src0_rgb, t.src1_rgb);
     return ENV_MODULATE;
@@ -266,8 +271,11 @@ ORYON_API void glTexGeni(GLenum coord, GLenum pname, GLint param) {
     const int c = coord_index(coord);
     if (c < 0) { set_error(GL_INVALID_ENUM); return; }
     if (pname != GL_TEXTURE_GEN_MODE) return;
+    /* Hanya GL_EYE_LINEAR dan GL_OBJECT_LINEAR yang dipakai 1.12.2;
+       GL_SPHERE_MAP dan GL_REFLECTION_MAP tidak pernah muncul. */
     A().tex[A().active_tex].gen_mode[c] =
-        (uint8_t) ((GLenum) param == GL_EYE_LINEAR ? TG_EYE : TG_OBJECT);
+        (uint8_t) ((GLenum) param == GL_EYE_LINEAR ? TG_EYE
+                 : (GLenum) param == GL_OBJECT_LINEAR ? TG_OBJECT : TG_OBJECT);
 }
 
 ORYON_API void glTexGenfv(GLenum coord, GLenum pname, const GLfloat *params) {

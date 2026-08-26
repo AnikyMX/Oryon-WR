@@ -329,6 +329,38 @@ int main() {
         }
     }
 
+    /* ------------------------------- J. jalur yang membuat crash di perangkat */
+    puts("\n== J. Minecraft.getGLMaximumTextureSize() ==");
+    {
+        /* Salinan persis loop di Minecraft.java. Sebelum tekstur proxy
+           ditangani, loop ini selalu berakhir dengan -1, atlas jadi 0x0, dan
+           Stitcher melempar "Unable to fit: minecraft:blocks/lava_flow". */
+        int found = -1;
+        for (int i = 16384; i > 0; i >>= 1) {
+            glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, i, i, 0,
+                         GL_RGBA, GL_UNSIGNED_BYTE, 0);
+            GLint w = 0;
+            glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
+            if (w != 0) { found = i; break; }
+        }
+        GLint driver_max = 0;
+        gles.glGetIntegerv(GL_MAX_TEXTURE_SIZE, &driver_max);
+        ok(found > 0, "ukuran tekstur maksimum = %d (dulu -1)", found);
+        ok(found <= driver_max, "tidak melampaui GL_MAX_TEXTURE_SIZE driver (%d)",
+           driver_max);
+        ok(gles.glGetError() == GL_NO_ERROR,
+           "jalur proxy tidak menyisakan GL_INVALID_ENUM");
+
+        GLint rgba = 0;
+        glGetIntegerv(GL_RGBA_MODE, &rgba);
+        GLint pm[2] = { 0, 0 };
+        glGetIntegerv(GL_POLYGON_MODE, pm);
+        ok(rgba == GL_TRUE, "GL_RGBA_MODE dijawab Oryon, bukan diteruskan");
+        ok(pm[0] == GL_FILL && pm[1] == GL_FILL, "GL_POLYGON_MODE dijawab Oryon");
+        ok(gles.glGetError() == GL_NO_ERROR,
+           "kueri warisan tidak menyisakan error di driver");
+    }
+
 #if defined(ORYON_HAVE_MC_SHADERS)
     puts("\n== I. Seluruh shader bawaan Minecraft 1.12.2 ==");
     {

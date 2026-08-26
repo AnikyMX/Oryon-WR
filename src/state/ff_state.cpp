@@ -51,7 +51,8 @@ void ff_init() {
 
     for (int c = 0; c < 4; ++c) a.cur_color[c] = 1.0f;
     a.cur_normal[2] = 1.0f;
-    /* cur_tex sudah nol dari memset. */
+    /* Koordinat tekstur berjalan: bawaan GL adalah (0, 0, 0, 1). */
+    for (int u = 0; u < FF_MAX_TEX; ++u) a.cur_tex[u][3] = 1.0f;
 }
 
 float *ff_tex_matrix(int unit) { return g_ff.tx[unit][g_ff.tx_top[unit]]; }

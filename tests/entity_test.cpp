@@ -247,6 +247,83 @@ int main() {
     ok(drawn == 12, "%d/12 kotak tergambar dari satu list", drawn);
     ok(gles.glGetError() == GL_NO_ERROR, "tanpa error GL");
 
+    /* ------------------------------- D. lightmap tanpa array koordinat --- */
+    puts("\n== D. Lightmap unit 1 tanpa array koordinat ==");
+    {
+        /* Inilah bentuk sebenarnya jalur entitas Minecraft:
+             unit 0 = tekstur entitas, punya array koordinat
+             unit 1 = lightmap, TIDAK punya array - koordinatnya dikirim lewat
+                      OpenGlHelper.setLightmapTextureCoords() alias
+                      glMultiTexCoord2f(GL_TEXTURE1, ...)
+
+           Aturan GL: unit yang menyala tanpa array memakai koordinat BERJALAN.
+           Kalau Oryon memakai (0,0) sebagai gantinya, lightmap tersampel di
+           sudut tergelapnya dan seluruh entitas jadi hitam - persis gejala
+           yang dilaporkan dari perangkat. Format vertex terrain punya DUA
+           koordinat, jadi terrain tidak pernah kena. */
+        const unsigned char skin[4]   = { 255, 128, 0, 255 };
+        /* 2x2: hanya texel (1,1) yang terang, sisanya gelap - seperti lightmap. */
+        const unsigned char lmap[16]  = { 0,0,0,255,   0,0,0,255,
+                                          0,0,0,255,   255,255,255,255 };
+        GLuint t_skin = 0, t_lmap = 0;
+        gles.glGenTextures(1, &t_skin);
+        gles.glGenTextures(1, &t_lmap);
+        for (int i = 0; i < 2; ++i) {
+            gles.glActiveTexture(GL_TEXTURE0 + i);
+            gles.glBindTexture(GL_TEXTURE_2D, i ? t_lmap : t_skin);
+            gles.glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, i ? 2 : 1, i ? 2 : 1, 0,
+                              GL_RGBA, GL_UNSIGNED_BYTE, i ? lmap : skin);
+            gles.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            gles.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            gles.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            gles.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        }
+
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        /* Hanya unit 0 yang punya array koordinat - persis seperti
+           OLDMODEL_POSITION_TEX_NORMAL. */
+        glClientActiveTexture(GL_TEXTURE0);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        static MV lit_quad[4];
+        make_quad(lit_quad, 4.0f, 60.0f, 0, 127, 0);   /* normal ke atas: terang penuh */
+
+        GLuint elist = glGenLists(1);
+        glNewList(elist, GL_COMPILE);
+        draw_box(lit_quad);
+        glEndList();
+
+        /* Koordinat lightmap menunjuk texel terang. */
+        glMultiTexCoord2f(GL_TEXTURE1, 0.75f, 0.75f);
+        clear_black();
+        glCallList(elist);
+        const Px bright = pixel(32, 32);
+        ok(bright.r > 200 && bright.g > 100 && bright.b < 40,
+           "lightmap terang -> tekstur entitas terlihat (%u,%u,%u)",
+           bright.r, bright.g, bright.b);
+
+        /* Koordinat lightmap menunjuk texel gelap: HARUS hitam. Kalau tetap
+           terang, berarti koordinat berjalan tidak dipakai sama sekali. */
+        glMultiTexCoord2f(GL_TEXTURE1, 0.25f, 0.25f);
+        clear_black();
+        glCallList(elist);
+        const Px dark = pixel(32, 32);
+        ok(dark.r < 20 && dark.g < 20,
+           "lightmap gelap -> gelap (%u,%u,%u)", dark.r, dark.g, dark.b);
+        ok(bright.r != dark.r,
+           "koordinat berjalan glMultiTexCoord2f benar-benar berpengaruh");
+
+        glDeleteLists(elist, 1);
+        glActiveTexture(GL_TEXTURE1);
+        glDisable(GL_TEXTURE_2D);
+        glActiveTexture(GL_TEXTURE0);
+        glDisable(GL_TEXTURE_2D);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+
     glDeleteLists(list, 1);
     glDeleteLists(big, 1);
     glDisable(GL_LIGHTING);

@@ -91,7 +91,7 @@ struct FFAttribState {
 
     float    cur_color[4];
     float    cur_normal[3];
-    float    cur_tex[FF_MAX_TEX][2];
+    float    cur_tex[FF_MAX_TEX][4];
 };
 
 struct FFState {

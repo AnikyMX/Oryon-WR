@@ -164,6 +164,48 @@ Menariknya, jalur langsung (tanpa display list) sudah benar sejak awal. Itu
 menjelaskan mengapa terrain baik-baik saja: terrain tidak pernah lewat display
 list.
 
+## Uji keempat: bentuk benar, tekstur hitam
+
+Setelah perbaikan display list, entitas dan item muncul dengan bentuk yang benar
+- tetapi hitam pekat. Terrain tetap normal.
+
+Perbedaannya ada di format vertex:
+
+| yang digambar | format | koordinat tekstur |
+|---|---|---|
+| terrain | `BLOCK` | **dua**: tekstur blok + lightmap |
+| entitas | `OLDMODEL_POSITION_TEX_NORMAL` | **satu**: tekstur entitas saja |
+| item | `ITEM` | **satu** |
+
+Padahal saat menggambar entitas, **dua** unit tekstur menyala: unit 0 untuk kulit
+entitas, unit 1 untuk lightmap. Lalu dari mana koordinat lightmap datang kalau
+tidak ada array untuk unit 1? Dari **koordinat berjalan**:
+
+```java
+OpenGlHelper.setLightmapTextureCoords(lightmapTexUnit, (float) j, (float) k);
+// -> glMultiTexCoord2f(GL_TEXTURE1, j, k)
+```
+
+Aturan GL memang begitu: unit tekstur yang menyala tanpa array koordinat memakai
+nilai berjalan yang terakhir disetel. Generator shader Oryon justru menuliskan
+konstanta:
+
+```glsl
+vec4 t = vec4(0.0, 0.0, 0.0, 1.0);   // salah
+```
+
+Koordinat (0,0) pada tekstur lightmap adalah sudut paling gelap - hitam pekat.
+Setiap entitas dan item lalu dikalikan hitam. Terrain lolos karena format
+vertexnya memang membawa koordinat lightmap sendiri.
+
+Sekarang shader memakai uniform `u_curTex<i>` yang berisi nilai berjalan, persis
+sesuai aturan GL. Hal yang sama berlaku untuk normal: tanpa array normal,
+`u_curNormal` yang dipakai, bukan `vec3(0,0,1)` yang ditanam.
+
+`tests/entity_test.cpp` bagian D mereproduksi susunan itu apa adanya - unit 0
+ber-array, unit 1 tanpa array, lightmap 2x2 yang hanya terang di satu texel - dan
+memeriksa bahwa memindahkan koordinat berjalan benar-benar mengubah hasilnya.
+
 ## Catatan lingkup: OptiFine
 
 Uji ini memakai OptiFine. Crash yang diperbaiki di atas adalah jalur **vanilla**

@@ -31,6 +31,7 @@ Lihat `docs/DEVICE.md`.
 | 6b | Tekstur proxy + audit enum (dari log perangkat) | selesai |
 | 6c | Uniform dijaga serial (dari catatan performa perangkat) | selesai |
 | 6d | Display list banyak-gambar (entitas hilang di perangkat) | selesai |
+| 6e | Koordinat tekstur berjalan (entitas hitam di perangkat) | selesai |
 
 ## Angka
 

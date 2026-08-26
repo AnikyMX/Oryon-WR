@@ -72,6 +72,7 @@ void locate(FFProgram &p) {
     p.u_fog_end     = gles.glGetUniformLocation(g, "u_fogEnd");
     p.u_fog_density = gles.glGetUniformLocation(g, "u_fogDensity");
     p.u_lm_ambient  = gles.glGetUniformLocation(g, "u_lmAmbient");
+    p.u_cur_normal  = gles.glGetUniformLocation(g, "u_curNormal");
     for (int i = 0; i < FF_MAX_LIGHTS; ++i) {
         name_i(n, "u_lightPos",  i); p.u_light_pos[i]  = gles.glGetUniformLocation(g, n);
         name_i(n, "u_lightDiff", i); p.u_light_diff[i] = gles.glGetUniformLocation(g, n);
@@ -81,6 +82,7 @@ void locate(FFProgram &p) {
         name_i(n, "u_texMat", u); p.u_tex_mat[u] = gles.glGetUniformLocation(g, n);
         name_i(n, "u_tgS",    u); p.u_tg_s[u]    = gles.glGetUniformLocation(g, n);
         name_i(n, "u_tgT",    u); p.u_tg_t[u]    = gles.glGetUniformLocation(g, n);
+        name_i(n, "u_curTex", u); p.u_cur_tex[u] = gles.glGetUniformLocation(g, n);
     }
     /* Sampler dipatok sekali ke nomor unitnya; setelah ini tidak pernah berubah. */
     gles.glUseProgram(g);
@@ -211,10 +213,15 @@ bool ffp_bind(const FFKey &k) {
             }
         }
 
+        if (p->u_cur_normal >= 0)
+            gles.glUniform3fv(p->u_cur_normal, 1, g_ff.a.cur_normal);
+
         for (int u = 0; u < FF_MAX_TEX; ++u) {
             const TexEnv &t = g_ff.a.tex[u];
             if (p->u_tg_s[u] >= 0) gles.glUniform4fv(p->u_tg_s[u], 1, t.gen_plane[0]);
             if (p->u_tg_t[u] >= 0) gles.glUniform4fv(p->u_tg_t[u], 1, t.gen_plane[1]);
+            if (p->u_cur_tex[u] >= 0)
+                gles.glUniform4fv(p->u_cur_tex[u], 1, g_ff.a.cur_tex[u]);
         }
     }
     return true;

@@ -351,6 +351,7 @@ ORYON_API void glColor4f(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
 ORYON_API void glNormal3f(GLfloat x, GLfloat y, GLfloat z) {
     float *n = A().cur_normal;
     n[0] = x; n[1] = y; n[2] = z;
+    ff_touch_uniform();
 }
 
 /* ------------------------------------------------------- tumpukan atribut - */

@@ -74,6 +74,7 @@ unsigned ffp_gen_vertex(const FFKey &k, char *out, unsigned cap) {
     if (!(k.flags & FF_ATTR_COLOR)) put(b, "uniform vec4 u_color;\n");
     if (lit) {
         put(b, "uniform mat3 u_nrm;\nuniform vec4 u_lmAmbient;\n");
+        if (!(k.flags & FF_ATTR_NORMAL)) put(b, "uniform vec3 u_curNormal;\n");
         for (int i = 0; i < FF_MAX_LIGHTS; ++i) {
             if (!bit(k.light_mask, i)) continue;
             putn(b, "uniform vec4 u_lightPos", i); put(b, ";\n");
@@ -87,6 +88,11 @@ unsigned ffp_gen_vertex(const FFKey &k, char *out, unsigned cap) {
         if (bit(k.tex_gen, u)) {
             putn(b, "uniform vec4 u_tgS", u); put(b, ";\n");
             putn(b, "uniform vec4 u_tgT", u); put(b, ";\n");
+        } else if (!bit(k.attr_tex, u)) {
+            /* Aturan GL: unit tekstur yang menyala tanpa array koordinat
+               memakai koordinat BERJALAN (glMultiTexCoord). Di situlah
+               Minecraft menaruh koordinat lightmap entitas dan item. */
+            putn(b, "uniform vec4 u_curTex", u); put(b, ";\n");
         }
     }
 
@@ -106,7 +112,7 @@ unsigned ffp_gen_vertex(const FFKey &k, char *out, unsigned cap) {
            menyetelnya hitam, jadi menuliskannya hanya membakar ALU. */
         put(b, "  vec3 n = ");
         if (k.flags & FF_ATTR_NORMAL) put(b, "u_nrm * a_normal;\n");
-        else                          put(b, "vec3(0.0, 0.0, 1.0);\n");
+        else                          put(b, "u_nrm * u_curNormal;\n");
         if (k.flags & FF_NORMALIZE)   put(b, "  n = normalize(n);\n");
         put(b, "  vec3 lit = u_lmAmbient.rgb * c.rgb;\n");
         for (int i = 0; i < FF_MAX_LIGHTS; ++i) {
@@ -135,7 +141,7 @@ unsigned ffp_gen_vertex(const FFKey &k, char *out, unsigned cap) {
         } else if (bit(k.attr_tex, u)) {
             putn(b, "a_tex", u); put(b, ";\n");
         } else {
-            put(b, "vec4(0.0, 0.0, 0.0, 1.0);\n");
+            putn(b, "u_curTex", u); put(b, ";\n");
         }
         if (bit(k.tex_matrix, u)) { putn(b, "    t = u_texMat", u); put(b, " * t;\n"); }
         putn(b, "    v_tex", u); put(b, " = t.xy;\n  }\n");

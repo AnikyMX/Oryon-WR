@@ -37,6 +37,7 @@ ORYON_API void glVertex3f(GLfloat x, GLfloat y, GLfloat z) {
 ORYON_API void glTexCoord2f(GLfloat s, GLfloat t) {
     g_ff.a.cur_tex[0][0] = s;
     g_ff.a.cur_tex[0][1] = t;
+    ff_touch_uniform();
 }
 
 namespace {
@@ -45,6 +46,7 @@ void multi_tex(GLenum target, GLfloat s, GLfloat t) {
     if (u < 0 || u >= FF_MAX_TEX) { set_error(GL_INVALID_ENUM); return; }
     g_ff.a.cur_tex[u][0] = s;
     g_ff.a.cur_tex[u][1] = t;
+    ff_touch_uniform();
 }
 }  /* namespace */
 

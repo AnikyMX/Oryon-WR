@@ -1,0 +1,1774 @@
+{
+"cat": {
+"glAccum": "stub",
+"glActiveTexture": "handwritten",
+"glActiveTextureARB": "alias:glActiveTexture",
+"glAlphaFunc": "handwritten",
+"glAreTexturesResident": "handwritten",
+"glArrayElement": "handwritten",
+"glAttachObjectARB": "alias:glAttachShader",
+"glAttachShader": "handwritten",
+"glBegin": "handwritten",
+"glBeginConditionalRender": "handwritten",
+"glBeginQuery": "handwritten",
+"glBeginTransformFeedback": "passthrough",
+"glBindAttribLocation": "handwritten",
+"glBindAttribLocationARB": "alias:glBindAttribLocation",
+"glBindBuffer": "handwritten",
+"glBindBufferARB": "alias:glBindBuffer",
+"glBindBufferBase": "passthrough",
+"glBindBufferRange": "passthrough",
+"glBindFragDataLocation": "stub",
+"glBindFramebuffer": "passthrough",
+"glBindFramebufferEXT": "alias:glBindFramebuffer",
+"glBindRenderbuffer": "passthrough",
+"glBindRenderbufferEXT": "alias:glBindRenderbuffer",
+"glBindTexture": "handwritten",
+"glBindVertexArray": "handwritten",
+"glBitmap": "stub",
+"glBlendColor": "passthrough",
+"glBlendColorEXT": "alias:glBlendColor",
+"glBlendEquation": "passthrough",
+"glBlendEquationEXT": "alias:glBlendEquation",
+"glBlendEquationSeparate": "passthrough",
+"glBlendEquationSeparateEXT": "alias:glBlendEquationSeparate",
+"glBlendFunc": "passthrough",
+"glBlendFuncSeparate": "passthrough",
+"glBlendFuncSeparateEXT": "alias:glBlendFuncSeparate",
+"glBlitFramebuffer": "passthrough",
+"glBlitFramebufferEXT": "alias:glBlitFramebuffer",
+"glBufferData": "handwritten",
+"glBufferDataARB": "alias:glBufferData",
+"glBufferSubData": "handwritten",
+"glBufferSubDataARB": "alias:glBufferSubData",
+"glCallList": "handwritten",
+"glCallLists": "handwritten",
+"glCheckFramebufferStatus": "passthrough",
+"glCheckFramebufferStatusEXT": "alias:glCheckFramebufferStatus",
+"glClampColor": "handwritten",
+"glClear": "passthrough",
+"glClearAccum": "stub",
+"glClearBufferfi": "passthrough",
+"glClearBufferfv": "passthrough",
+"glClearBufferiv": "passthrough",
+"glClearBufferuiv": "passthrough",
+"glClearColor": "passthrough",
+"glClearDepth": "handwritten",
+"glClearIndex": "stub",
+"glClearStencil": "passthrough",
+"glClientActiveTexture": "handwritten",
+"glClientActiveTextureARB": "alias:glClientActiveTexture",
+"glClipPlane": "handwritten",
+"glColor3b": "variant",
+"glColor3bv": "variant",
+"glColor3d": "variant",
+"glColor3dv": "variant",
+"glColor3f": "variant",
+"glColor3fv": "variant",
+"glColor3i": "variant",
+"glColor3iv": "variant",
+"glColor3s": "variant",
+"glColor3sv": "variant",
+"glColor3ub": "variant",
+"glColor3ubv": "variant",
+"glColor3ui": "variant",
+"glColor3uiv": "variant",
+"glColor3us": "variant",
+"glColor3usv": "variant",
+"glColor4b": "variant",
+"glColor4bv": "variant",
+"glColor4d": "variant",
+"glColor4dv": "variant",
+"glColor4f": "variant",
+"glColor4fv": "variant",
+"glColor4i": "variant",
+"glColor4iv": "variant",
+"glColor4s": "variant",
+"glColor4sv": "variant",
+"glColor4ub": "variant",
+"glColor4ubv": "variant",
+"glColor4ui": "variant",
+"glColor4uiv": "variant",
+"glColor4us": "variant",
+"glColor4usv": "variant",
+"glColorMask": "passthrough",
+"glColorMaski": "passthrough",
+"glColorMaterial": "handwritten",
+"glColorPointer": "handwritten",
+"glCompileShader": "passthrough",
+"glCompileShaderARB": "alias:glCompileShader",
+"glCompressedTexImage1D": "stub",
+"glCompressedTexImage2D": "passthrough",
+"glCompressedTexImage3D": "passthrough",
+"glCompressedTexSubImage1D": "stub",
+"glCompressedTexSubImage2D": "passthrough",
+"glCompressedTexSubImage3D": "passthrough",
+"glCopyPixels": "stub",
+"glCopyTexImage1D": "handwritten",
+"glCopyTexImage2D": "handwritten",
+"glCopyTexSubImage1D": "handwritten",
+"glCopyTexSubImage2D": "handwritten",
+"glCopyTexSubImage3D": "passthrough",
+"glCreateProgram": "passthrough",
+"glCreateProgramObjectARB": "alias:glCreateProgram",
+"glCreateShader": "handwritten",
+"glCreateShaderObjectARB": "alias:glCreateShader",
+"glCullFace": "passthrough",
+"glDeleteBuffers": "handwritten",
+"glDeleteBuffersARB": "alias:glDeleteBuffers",
+"glDeleteFramebuffers": "passthrough",
+"glDeleteFramebuffersEXT": "alias:glDeleteFramebuffers",
+"glDeleteLists": "handwritten",
+"glDeleteObjectARB": "handwritten",
+"glDeleteProgram": "handwritten",
+"glDeleteQueries": "passthrough",
+"glDeleteRenderbuffers": "passthrough",
+"glDeleteRenderbuffersEXT": "alias:glDeleteRenderbuffers",
+"glDeleteShader": "handwritten",
+"glDeleteTextures": "handwritten",
+"glDeleteVertexArrays": "handwritten",
+"glDepthFunc": "passthrough",
+"glDepthMask": "passthrough",
+"glDepthRange": "handwritten",
+"glDetachObjectARB": "alias:glDetachShader",
+"glDetachShader": "handwritten",
+"glDisable": "handwritten",
+"glDisableClientState": "handwritten",
+"glDisableVertexAttribArray": "handwritten",
+"glDisableVertexAttribArrayARB": "alias:glDisableVertexAttribArray",
+"glDisablei": "passthrough",
+"glDrawArrays": "handwritten",
+"glDrawBuffer": "handwritten",
+"glDrawBuffers": "passthrough",
+"glDrawElements": "handwritten",
+"glDrawPixels": "stub",
+"glDrawRangeElements": "handwritten",
+"glEdgeFlag": "noop",
+"glEdgeFlagPointer": "handwritten",
+"glEdgeFlagv": "noop",
+"glEnable": "handwritten",
+"glEnableClientState": "handwritten",
+"glEnableVertexAttribArray": "handwritten",
+"glEnableVertexAttribArrayARB": "alias:glEnableVertexAttribArray",
+"glEnablei": "passthrough",
+"glEnd": "handwritten",
+"glEndConditionalRender": "handwritten",
+"glEndList": "handwritten",
+"glEndQuery": "handwritten",
+"glEndTransformFeedback": "passthrough",
+"glEvalCoord1d": "noop",
+"glEvalCoord1dv": "noop",
+"glEvalCoord1f": "noop",
+"glEvalCoord1fv": "noop",
+"glEvalCoord2d": "noop",
+"glEvalCoord2dv": "noop",
+"glEvalCoord2f": "noop",
+"glEvalCoord2fv": "noop",
+"glEvalMesh1": "stub",
+"glEvalMesh2": "stub",
+"glEvalPoint1": "noop",
+"glEvalPoint2": "noop",
+"glFeedbackBuffer": "stub",
+"glFinish": "passthrough",
+"glFlush": "passthrough",
+"glFlushMappedBufferRange": "handwritten",
+"glFogCoordPointer": "handwritten",
+"glFogCoordd": "variant",
+"glFogCoorddv": "variant",
+"glFogCoordf": "variant",
+"glFogCoordfv": "variant",
+"glFogf": "handwritten",
+"glFogfv": "handwritten",
+"glFogi": "handwritten",
+"glFogiv": "handwritten",
+"glFramebufferRenderbuffer": "passthrough",
+"glFramebufferRenderbufferEXT": "alias:glFramebufferRenderbuffer",
+"glFramebufferTexture1D": "handwritten",
+"glFramebufferTexture1DEXT": "alias:glFramebufferTexture1D",
+"glFramebufferTexture2D": "passthrough",
+"glFramebufferTexture2DEXT": "alias:glFramebufferTexture2D",
+"glFramebufferTexture3D": "handwritten",
+"glFramebufferTexture3DEXT": "alias:glFramebufferTexture3D",
+"glFramebufferTextureLayer": "passthrough",
+"glFrontFace": "passthrough",
+"glFrustum": "handwritten",
+"glGenBuffers": "passthrough",
+"glGenBuffersARB": "alias:glGenBuffers",
+"glGenFramebuffers": "passthrough",
+"glGenFramebuffersEXT": "alias:glGenFramebuffers",
+"glGenLists": "handwritten",
+"glGenQueries": "passthrough",
+"glGenRenderbuffers": "passthrough",
+"glGenRenderbuffersEXT": "alias:glGenRenderbuffers",
+"glGenTextures": "passthrough",
+"glGenVertexArrays": "passthrough",
+"glGenerateMipmap": "passthrough",
+"glGenerateMipmapEXT": "alias:glGenerateMipmap",
+"glGetActiveAttrib": "passthrough",
+"glGetActiveAttribARB": "alias:glGetActiveAttrib",
+"glGetActiveUniform": "passthrough",
+"glGetActiveUniformARB": "alias:glGetActiveUniform",
+"glGetAttachedObjectsARB": "alias:glGetAttachedShaders",
+"glGetAttachedShaders": "passthrough",
+"glGetAttribLocation": "handwritten",
+"glGetAttribLocationARB": "alias:glGetAttribLocation",
+"glGetBooleani_v": "passthrough",
+"glGetBooleanv": "handwritten",
+"glGetBufferParameteriv": "handwritten",
+"glGetBufferParameterivARB": "alias:glGetBufferParameteriv",
+"glGetBufferPointerv": "handwritten",
+"glGetBufferPointervARB": "alias:glGetBufferPointerv",
+"glGetBufferSubData": "handwritten",
+"glGetBufferSubDataARB": "alias:glGetBufferSubData",
+"glGetClipPlane": "handwritten",
+"glGetCompressedTexImage": "stub",
+"glGetDoublev": "handwritten",
+"glGetError": "handwritten",
+"glGetFloatv": "handwritten",
+"glGetFragDataLocation": "passthrough",
+"glGetFramebufferAttachmentParameteriv": "passthrough",
+"glGetFramebufferAttachmentParameterivEXT": "alias:glGetFramebufferAttachmentParameteriv",
+"glGetHandleARB": "handwritten",
+"glGetInfoLogARB": "handwritten",
+"glGetIntegeri_v": "passthrough",
+"glGetIntegerv": "handwritten",
+"glGetLightfv": "handwritten",
+"glGetLightiv": "handwritten",
+"glGetMapdv": "stub",
+"glGetMapfv": "stub",
+"glGetMapiv": "stub",
+"glGetMaterialfv": "handwritten",
+"glGetMaterialiv": "handwritten",
+"glGetObjectParameterfvARB": "handwritten",
+"glGetObjectParameterivARB": "handwritten",
+"glGetPixelMapfv": "stub",
+"glGetPixelMapuiv": "stub",
+"glGetPixelMapusv": "stub",
+"glGetPointerv": "handwritten",
+"glGetPolygonStipple": "stub",
+"glGetProgramInfoLog": "passthrough",
+"glGetProgramiv": "passthrough",
+"glGetQueryObjectiv": "handwritten",
+"glGetQueryObjectuiv": "passthrough",
+"glGetQueryiv": "handwritten",
+"glGetRenderbufferParameteriv": "passthrough",
+"glGetRenderbufferParameterivEXT": "alias:glGetRenderbufferParameteriv",
+"glGetShaderInfoLog": "passthrough",
+"glGetShaderSource": "passthrough",
+"glGetShaderSourceARB": "alias:glGetShaderSource",
+"glGetShaderiv": "passthrough",
+"glGetString": "handwritten",
+"glGetStringi": "handwritten",
+"glGetTexEnvfv": "handwritten",
+"glGetTexEnviv": "handwritten",
+"glGetTexGendv": "handwritten",
+"glGetTexGenfv": "handwritten",
+"glGetTexGeniv": "handwritten",
+"glGetTexImage": "handwritten",
+"glGetTexLevelParameterfv": "handwritten",
+"glGetTexLevelParameteriv": "handwritten",
+"glGetTexParameterIiv": "passthrough",
+"glGetTexParameterIuiv": "passthrough",
+"glGetTexParameterfv": "handwritten",
+"glGetTexParameteriv": "handwritten",
+"glGetTransformFeedbackVarying": "passthrough",
+"glGetUniformLocation": "handwritten",
+"glGetUniformLocationARB": "alias:glGetUniformLocation",
+"glGetUniformfv": "passthrough",
+"glGetUniformfvARB": "alias:glGetUniformfv",
+"glGetUniformiv": "passthrough",
+"glGetUniformivARB": "alias:glGetUniformiv",
+"glGetUniformuiv": "passthrough",
+"glGetVertexAttribIiv": "handwritten",
+"glGetVertexAttribIuiv": "handwritten",
+"glGetVertexAttribPointerv": "handwritten",
+"glGetVertexAttribPointervARB": "alias:glGetVertexAttribPointerv",
+"glGetVertexAttribdv": "handwritten",
+"glGetVertexAttribdvARB": "alias:glGetVertexAttribdv",
+"glGetVertexAttribfv": "handwritten",
+"glGetVertexAttribfvARB": "alias:glGetVertexAttribfv",
+"glGetVertexAttribiv": "handwritten",
+"glGetVertexAttribivARB": "alias:glGetVertexAttribiv",
+"glHint": "passthrough",
+"glIndexMask": "stub",
+"glIndexPointer": "handwritten",
+"glIndexd": "noop",
+"glIndexdv": "noop",
+"glIndexf": "noop",
+"glIndexfv": "noop",
+"glIndexi": "noop",
+"glIndexiv": "noop",
+"glIndexs": "noop",
+"glIndexsv": "noop",
+"glIndexub": "noop",
+"glIndexubv": "noop",
+"glInitNames": "stub",
+"glInterleavedArrays": "handwritten",
+"glIsBuffer": "passthrough",
+"glIsBufferARB": "alias:glIsBuffer",
+"glIsEnabled": "handwritten",
+"glIsEnabledi": "passthrough",
+"glIsFramebuffer": "passthrough",
+"glIsFramebufferEXT": "alias:glIsFramebuffer",
+"glIsList": "handwritten",
+"glIsProgram": "passthrough",
+"glIsQuery": "passthrough",
+"glIsRenderbuffer": "passthrough",
+"glIsRenderbufferEXT": "alias:glIsRenderbuffer",
+"glIsShader": "passthrough",
+"glIsTexture": "passthrough",
+"glIsVertexArray": "passthrough",
+"glLightModelf": "handwritten",
+"glLightModelfv": "handwritten",
+"glLightModeli": "handwritten",
+"glLightModeliv": "handwritten",
+"glLightf": "handwritten",
+"glLightfv": "handwritten",
+"glLighti": "handwritten",
+"glLightiv": "handwritten",
+"glLineStipple": "stub",
+"glLineWidth": "handwritten",
+"glLinkProgram": "handwritten",
+"glLinkProgramARB": "alias:glLinkProgram",
+"glListBase": "handwritten",
+"glLoadIdentity": "handwritten",
+"glLoadMatrixd": "handwritten",
+"glLoadMatrixf": "handwritten",
+"glLoadName": "stub",
+"glLoadTransposeMatrixd": "handwritten",
+"glLoadTransposeMatrixf": "handwritten",
+"glLogicOp": "handwritten",
+"glMap1d": "stub",
+"glMap1f": "stub",
+"glMap2d": "stub",
+"glMap2f": "stub",
+"glMapBuffer": "handwritten",
+"glMapBufferARB": "alias:glMapBuffer",
+"glMapBufferRange": "handwritten",
+"glMapGrid1d": "stub",
+"glMapGrid1f": "stub",
+"glMapGrid2d": "stub",
+"glMapGrid2f": "stub",
+"glMaterialf": "handwritten",
+"glMaterialfv": "handwritten",
+"glMateriali": "handwritten",
+"glMaterialiv": "handwritten",
+"glMatrixMode": "handwritten",
+"glMultMatrixd": "handwritten",
+"glMultMatrixf": "handwritten",
+"glMultTransposeMatrixd": "handwritten",
+"glMultTransposeMatrixf": "handwritten",
+"glMultiDrawArrays": "handwritten",
+"glMultiDrawElements": "handwritten",
+"glMultiTexCoord1d": "variant",
+"glMultiTexCoord1dARB": "variant",
+"glMultiTexCoord1dv": "variant",
+"glMultiTexCoord1dvARB": "variant",
+"glMultiTexCoord1f": "variant",
+"glMultiTexCoord1fARB": "variant",
+"glMultiTexCoord1fv": "variant",
+"glMultiTexCoord1fvARB": "variant",
+"glMultiTexCoord1i": "variant",
+"glMultiTexCoord1iARB": "variant",
+"glMultiTexCoord1iv": "variant",
+"glMultiTexCoord1ivARB": "variant",
+"glMultiTexCoord1s": "variant",
+"glMultiTexCoord1sARB": "variant",
+"glMultiTexCoord1sv": "variant",
+"glMultiTexCoord1svARB": "variant",
+"glMultiTexCoord2d": "variant",
+"glMultiTexCoord2dARB": "variant",
+"glMultiTexCoord2dv": "variant",
+"glMultiTexCoord2dvARB": "variant",
+"glMultiTexCoord2f": "variant",
+"glMultiTexCoord2fARB": "variant",
+"glMultiTexCoord2fv": "variant",
+"glMultiTexCoord2fvARB": "variant",
+"glMultiTexCoord2i": "variant",
+"glMultiTexCoord2iARB": "variant",
+"glMultiTexCoord2iv": "variant",
+"glMultiTexCoord2ivARB": "variant",
+"glMultiTexCoord2s": "variant",
+"glMultiTexCoord2sARB": "variant",
+"glMultiTexCoord2sv": "variant",
+"glMultiTexCoord2svARB": "variant",
+"glMultiTexCoord3d": "variant",
+"glMultiTexCoord3dARB": "variant",
+"glMultiTexCoord3dv": "variant",
+"glMultiTexCoord3dvARB": "variant",
+"glMultiTexCoord3f": "variant",
+"glMultiTexCoord3fARB": "variant",
+"glMultiTexCoord3fv": "variant",
+"glMultiTexCoord3fvARB": "variant",
+"glMultiTexCoord3i": "variant",
+"glMultiTexCoord3iARB": "variant",
+"glMultiTexCoord3iv": "variant",
+"glMultiTexCoord3ivARB": "variant",
+"glMultiTexCoord3s": "variant",
+"glMultiTexCoord3sARB": "variant",
+"glMultiTexCoord3sv": "variant",
+"glMultiTexCoord3svARB": "variant",
+"glMultiTexCoord4d": "variant",
+"glMultiTexCoord4dARB": "variant",
+"glMultiTexCoord4dv": "variant",
+"glMultiTexCoord4dvARB": "variant",
+"glMultiTexCoord4f": "variant",
+"glMultiTexCoord4fARB": "variant",
+"glMultiTexCoord4fv": "variant",
+"glMultiTexCoord4fvARB": "variant",
+"glMultiTexCoord4i": "variant",
+"glMultiTexCoord4iARB": "variant",
+"glMultiTexCoord4iv": "variant",
+"glMultiTexCoord4ivARB": "variant",
+"glMultiTexCoord4s": "variant",
+"glMultiTexCoord4sARB": "variant",
+"glMultiTexCoord4sv": "variant",
+"glMultiTexCoord4svARB": "variant",
+"glNewList": "handwritten",
+"glNormal3b": "variant",
+"glNormal3bv": "variant",
+"glNormal3d": "variant",
+"glNormal3dv": "variant",
+"glNormal3f": "variant",
+"glNormal3fv": "variant",
+"glNormal3i": "variant",
+"glNormal3iv": "variant",
+"glNormal3s": "variant",
+"glNormal3sv": "variant",
+"glNormalPointer": "handwritten",
+"glOrtho": "handwritten",
+"glPassThrough": "stub",
+"glPixelMapfv": "stub",
+"glPixelMapuiv": "stub",
+"glPixelMapusv": "stub",
+"glPixelStoref": "handwritten",
+"glPixelStorei": "handwritten",
+"glPixelTransferf": "stub",
+"glPixelTransferi": "stub",
+"glPixelZoom": "stub",
+"glPointParameterf": "handwritten",
+"glPointParameterfv": "handwritten",
+"glPointParameteri": "handwritten",
+"glPointParameteriv": "handwritten",
+"glPointSize": "handwritten",
+"glPolygonMode": "handwritten",
+"glPolygonOffset": "passthrough",
+"glPolygonStipple": "stub",
+"glPopAttrib": "handwritten",
+"glPopClientAttrib": "handwritten",
+"glPopMatrix": "handwritten",
+"glPopName": "stub",
+"glPrioritizeTextures": "stub",
+"glPushAttrib": "handwritten",
+"glPushClientAttrib": "handwritten",
+"glPushMatrix": "handwritten",
+"glPushName": "stub",
+"glRasterPos2d": "variant",
+"glRasterPos2dv": "variant",
+"glRasterPos2f": "variant",
+"glRasterPos2fv": "variant",
+"glRasterPos2i": "variant",
+"glRasterPos2iv": "variant",
+"glRasterPos2s": "variant",
+"glRasterPos2sv": "variant",
+"glRasterPos3d": "variant",
+"glRasterPos3dv": "variant",
+"glRasterPos3f": "variant",
+"glRasterPos3fv": "variant",
+"glRasterPos3i": "variant",
+"glRasterPos3iv": "variant",
+"glRasterPos3s": "variant",
+"glRasterPos3sv": "variant",
+"glRasterPos4d": "variant",
+"glRasterPos4dv": "variant",
+"glRasterPos4f": "variant",
+"glRasterPos4fv": "variant",
+"glRasterPos4i": "variant",
+"glRasterPos4iv": "variant",
+"glRasterPos4s": "variant",
+"glRasterPos4sv": "variant",
+"glReadBuffer": "passthrough",
+"glReadPixels": "handwritten",
+"glRectd": "variant",
+"glRectdv": "variant",
+"glRectf": "variant",
+"glRectfv": "variant",
+"glRecti": "variant",
+"glRectiv": "variant",
+"glRects": "variant",
+"glRectsv": "variant",
+"glRenderMode": "stub",
+"glRenderbufferStorage": "passthrough",
+"glRenderbufferStorageEXT": "alias:glRenderbufferStorage",
+"glRenderbufferStorageMultisample": "passthrough",
+"glRenderbufferStorageMultisampleEXT": "alias:glRenderbufferStorageMultisample",
+"glRotated": "handwritten",
+"glRotatef": "handwritten",
+"glSampleCoverage": "passthrough",
+"glScaled": "handwritten",
+"glScalef": "handwritten",
+"glScissor": "passthrough",
+"glSecondaryColor3b": "variant",
+"glSecondaryColor3bv": "variant",
+"glSecondaryColor3d": "variant",
+"glSecondaryColor3dv": "variant",
+"glSecondaryColor3f": "variant",
+"glSecondaryColor3fv": "variant",
+"glSecondaryColor3i": "variant",
+"glSecondaryColor3iv": "variant",
+"glSecondaryColor3s": "variant",
+"glSecondaryColor3sv": "variant",
+"glSecondaryColor3ub": "variant",
+"glSecondaryColor3ubv": "variant",
+"glSecondaryColor3ui": "variant",
+"glSecondaryColor3uiv": "variant",
+"glSecondaryColor3us": "variant",
+"glSecondaryColor3usv": "variant",
+"glSecondaryColorPointer": "handwritten",
+"glSelectBuffer": "stub",
+"glShadeModel": "handwritten",
+"glShaderSource": "handwritten",
+"glShaderSourceARB": "alias:glShaderSource",
+"glStencilFunc": "passthrough",
+"glStencilFuncSeparate": "passthrough",
+"glStencilMask": "passthrough",
+"glStencilMaskSeparate": "passthrough",
+"glStencilOp": "passthrough",
+"glStencilOpSeparate": "passthrough",
+"glTexCoord1d": "variant",
+"glTexCoord1dv": "variant",
+"glTexCoord1f": "variant",
+"glTexCoord1fv": "variant",
+"glTexCoord1i": "variant",
+"glTexCoord1iv": "variant",
+"glTexCoord1s": "variant",
+"glTexCoord1sv": "variant",
+"glTexCoord2d": "variant",
+"glTexCoord2dv": "variant",
+"glTexCoord2f": "variant",
+"glTexCoord2fv": "variant",
+"glTexCoord2i": "variant",
+"glTexCoord2iv": "variant",
+"glTexCoord2s": "variant",
+"glTexCoord2sv": "variant",
+"glTexCoord3d": "variant",
+"glTexCoord3dv": "variant",
+"glTexCoord3f": "variant",
+"glTexCoord3fv": "variant",
+"glTexCoord3i": "variant",
+"glTexCoord3iv": "variant",
+"glTexCoord3s": "variant",
+"glTexCoord3sv": "variant",
+"glTexCoord4d": "variant",
+"glTexCoord4dv": "variant",
+"glTexCoord4f": "variant",
+"glTexCoord4fv": "variant",
+"glTexCoord4i": "variant",
+"glTexCoord4iv": "variant",
+"glTexCoord4s": "variant",
+"glTexCoord4sv": "variant",
+"glTexCoordPointer": "handwritten",
+"glTexEnvf": "handwritten",
+"glTexEnvfv": "handwritten",
+"glTexEnvi": "handwritten",
+"glTexEnviv": "handwritten",
+"glTexGend": "handwritten",
+"glTexGendv": "handwritten",
+"glTexGenf": "handwritten",
+"glTexGenfv": "handwritten",
+"glTexGeni": "handwritten",
+"glTexGeniv": "handwritten",
+"glTexImage1D": "handwritten",
+"glTexImage2D": "handwritten",
+"glTexImage3D": "passthrough",
+"glTexParameterIiv": "passthrough",
+"glTexParameterIuiv": "passthrough",
+"glTexParameterf": "handwritten",
+"glTexParameterfv": "handwritten",
+"glTexParameteri": "handwritten",
+"glTexParameteriv": "handwritten",
+"glTexSubImage1D": "handwritten",
+"glTexSubImage2D": "handwritten",
+"glTexSubImage3D": "passthrough",
+"glTransformFeedbackVaryings": "passthrough",
+"glTranslated": "handwritten",
+"glTranslatef": "handwritten",
+"glUniform1f": "passthrough",
+"glUniform1fARB": "alias:glUniform1f",
+"glUniform1fv": "passthrough",
+"glUniform1fvARB": "alias:glUniform1fv",
+"glUniform1i": "passthrough",
+"glUniform1iARB": "alias:glUniform1i",
+"glUniform1iv": "passthrough",
+"glUniform1ivARB": "alias:glUniform1iv",
+"glUniform1ui": "passthrough",
+"glUniform1uiv": "passthrough",
+"glUniform2f": "passthrough",
+"glUniform2fARB": "alias:glUniform2f",
+"glUniform2fv": "passthrough",
+"glUniform2fvARB": "alias:glUniform2fv",
+"glUniform2i": "passthrough",
+"glUniform2iARB": "alias:glUniform2i",
+"glUniform2iv": "passthrough",
+"glUniform2ivARB": "alias:glUniform2iv",
+"glUniform2ui": "passthrough",
+"glUniform2uiv": "passthrough",
+"glUniform3f": "passthrough",
+"glUniform3fARB": "alias:glUniform3f",
+"glUniform3fv": "passthrough",
+"glUniform3fvARB": "alias:glUniform3fv",
+"glUniform3i": "passthrough",
+"glUniform3iARB": "alias:glUniform3i",
+"glUniform3iv": "passthrough",
+"glUniform3ivARB": "alias:glUniform3iv",
+"glUniform3ui": "passthrough",
+"glUniform3uiv": "passthrough",
+"glUniform4f": "passthrough",
+"glUniform4fARB": "alias:glUniform4f",
+"glUniform4fv": "passthrough",
+"glUniform4fvARB": "alias:glUniform4fv",
+"glUniform4i": "passthrough",
+"glUniform4iARB": "alias:glUniform4i",
+"glUniform4iv": "passthrough",
+"glUniform4ivARB": "alias:glUniform4iv",
+"glUniform4ui": "passthrough",
+"glUniform4uiv": "passthrough",
+"glUniformMatrix2fv": "passthrough",
+"glUniformMatrix2fvARB": "alias:glUniformMatrix2fv",
+"glUniformMatrix2x3fv": "passthrough",
+"glUniformMatrix2x4fv": "passthrough",
+"glUniformMatrix3fv": "passthrough",
+"glUniformMatrix3fvARB": "alias:glUniformMatrix3fv",
+"glUniformMatrix3x2fv": "passthrough",
+"glUniformMatrix3x4fv": "passthrough",
+"glUniformMatrix4fv": "passthrough",
+"glUniformMatrix4fvARB": "alias:glUniformMatrix4fv",
+"glUniformMatrix4x2fv": "passthrough",
+"glUniformMatrix4x3fv": "passthrough",
+"glUnmapBuffer": "handwritten",
+"glUnmapBufferARB": "alias:glUnmapBuffer",
+"glUseProgram": "handwritten",
+"glUseProgramObjectARB": "alias:glUseProgram",
+"glValidateProgram": "passthrough",
+"glValidateProgramARB": "alias:glValidateProgram",
+"glVertex2d": "variant",
+"glVertex2dv": "variant",
+"glVertex2f": "variant",
+"glVertex2fv": "variant",
+"glVertex2i": "variant",
+"glVertex2iv": "variant",
+"glVertex2s": "variant",
+"glVertex2sv": "variant",
+"glVertex3d": "variant",
+"glVertex3dv": "variant",
+"glVertex3f": "variant",
+"glVertex3fv": "variant",
+"glVertex3i": "variant",
+"glVertex3iv": "variant",
+"glVertex3s": "variant",
+"glVertex3sv": "variant",
+"glVertex4d": "variant",
+"glVertex4dv": "variant",
+"glVertex4f": "variant",
+"glVertex4fv": "variant",
+"glVertex4i": "variant",
+"glVertex4iv": "variant",
+"glVertex4s": "variant",
+"glVertex4sv": "variant",
+"glVertexAttrib1d": "variant",
+"glVertexAttrib1dARB": "variant",
+"glVertexAttrib1dv": "variant",
+"glVertexAttrib1dvARB": "variant",
+"glVertexAttrib1f": "variant",
+"glVertexAttrib1fARB": "variant",
+"glVertexAttrib1fv": "variant",
+"glVertexAttrib1fvARB": "variant",
+"glVertexAttrib1s": "variant",
+"glVertexAttrib1sARB": "variant",
+"glVertexAttrib1sv": "variant",
+"glVertexAttrib1svARB": "variant",
+"glVertexAttrib2d": "variant",
+"glVertexAttrib2dARB": "variant",
+"glVertexAttrib2dv": "variant",
+"glVertexAttrib2dvARB": "variant",
+"glVertexAttrib2f": "variant",
+"glVertexAttrib2fARB": "variant",
+"glVertexAttrib2fv": "variant",
+"glVertexAttrib2fvARB": "variant",
+"glVertexAttrib2s": "variant",
+"glVertexAttrib2sARB": "variant",
+"glVertexAttrib2sv": "variant",
+"glVertexAttrib2svARB": "variant",
+"glVertexAttrib3d": "variant",
+"glVertexAttrib3dARB": "variant",
+"glVertexAttrib3dv": "variant",
+"glVertexAttrib3dvARB": "variant",
+"glVertexAttrib3f": "variant",
+"glVertexAttrib3fARB": "variant",
+"glVertexAttrib3fv": "variant",
+"glVertexAttrib3fvARB": "variant",
+"glVertexAttrib3s": "variant",
+"glVertexAttrib3sARB": "variant",
+"glVertexAttrib3sv": "variant",
+"glVertexAttrib3svARB": "variant",
+"glVertexAttrib4Nbv": "variant",
+"glVertexAttrib4NbvARB": "variant",
+"glVertexAttrib4Niv": "variant",
+"glVertexAttrib4NivARB": "variant",
+"glVertexAttrib4Nsv": "variant",
+"glVertexAttrib4NsvARB": "variant",
+"glVertexAttrib4Nub": "variant",
+"glVertexAttrib4NubARB": "variant",
+"glVertexAttrib4Nubv": "variant",
+"glVertexAttrib4NubvARB": "variant",
+"glVertexAttrib4Nuiv": "variant",
+"glVertexAttrib4NuivARB": "variant",
+"glVertexAttrib4Nusv": "variant",
+"glVertexAttrib4NusvARB": "variant",
+"glVertexAttrib4bv": "variant",
+"glVertexAttrib4bvARB": "variant",
+"glVertexAttrib4d": "variant",
+"glVertexAttrib4dARB": "variant",
+"glVertexAttrib4dv": "variant",
+"glVertexAttrib4dvARB": "variant",
+"glVertexAttrib4f": "variant",
+"glVertexAttrib4fARB": "variant",
+"glVertexAttrib4fv": "variant",
+"glVertexAttrib4fvARB": "variant",
+"glVertexAttrib4iv": "variant",
+"glVertexAttrib4ivARB": "variant",
+"glVertexAttrib4s": "variant",
+"glVertexAttrib4sARB": "variant",
+"glVertexAttrib4sv": "variant",
+"glVertexAttrib4svARB": "variant",
+"glVertexAttrib4ubv": "variant",
+"glVertexAttrib4ubvARB": "variant",
+"glVertexAttrib4uiv": "variant",
+"glVertexAttrib4uivARB": "variant",
+"glVertexAttrib4usv": "variant",
+"glVertexAttrib4usvARB": "variant",
+"glVertexAttribI1i": "variant",
+"glVertexAttribI1iv": "variant",
+"glVertexAttribI1ui": "variant",
+"glVertexAttribI1uiv": "variant",
+"glVertexAttribI2i": "variant",
+"glVertexAttribI2iv": "variant",
+"glVertexAttribI2ui": "variant",
+"glVertexAttribI2uiv": "variant",
+"glVertexAttribI3i": "variant",
+"glVertexAttribI3iv": "variant",
+"glVertexAttribI3ui": "variant",
+"glVertexAttribI3uiv": "variant",
+"glVertexAttribI4bv": "variant",
+"glVertexAttribI4i": "variant",
+"glVertexAttribI4iv": "variant",
+"glVertexAttribI4sv": "variant",
+"glVertexAttribI4ubv": "variant",
+"glVertexAttribI4ui": "variant",
+"glVertexAttribI4uiv": "variant",
+"glVertexAttribI4usv": "variant",
+"glVertexAttribIPointer": "handwritten",
+"glVertexAttribPointer": "handwritten",
+"glVertexAttribPointerARB": "alias:glVertexAttribPointer",
+"glVertexPointer": "handwritten",
+"glViewport": "passthrough",
+"glWindowPos2d": "variant",
+"glWindowPos2dv": "variant",
+"glWindowPos2f": "variant",
+"glWindowPos2fv": "variant",
+"glWindowPos2i": "variant",
+"glWindowPos2iv": "variant",
+"glWindowPos2s": "variant",
+"glWindowPos2sv": "variant",
+"glWindowPos3d": "variant",
+"glWindowPos3dv": "variant",
+"glWindowPos3f": "variant",
+"glWindowPos3fv": "variant",
+"glWindowPos3i": "variant",
+"glWindowPos3iv": "variant",
+"glWindowPos3s": "variant",
+"glWindowPos3sv": "variant"
+},
+"categories": {
+"alias": 80,
+"handwritten": 186,
+"noop": 22,
+"passthrough": 133,
+"stub": 45,
+"variant": 322
+},
+"export_count": 788,
+"extensions": [
+"ARB_multitexture",
+"ARB_texture_env_combine",
+"ARB_texture_env_add",
+"ARB_texture_env_crossbar",
+"ARB_texture_env_dot3",
+"EXT_texture_env_combine",
+"EXT_texture_env_add",
+"ARB_texture_cube_map",
+"ARB_texture_non_power_of_two",
+"ARB_texture_mirrored_repeat",
+"SGIS_texture_edge_clamp",
+"EXT_texture_edge_clamp",
+"EXT_bgra",
+"ARB_depth_texture",
+"EXT_packed_depth_stencil",
+"ARB_vertex_buffer_object",
+"ARB_pixel_buffer_object",
+"ARB_map_buffer_range",
+"ARB_vertex_array_object",
+"ARB_framebuffer_object",
+"EXT_framebuffer_object",
+"EXT_framebuffer_blit",
+"EXT_framebuffer_multisample",
+"ARB_shader_objects",
+"ARB_vertex_shader",
+"ARB_fragment_shader",
+"ARB_shading_language_100",
+"EXT_blend_func_separate",
+"EXT_blend_color",
+"EXT_blend_minmax",
+"EXT_blend_subtract",
+"EXT_blend_equation_separate",
+"NV_fog_distance",
+"ARB_texture_rg",
+"ARB_half_float_pixel",
+"ARB_depth_buffer_float",
+"EXT_texture_filter_anisotropic",
+"ARB_texture_border_clamp"
+],
+"handwritten": {
+"glActiveTexture": {
+"file": "ffp.cpp",
+"params": "GLenum texture",
+"ret": "void"
+},
+"glAlphaFunc": {
+"file": "ffp.cpp",
+"params": "GLenum func, GLfloat ref",
+"ret": "void"
+},
+"glAreTexturesResident": {
+"file": "misc.cpp",
+"params": "GLsizei n, const GLuint *textures, GLboolean *residences",
+"ret": "GLboolean"
+},
+"glArrayElement": {
+"file": "vertex.cpp",
+"params": "GLint i",
+"ret": "void"
+},
+"glAttachShader": {
+"file": "shader.cpp",
+"params": "GLuint program, GLuint shader",
+"ret": "void"
+},
+"glBegin": {
+"file": "vertex.cpp",
+"params": "GLenum mode",
+"ret": "void"
+},
+"glBeginConditionalRender": {
+"file": "misc.cpp",
+"params": "GLuint id, GLenum mode",
+"ret": "void"
+},
+"glBeginQuery": {
+"file": "misc.cpp",
+"params": "GLenum target, GLuint id",
+"ret": "void"
+},
+"glBindAttribLocation": {
+"file": "shader.cpp",
+"params": "GLuint program, GLuint index, const GLchar *name",
+"ret": "void"
+},
+"glBindBuffer": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLuint buffer",
+"ret": "void"
+},
+"glBindTexture": {
+"file": "texture.cpp",
+"params": "GLenum target, GLuint texture",
+"ret": "void"
+},
+"glBindVertexArray": {
+"file": "vertex.cpp",
+"params": "GLuint array",
+"ret": "void"
+},
+"glBufferData": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLsizeiptr size, const void *data, GLenum usage",
+"ret": "void"
+},
+"glBufferSubData": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLintptr offset, GLsizeiptr size, const void *data",
+"ret": "void"
+},
+"glCallList": {
+"file": "dlist.cpp",
+"params": "GLuint list",
+"ret": "void"
+},
+"glCallLists": {
+"file": "dlist.cpp",
+"params": "GLsizei n, GLenum type, const void *lists",
+"ret": "void"
+},
+"glClampColor": {
+"file": "misc.cpp",
+"params": "GLenum target, GLenum clamp",
+"ret": "void"
+},
+"glClearDepth": {
+"file": "core.cpp",
+"params": "GLdouble depth",
+"ret": "void"
+},
+"glClientActiveTexture": {
+"file": "ffp.cpp",
+"params": "GLenum texture",
+"ret": "void"
+},
+"glClipPlane": {
+"file": "ffp.cpp",
+"params": "GLenum plane, const GLdouble *eq",
+"ret": "void"
+},
+"glColorMaterial": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum mode",
+"ret": "void"
+},
+"glColorPointer": {
+"file": "vertex.cpp",
+"params": "GLint size, GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glCopyTexImage1D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLint border",
+"ret": "void"
+},
+"glCopyTexImage2D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border",
+"ret": "void"
+},
+"glCopyTexSubImage1D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLint xoffset, GLint x, GLint y, GLsizei width",
+"ret": "void"
+},
+"glCopyTexSubImage2D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height",
+"ret": "void"
+},
+"glCreateShader": {
+"file": "shader.cpp",
+"params": "GLenum type",
+"ret": "GLuint"
+},
+"glDeleteBuffers": {
+"file": "vertex.cpp",
+"params": "GLsizei n, const GLuint *buffers",
+"ret": "void"
+},
+"glDeleteLists": {
+"file": "dlist.cpp",
+"params": "GLuint list, GLsizei range",
+"ret": "void"
+},
+"glDeleteObjectARB": {
+"file": "shader.cpp",
+"params": "GLhandleARB obj",
+"ret": "void"
+},
+"glDeleteProgram": {
+"file": "shader.cpp",
+"params": "GLuint program",
+"ret": "void"
+},
+"glDeleteShader": {
+"file": "shader.cpp",
+"params": "GLuint shader",
+"ret": "void"
+},
+"glDeleteTextures": {
+"file": "texture.cpp",
+"params": "GLsizei n, const GLuint *textures",
+"ret": "void"
+},
+"glDeleteVertexArrays": {
+"file": "vertex.cpp",
+"params": "GLsizei n, const GLuint *arrays",
+"ret": "void"
+},
+"glDepthRange": {
+"file": "core.cpp",
+"params": "GLdouble zNear, GLdouble zFar",
+"ret": "void"
+},
+"glDetachShader": {
+"file": "shader.cpp",
+"params": "GLuint program, GLuint shader",
+"ret": "void"
+},
+"glDisable": {
+"file": "ffp.cpp",
+"params": "GLenum cap",
+"ret": "void"
+},
+"glDisableClientState": {
+"file": "vertex.cpp",
+"params": "GLenum array",
+"ret": "void"
+},
+"glDisableVertexAttribArray": {
+"file": "vertex.cpp",
+"params": "GLuint index",
+"ret": "void"
+},
+"glDrawArrays": {
+"file": "vertex.cpp",
+"params": "GLenum mode, GLint first, GLsizei count",
+"ret": "void"
+},
+"glDrawBuffer": {
+"file": "misc.cpp",
+"params": "GLenum buf",
+"ret": "void"
+},
+"glDrawElements": {
+"file": "vertex.cpp",
+"params": "GLenum mode, GLsizei count, GLenum type, const void *indices",
+"ret": "void"
+},
+"glDrawRangeElements": {
+"file": "vertex.cpp",
+"params": "GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const void *indices",
+"ret": "void"
+},
+"glEdgeFlagPointer": {
+"file": "vertex.cpp",
+"params": "GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glEnable": {
+"file": "ffp.cpp",
+"params": "GLenum cap",
+"ret": "void"
+},
+"glEnableClientState": {
+"file": "vertex.cpp",
+"params": "GLenum array",
+"ret": "void"
+},
+"glEnableVertexAttribArray": {
+"file": "vertex.cpp",
+"params": "GLuint index",
+"ret": "void"
+},
+"glEnd": {
+"file": "vertex.cpp",
+"params": "void",
+"ret": "void"
+},
+"glEndConditionalRender": {
+"file": "misc.cpp",
+"params": "void",
+"ret": "void"
+},
+"glEndList": {
+"file": "dlist.cpp",
+"params": "void",
+"ret": "void"
+},
+"glEndQuery": {
+"file": "misc.cpp",
+"params": "GLenum target",
+"ret": "void"
+},
+"glFlushMappedBufferRange": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLintptr offset, GLsizeiptr length",
+"ret": "void"
+},
+"glFogCoordPointer": {
+"file": "vertex.cpp",
+"params": "GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glFogf": {
+"file": "ffp.cpp",
+"params": "GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glFogfv": {
+"file": "ffp.cpp",
+"params": "GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glFogi": {
+"file": "ffp.cpp",
+"params": "GLenum pname, GLint param",
+"ret": "void"
+},
+"glFogiv": {
+"file": "ffp.cpp",
+"params": "GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glFramebufferTexture1D": {
+"file": "misc.cpp",
+"params": "GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level",
+"ret": "void"
+},
+"glFramebufferTexture3D": {
+"file": "misc.cpp",
+"params": "GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level, GLint zoffset",
+"ret": "void"
+},
+"glFrustum": {
+"file": "matrix.cpp",
+"params": "GLdouble l, GLdouble r, GLdouble b, GLdouble t, GLdouble n, GLdouble f",
+"ret": "void"
+},
+"glGenLists": {
+"file": "dlist.cpp",
+"params": "GLsizei range",
+"ret": "GLuint"
+},
+"glGetAttribLocation": {
+"file": "shader.cpp",
+"params": "GLuint program, const GLchar *name",
+"ret": "GLint"
+},
+"glGetBooleanv": {
+"file": "core.cpp",
+"params": "GLenum pname, GLboolean *data",
+"ret": "void"
+},
+"glGetBufferParameteriv": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetBufferPointerv": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLenum pname, void **params",
+"ret": "void"
+},
+"glGetBufferSubData": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLintptr offset, GLsizeiptr size, void *data",
+"ret": "void"
+},
+"glGetClipPlane": {
+"file": "ffp.cpp",
+"params": "GLenum plane, GLdouble *eq",
+"ret": "void"
+},
+"glGetDoublev": {
+"file": "core.cpp",
+"params": "GLenum pname, GLdouble *data",
+"ret": "void"
+},
+"glGetError": {
+"file": "core.cpp",
+"params": "void",
+"ret": "GLenum"
+},
+"glGetFloatv": {
+"file": "core.cpp",
+"params": "GLenum pname, GLfloat *data",
+"ret": "void"
+},
+"glGetHandleARB": {
+"file": "shader.cpp",
+"params": "GLenum pname",
+"ret": "GLhandleARB"
+},
+"glGetInfoLogARB": {
+"file": "shader.cpp",
+"params": "GLhandleARB obj, GLsizei maxLength, GLsizei *length, GLcharARB *infoLog",
+"ret": "void"
+},
+"glGetIntegerv": {
+"file": "core.cpp",
+"params": "GLenum pname, GLint *data",
+"ret": "void"
+},
+"glGetLightfv": {
+"file": "ffp.cpp",
+"params": "GLenum light, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetLightiv": {
+"file": "ffp.cpp",
+"params": "GLenum light, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetMaterialfv": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetMaterialiv": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetObjectParameterfvARB": {
+"file": "shader.cpp",
+"params": "GLhandleARB obj, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetObjectParameterivARB": {
+"file": "shader.cpp",
+"params": "GLhandleARB obj, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetPointerv": {
+"file": "vertex.cpp",
+"params": "GLenum pname, void **params",
+"ret": "void"
+},
+"glGetQueryObjectiv": {
+"file": "misc.cpp",
+"params": "GLuint id, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetQueryiv": {
+"file": "misc.cpp",
+"params": "GLenum target, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetString": {
+"file": "core.cpp",
+"params": "GLenum name",
+"ret": "const GLubyte *"
+},
+"glGetStringi": {
+"file": "core.cpp",
+"params": "GLenum name, GLuint index",
+"ret": "const GLubyte *"
+},
+"glGetTexEnvfv": {
+"file": "ffp.cpp",
+"params": "GLenum target, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetTexEnviv": {
+"file": "ffp.cpp",
+"params": "GLenum target, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetTexGendv": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, GLdouble *params",
+"ret": "void"
+},
+"glGetTexGenfv": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetTexGeniv": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetTexImage": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLenum format, GLenum type, void *pixels",
+"ret": "void"
+},
+"glGetTexLevelParameterfv": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetTexLevelParameteriv": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetTexParameterfv": {
+"file": "texture.cpp",
+"params": "GLenum target, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetTexParameteriv": {
+"file": "texture.cpp",
+"params": "GLenum target, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetUniformLocation": {
+"file": "shader.cpp",
+"params": "GLuint program, const GLchar *name",
+"ret": "GLint"
+},
+"glGetVertexAttribIiv": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glGetVertexAttribIuiv": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLenum pname, GLuint *params",
+"ret": "void"
+},
+"glGetVertexAttribPointerv": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLenum pname, void **pointer",
+"ret": "void"
+},
+"glGetVertexAttribdv": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLenum pname, GLdouble *params",
+"ret": "void"
+},
+"glGetVertexAttribfv": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLenum pname, GLfloat *params",
+"ret": "void"
+},
+"glGetVertexAttribiv": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLenum pname, GLint *params",
+"ret": "void"
+},
+"glIndexPointer": {
+"file": "vertex.cpp",
+"params": "GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glInterleavedArrays": {
+"file": "vertex.cpp",
+"params": "GLenum format, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glIsEnabled": {
+"file": "ffp.cpp",
+"params": "GLenum cap",
+"ret": "GLboolean"
+},
+"glIsList": {
+"file": "dlist.cpp",
+"params": "GLuint list",
+"ret": "GLboolean"
+},
+"glLightModelf": {
+"file": "ffp.cpp",
+"params": "GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glLightModelfv": {
+"file": "ffp.cpp",
+"params": "GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glLightModeli": {
+"file": "ffp.cpp",
+"params": "GLenum pname, GLint param",
+"ret": "void"
+},
+"glLightModeliv": {
+"file": "ffp.cpp",
+"params": "GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glLightf": {
+"file": "ffp.cpp",
+"params": "GLenum light, GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glLightfv": {
+"file": "ffp.cpp",
+"params": "GLenum light, GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glLighti": {
+"file": "ffp.cpp",
+"params": "GLenum light, GLenum pname, GLint param",
+"ret": "void"
+},
+"glLightiv": {
+"file": "ffp.cpp",
+"params": "GLenum light, GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glLineWidth": {
+"file": "ffp.cpp",
+"params": "GLfloat width",
+"ret": "void"
+},
+"glLinkProgram": {
+"file": "shader.cpp",
+"params": "GLuint program",
+"ret": "void"
+},
+"glListBase": {
+"file": "dlist.cpp",
+"params": "GLuint base",
+"ret": "void"
+},
+"glLoadIdentity": {
+"file": "matrix.cpp",
+"params": "void",
+"ret": "void"
+},
+"glLoadMatrixd": {
+"file": "matrix.cpp",
+"params": "const GLdouble *m",
+"ret": "void"
+},
+"glLoadMatrixf": {
+"file": "matrix.cpp",
+"params": "const GLfloat *m",
+"ret": "void"
+},
+"glLoadTransposeMatrixd": {
+"file": "matrix.cpp",
+"params": "const GLdouble *m",
+"ret": "void"
+},
+"glLoadTransposeMatrixf": {
+"file": "matrix.cpp",
+"params": "const GLfloat *m",
+"ret": "void"
+},
+"glLogicOp": {
+"file": "ffp.cpp",
+"params": "GLenum opcode",
+"ret": "void"
+},
+"glMapBuffer": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLenum access",
+"ret": "void *"
+},
+"glMapBufferRange": {
+"file": "vertex.cpp",
+"params": "GLenum target, GLintptr offset, GLsizeiptr length, GLbitfield access",
+"ret": "void *"
+},
+"glMaterialf": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glMaterialfv": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glMateriali": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum pname, GLint param",
+"ret": "void"
+},
+"glMaterialiv": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glMatrixMode": {
+"file": "matrix.cpp",
+"params": "GLenum mode",
+"ret": "void"
+},
+"glMultMatrixd": {
+"file": "matrix.cpp",
+"params": "const GLdouble *m",
+"ret": "void"
+},
+"glMultMatrixf": {
+"file": "matrix.cpp",
+"params": "const GLfloat *m",
+"ret": "void"
+},
+"glMultTransposeMatrixd": {
+"file": "matrix.cpp",
+"params": "const GLdouble *m",
+"ret": "void"
+},
+"glMultTransposeMatrixf": {
+"file": "matrix.cpp",
+"params": "const GLfloat *m",
+"ret": "void"
+},
+"glMultiDrawArrays": {
+"file": "vertex.cpp",
+"params": "GLenum mode, const GLint *first, const GLsizei *count, GLsizei drawcount",
+"ret": "void"
+},
+"glMultiDrawElements": {
+"file": "vertex.cpp",
+"params": "GLenum mode, const GLsizei *count, GLenum type, const void *const *indices, GLsizei drawcount",
+"ret": "void"
+},
+"glNewList": {
+"file": "dlist.cpp",
+"params": "GLuint list, GLenum mode",
+"ret": "void"
+},
+"glNormalPointer": {
+"file": "vertex.cpp",
+"params": "GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glOrtho": {
+"file": "matrix.cpp",
+"params": "GLdouble l, GLdouble r, GLdouble b, GLdouble t, GLdouble n, GLdouble f",
+"ret": "void"
+},
+"glPixelStoref": {
+"file": "texture.cpp",
+"params": "GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glPixelStorei": {
+"file": "texture.cpp",
+"params": "GLenum pname, GLint param",
+"ret": "void"
+},
+"glPointParameterf": {
+"file": "misc.cpp",
+"params": "GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glPointParameterfv": {
+"file": "misc.cpp",
+"params": "GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glPointParameteri": {
+"file": "misc.cpp",
+"params": "GLenum pname, GLint param",
+"ret": "void"
+},
+"glPointParameteriv": {
+"file": "misc.cpp",
+"params": "GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glPointSize": {
+"file": "ffp.cpp",
+"params": "GLfloat size",
+"ret": "void"
+},
+"glPolygonMode": {
+"file": "ffp.cpp",
+"params": "GLenum face, GLenum mode",
+"ret": "void"
+},
+"glPopAttrib": {
+"file": "attrib.cpp",
+"params": "void",
+"ret": "void"
+},
+"glPopClientAttrib": {
+"file": "attrib.cpp",
+"params": "void",
+"ret": "void"
+},
+"glPopMatrix": {
+"file": "matrix.cpp",
+"params": "void",
+"ret": "void"
+},
+"glPushAttrib": {
+"file": "attrib.cpp",
+"params": "GLbitfield mask",
+"ret": "void"
+},
+"glPushClientAttrib": {
+"file": "attrib.cpp",
+"params": "GLbitfield mask",
+"ret": "void"
+},
+"glPushMatrix": {
+"file": "matrix.cpp",
+"params": "void",
+"ret": "void"
+},
+"glReadPixels": {
+"file": "texture.cpp",
+"params": "GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels",
+"ret": "void"
+},
+"glRotated": {
+"file": "matrix.cpp",
+"params": "GLdouble a, GLdouble x, GLdouble y, GLdouble z",
+"ret": "void"
+},
+"glRotatef": {
+"file": "matrix.cpp",
+"params": "GLfloat a, GLfloat x, GLfloat y, GLfloat z",
+"ret": "void"
+},
+"glScaled": {
+"file": "matrix.cpp",
+"params": "GLdouble x, GLdouble y, GLdouble z",
+"ret": "void"
+},
+"glScalef": {
+"file": "matrix.cpp",
+"params": "GLfloat x, GLfloat y, GLfloat z",
+"ret": "void"
+},
+"glSecondaryColorPointer": {
+"file": "vertex.cpp",
+"params": "GLint size, GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glShadeModel": {
+"file": "ffp.cpp",
+"params": "GLenum mode",
+"ret": "void"
+},
+"glShaderSource": {
+"file": "shader.cpp",
+"params": "GLuint shader, GLsizei count, const GLchar *const *string, const GLint *length",
+"ret": "void"
+},
+"glTexCoordPointer": {
+"file": "vertex.cpp",
+"params": "GLint size, GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glTexEnvf": {
+"file": "ffp.cpp",
+"params": "GLenum target, GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glTexEnvfv": {
+"file": "ffp.cpp",
+"params": "GLenum target, GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glTexEnvi": {
+"file": "ffp.cpp",
+"params": "GLenum target, GLenum pname, GLint param",
+"ret": "void"
+},
+"glTexEnviv": {
+"file": "ffp.cpp",
+"params": "GLenum target, GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glTexGend": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, GLdouble param",
+"ret": "void"
+},
+"glTexGendv": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, const GLdouble *params",
+"ret": "void"
+},
+"glTexGenf": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glTexGenfv": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glTexGeni": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, GLint param",
+"ret": "void"
+},
+"glTexGeniv": {
+"file": "ffp.cpp",
+"params": "GLenum coord, GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glTexImage1D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLint internalformat, GLsizei width, GLint border, GLenum format, GLenum type, const void *pixels",
+"ret": "void"
+},
+"glTexImage2D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void *pixels",
+"ret": "void"
+},
+"glTexParameterf": {
+"file": "texture.cpp",
+"params": "GLenum target, GLenum pname, GLfloat param",
+"ret": "void"
+},
+"glTexParameterfv": {
+"file": "texture.cpp",
+"params": "GLenum target, GLenum pname, const GLfloat *params",
+"ret": "void"
+},
+"glTexParameteri": {
+"file": "texture.cpp",
+"params": "GLenum target, GLenum pname, GLint param",
+"ret": "void"
+},
+"glTexParameteriv": {
+"file": "texture.cpp",
+"params": "GLenum target, GLenum pname, const GLint *params",
+"ret": "void"
+},
+"glTexSubImage1D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLint xoffset, GLsizei width, GLenum format, GLenum type, const void *pixels",
+"ret": "void"
+},
+"glTexSubImage2D": {
+"file": "texture.cpp",
+"params": "GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void *pixels",
+"ret": "void"
+},
+"glTranslated": {
+"file": "matrix.cpp",
+"params": "GLdouble x, GLdouble y, GLdouble z",
+"ret": "void"
+},
+"glTranslatef": {
+"file": "matrix.cpp",
+"params": "GLfloat x, GLfloat y, GLfloat z",
+"ret": "void"
+},
+"glUnmapBuffer": {
+"file": "vertex.cpp",
+"params": "GLenum target",
+"ret": "GLboolean"
+},
+"glUseProgram": {
+"file": "shader.cpp",
+"params": "GLuint program",
+"ret": "void"
+},
+"glVertexAttribIPointer": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLint size, GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glVertexAttribPointer": {
+"file": "vertex.cpp",
+"params": "GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const void *pointer",
+"ret": "void"
+},
+"glVertexPointer": {
+"file": "vertex.cpp",
+"params": "GLint size, GLenum type, GLsizei stride, const void *pointer",
+"ret": "void"
+}
+},
+"unknown_enums": []
+}

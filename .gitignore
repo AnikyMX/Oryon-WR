@@ -1,0 +1,12 @@
+build/
+build-*/
+__pycache__/
+*.pyc
+tools/bench/bench
+tools/bench/*.so
+# regenerable jar extraction (tools/jarscan.py); generator inputs are kept
+tools/db/natives.json
+tools/db/mc_gl_calls.json
+tools/db/mc_lwjgl_refs.json
+tools/db/mc_shaders.json
+tools/db/flag_required_gl.json

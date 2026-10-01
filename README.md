@@ -40,7 +40,7 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
 | `stats.cpp` | diagnostik opsional `ORYON_STATS` (nol instruksi tambahan di jalur draw saat mati) |
 | `core.cpp` | error model, string/versi, kueri virtual `glGet*` |
 | `matrix.cpp` | stack MODELVIEW/PROJECTION/TEXTURE (CPU) |
-| `ffp.cpp`, `ffp_prog.cpp` | state fixed-function → kunci kanonik → GLSL ES 3.20 ter-cache, uniform ber-versi |
+| `ffp.cpp`, `ffp_prog.cpp` | state fixed-function → kunci kanonik (COMBINE setara MODULATE/REPLACE dilebur, mode fog via uniform) → GLSL ES 3.20 ter-cache (memori + disk), uniform ber-versi |
 | `vertex.cpp` | immediate mode + batching, client array, ring streaming (persistent/fallback), QUADS via IBO + BaseVertex |
 | `texture.cpp` | BGRA/8888_REV zero-copy via swizzle, format legacy, proxy, readback |
 | `dlist.cpp` | display list: op stream + geometri di-merge ke VBO/IBO/VAO per list |

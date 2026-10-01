@@ -52,8 +52,8 @@ def run(extra, seconds=0.0):
     m = re.search(r'^CHILD (.*)$', p.stdout, re.M)
     return p.returncode, (json.loads(m.group(1)) if m else None), p.stderr
 def cache_line(err):
-    m = re.search(r'program cache (\S+): (\d+) loaded, (\d+) rebuilt, (\d+) dropped', err)
-    return tuple(int(x) for x in m.groups()[1:]) if m else None
+    m = re.search(r'program cache (\S+): (\d+) loaded, (\d+) rebuilt, (\d+) migrated, (\d+) dropped', err)
+    return (int(m.group(2)), int(m.group(3)), int(m.group(5))) if m else None
 
 D = tempfile.mkdtemp(prefix='oryon-pc-')
 rc1, r1, e1 = run({'ORYON_CACHE_DIR': D})
@@ -85,8 +85,24 @@ rc4, r4, e4 = run({'ORYON_CACHE_DIR': D2, 'ORYON_NO_PROGRAM_CACHE': '1'})
 check(rc4 == 0 and r4 and r4['px'] == r1['px'] and 'program cache' not in e4 and not os.listdir(D2), 'ORYON_NO_PROGRAM_CACHE=1 must disable the cache')
 shutil.rmtree(D, ignore_errors=True); shutil.rmtree(D2, ignore_errors=True)
 
+# Optional: keys written by a previous Oryon build (ORYON_SO_PREV) are migrated to their canonical form at init,
+# so nothing compiles while drawing afterwards.
+migr = None
+prev = os.environ.get('ORYON_SO_PREV')
+if prev:
+    D3 = tempfile.mkdtemp(prefix='oryon-pc-mig-')
+    rcp, rp, ep = run({'ORYON_CACHE_DIR': D3, 'ORYON_SO': prev})
+    mline = lambda err: re.search(r'program cache \S+: (\d+) loaded, (\d+) rebuilt, (\d+) migrated, (\d+) dropped', err)
+    rc5, r5, e5 = run({'ORYON_CACHE_DIR': D3, 'ORYON_STATS': '1'}, 1.3)
+    m5 = mline(e5); migr = m5.groups() if m5 else None
+    st5 = re.findall(r'\] stats [0-9.]+s: .*?ffp prog \+(\d+)', e5)
+    check(rcp == 0 and rc5 == 0 and m5 and int(m5.group(3)) >= 1, 'previous-build keys should be migrated: %s' % (migr,))
+    check(st5 and all(int(x) == 0 for x in st5), 'after migration nothing may compile while drawing: %s' % st5)
+    check(r5 and rp and r5['px'] == rp['px'], 'pixels differ between previous build and migrated programs')
+    shutil.rmtree(D3, ignore_errors=True)
+
 print('== PROGRAM CACHE TEST ==')
-print('run1: %d programs stored | run2 init: %s | run3 init: %s | pixels %s' % (len(files), cl, cl3, r1 and r1['px']))
+print('run1: %d programs stored | run2 init: %s | run3 init: %s | migration (loaded, rebuilt, migrated, dropped): %s | pixels %s' % (len(files), cl, cl3, migr, r1 and r1['px']))
 print('RESULT:', 'PASS' if not fails else 'FAIL')
 for f in fails: print('  -', f)
 sys.exit(1 if fails else 0)

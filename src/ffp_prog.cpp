@@ -51,6 +51,50 @@ uint64_t comb_op(GLenum o) {
 }
 uint64_t scale_code(GLfloat s) { return s >= 3.0f ? 2 : s >= 1.5f ? 1 : 0; }
 
+// Canonical form: keys whose generated shaders are equivalent become identical, so fewer programs are compiled.
+//  - fog: the equation (linear/exp/exp2) is selected by a uniform, so the mode is not part of the key;
+//  - COMBINE: TEXTUREn of the unit itself = TEXTURE, PRIMARY_COLOR on the first enabled unit = PREVIOUS, unused
+//    arguments are zeroed, commutative arguments are ordered, and configurations equal to MODULATE / REPLACE become
+//    those modes (Minecraft's RenderLivingBase.unsetBrightness leaves units 0/1 in such a COMBINE state).
+void canon_key(FfpKey &k) {
+    k.fog_mode = 0;
+    int first = -1;
+    for (int u = 0; u < k.nunits; ++u) {
+        uint32_t w = k.tu[u];
+        if (!(w & 7)) { k.comb[u] = 0; continue; }
+        if (first < 0) first = u;
+        if (((w >> 3) & 7) != ENV_COMBINE) { k.comb[u] = 0; continue; }
+        const uint64_t c = k.comb[u];
+        uint32_t fr = c & 7, fa = (c >> 3) & 7, scr = (c >> 39) & 3, sca = (c >> 41) & 3;
+        uint32_t sr[3], sa[3], orr[3], oa[3];
+        for (int i = 0; i < 3; ++i) {
+            sr[i] = (c >> (6 + 4 * i)) & 15; sa[i] = (c >> (18 + 4 * i)) & 15;
+            orr[i] = (c >> (30 + 2 * i)) & 3; oa[i] = (c >> (36 + i)) & 1;
+            if (sr[i] == 4u + (uint32_t)u) sr[i] = 0;               // TEXTUREn of this unit == TEXTURE
+            if (sa[i] == 4u + (uint32_t)u) sa[i] = 0;
+            if (u == first && sr[i] == 2) sr[i] = 3;                // PRIMARY_COLOR == PREVIOUS on the first unit
+            if (u == first && sa[i] == 2) sa[i] = 3;
+        }
+        auto nargs = [](uint32_t f) { return f == 0 ? 1 : f == 4 ? 3 : 2; };
+        if (fr == 7) { fa = 0; sca = 0; for (int i = 0; i < 3; ++i) { sa[i] = 0; oa[i] = 0; } }   // DOT3_RGBA: alpha from RGB
+        for (int i = nargs(fr); i < 3; ++i) { sr[i] = 0; orr[i] = 0; }
+        if (fr != 7) for (int i = nargs(fa); i < 3; ++i) { sa[i] = 0; oa[i] = 0; }
+        auto comm = [](uint32_t f) { return f == 1 || f == 2 || f == 3 || f == 6 || f == 7; };
+        if (comm(fr) && (sr[1] << 2 | orr[1]) < (sr[0] << 2 | orr[0])) { uint32_t t = sr[0]; sr[0] = sr[1]; sr[1] = t; t = orr[0]; orr[0] = orr[1]; orr[1] = t; }
+        if (fr != 7 && comm(fa) && (sa[1] << 1 | oa[1]) < (sa[0] << 1 | oa[0])) { uint32_t t = sa[0]; sa[0] = sa[1]; sa[1] = t; t = oa[0]; oa[0] = oa[1]; oa[1] = t; }
+        const uint32_t fmt = (w >> 6) & 3;
+        const bool modulate = fr == 1 && fa == 1 && !scr && !sca && sr[0] == 0 && sr[1] == 3 && !orr[0] && !orr[1] &&
+                              sa[0] == 0 && sa[1] == 3 && !oa[0] && !oa[1];
+        const bool replace = fr == 0 && fa == 0 && !scr && !sca && sr[0] == 0 && !orr[0] && sa[0] == 0 && !oa[0];
+        if (modulate && fmt != FMT_ALPHA) { k.tu[u] = (w & ~(7u << 3)) | (ENV_MODULATE << 3); k.comb[u] = 0; continue; }
+        if (replace && (fmt == FMT_RGBA || fmt == FMT_INTENSITY)) { k.tu[u] = (w & ~(7u << 3)) | (ENV_REPLACE << 3); k.comb[u] = 0; continue; }
+        uint64_t n = (uint64_t)fr | ((uint64_t)fa << 3) | ((uint64_t)scr << 39) | ((uint64_t)sca << 41);
+        for (int i = 0; i < 3; ++i)
+            n |= ((uint64_t)sr[i] << (6 + 4 * i)) | ((uint64_t)sa[i] << (18 + 4 * i)) | ((uint64_t)orr[i] << (30 + 2 * i)) | ((uint64_t)oa[i] << (36 + i));
+        k.comb[u] = n;
+    }
+}
+
 void build_key(FfpKey &k, bool points) {
     memset(&k, 0, sizeof k);
     const Ffp &f = g.f;
@@ -120,6 +164,7 @@ void build_key(FfpKey &k, bool points) {
         if (f.normalize) k.flags |= FK_NORMALIZE;
         else if (f.rescale) k.flags |= FK_RESCALE;
     }
+    canon_key(k);
 }
 
 uint32_t key_hash(const FfpKey &k) {
@@ -370,10 +415,9 @@ void gen_fs(SB &s, const FfpKey &k) {
     }
     if (sec) s.add("  c.rgb = min(c.rgb + v_s, 1.0);\n");
     if (k.flags & FK_FOG) {
-        if (k.fog_mode == 1) s.add("  float f = clamp(v_fz * u_fog[1].x + u_fog[1].y, 0.0, 1.0);\n");
-        else if (k.fog_mode == 3) s.add("  float fd = u_fog[1].z * v_fz; float f = clamp(exp(-fd * fd), 0.0, 1.0);\n");
-        else s.add("  float f = clamp(exp(-u_fog[1].z * v_fz), 0.0, 1.0);\n");
-        s.add("  c.rgb = mix(u_fog[0].rgb, c.rgb, f);\n");
+        s.add("  float f;\n  if (u_fog[1].w < 0.5) f = v_fz * u_fog[1].x + u_fog[1].y;\n"
+              "  else { float fd = u_fog[1].z * v_fz; f = exp(-(u_fog[1].w < 1.5 ? fd : fd * fd)); }\n");
+        s.add("  c.rgb = mix(u_fog[0].rgb, c.rgb, clamp(f, 0.0, 1.0));\n");
     }
     if (k.flags & FK_ALPHA) {
         static const char *kA[] = {"true", "!(c.a < u_aref)", "!(c.a == u_aref)", "!(c.a <= u_aref)",
@@ -477,7 +521,7 @@ void key_desc(const FfpKey &k, char *out, size_t n) {
         uint32_t w = k.tu[u]; if (!(w & 7)) continue;
         s.addf("t%d:%s/%s%s ", u, kTgt[w & 7], kEnv[(w >> 3) & 7], ((w >> 8) & 15) ? "+texgen" : "");
     }
-    if (k.flags & FK_FOG) s.addf("fog:%s ", k.fog_mode == 1 ? "linear" : k.fog_mode == 3 ? "exp2" : "exp");
+    if (k.flags & FK_FOG) s.addf("fog%s ", k.fog_src == 2 ? ":radial" : k.fog_src == 3 ? ":coord" : "");
     if (k.flags & FK_ALPHA) s.add("alphatest ");
     if (k.flags & FK_FLAT) s.add("flat ");
     if (k.flags & FK_COLORSUM) s.add("colorsum ");
@@ -547,6 +591,19 @@ void insert(Program *P) { Program **b = &g_bucket[P->hash & 255]; P->next = *b; 
 bool cached_in_memory(const FfpKey &k, uint32_t h) {
     for (Program *p = g_bucket[h & 255]; p; p = p->next) if (p->hash == h && !memcmp(&p->key, &k, sizeof k)) return true;
     return false;
+}
+// Warm-up of one key: load its binary when the source hash matches, else rebuild (at startup) and store.
+bool warm_key(const FfpKey &K, const CacheHdr *H, const void *bin, int &loaded, int &rebuilt) {
+    const uint32_t kh = key_hash(K);
+    if (cached_in_memory(K, kh)) return true;
+    const uint32_t amask = gen_sources(K);
+    const uint64_t sh = src_hash();
+    GLuint p = (H && bin && H->src_hash == sh) ? program_from_binary(H->fmt, bin, (GLsizei)H->len) : 0;
+    if (p) ++loaded;
+    else if ((p = compile_program(K)) != 0) { cache_store(p, K, sh); ++rebuilt; }
+    else return false;
+    insert(finish(p, K, kh, amask));
+    return true;
 }
 
 __attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
@@ -626,7 +683,8 @@ void upload(Program *P) {
     if (P->u_fog >= 0 && P->s_fog != f.v_fog) {
         GLfloat d[8]; memcpy(d, &f.fog_color, 16);
         GLfloat den = f.fog_end - f.fog_start;
-        d[4] = den != 0.0f ? -1.0f / den : 0.0f; d[5] = den != 0.0f ? f.fog_end / den : 1.0f; d[6] = f.fog_density; d[7] = 0;
+        d[4] = den != 0.0f ? -1.0f / den : 0.0f; d[5] = den != 0.0f ? f.fog_end / den : 1.0f; d[6] = f.fog_density;
+        d[7] = f.fog_mode == GL_EXP ? 1.0f : f.fog_mode == GL_EXP2 ? 2.0f : 0.0f;
         es.glUniform4fv(P->u_fog, 2, d); P->s_fog = f.v_fog;
     }
     if (P->u_aref >= 0 && P->s_alpha != f.v_alpha) { es.glUniform1f(P->u_aref, f.alpha_ref); P->s_alpha = f.v_alpha; }
@@ -689,7 +747,7 @@ void ffp_cache_init() {
     g_drv_hash = h;
     g_cache_on = true;
     const uint64_t t0 = now_us();
-    int loaded = 0, rebuilt = 0, dropped = 0;
+    int loaded = 0, rebuilt = 0, migrated = 0, dropped = 0;
     if (DIR *dp = opendir(g_cache_dir)) {
         char path[800];
         int seen = 0;
@@ -702,20 +760,24 @@ void ffp_cache_init() {
             CacheHdr H; FfpKey K;
             void *bin = cache_read(path, H, K);
             if (!bin) { unlink(path); ++dropped; continue; }
-            const uint32_t kh = key_hash(K);
-            if (cached_in_memory(K, kh)) { free(bin); continue; }
-            const uint32_t amask = gen_sources(K);
-            const uint64_t sh = src_hash();
-            GLuint p = H.src_hash == sh ? program_from_binary(H.fmt, bin, (GLsizei)H.len) : 0;
+            FfpKey C = K; canon_key(C);
+            if (memcmp(&C, &K, sizeof K)) {                  // key written by an older Oryon: move to its canonical form
+                free(bin); unlink(path); ++migrated;
+                char cp[600]; cache_path(C, cp, sizeof cp);
+                CacheHdr H2; FfpKey K2;
+                void *b2 = cache_read(cp, H2, K2);
+                const bool own = b2 && !memcmp(&K2, &C, sizeof C);
+                warm_key(C, own ? &H2 : nullptr, own ? b2 : nullptr, loaded, rebuilt);
+                free(b2);
+                continue;
+            }
+            if (!warm_key(K, &H, bin, loaded, rebuilt)) { unlink(path); ++dropped; }
             free(bin);
-            if (p) ++loaded;
-            else if ((p = compile_program(K)) != 0) { cache_store(p, K, sh); ++rebuilt; }
-            else { unlink(path); ++dropped; continue; }
-            insert(finish(p, K, kh, amask));
         }
         closedir(dp);
     }
     while (es.glGetError() != GL_NO_ERROR) {}
-    log("program cache %s: %d loaded, %d rebuilt, %d dropped in %.1f ms", g_cache_dir, loaded, rebuilt, dropped, (now_us() - t0) / 1000.0);
+    log("program cache %s: %d loaded, %d rebuilt, %d migrated, %d dropped in %.1f ms", g_cache_dir, loaded, rebuilt, migrated, dropped,
+        (now_us() - t0) / 1000.0);
 }
 } // namespace ory

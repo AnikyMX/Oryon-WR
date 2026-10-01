@@ -35,6 +35,12 @@ typedef unsigned int E; typedef int I; typedef float F;
 #define GL_NEAREST 0x2600
 #define GL_NORMAL_ARRAY 0x8075
 #define GL_BYTE 0x1400
+#define GL_LIGHTING 0x0B50
+#define GL_FOG 0x0B60
+#define GL_TEXTURE_ENV 0x2300
+#define GL_TEXTURE_ENV_MODE 0x2200
+#define GL_MODULATE 0x2100
+#define GL_COMBINE 0x8570
 
 static void *L;
 #define S(ret, name, args) static ret (*name) args;
@@ -48,7 +54,7 @@ S(void, glBufferData, (E, intptr_t, const void *, E)) S(unsigned, glGenLists, (I
 S(void, glCallList, (unsigned)) S(void, glFinish, (void)) S(void, glViewport, (I, I, I, I)) S(void, glMatrixMode, (E)) S(void, glLoadIdentity, (void))
 S(void, glOrtho, (double, double, double, double, double, double)) S(void, glEnable, (E)) S(void, glDisable, (E)) S(void, glBindTexture, (E, unsigned))
 S(void, glGenTextures, (I, unsigned *)) S(void, glTexImage2D, (E, I, I, I, I, I, E, E, const void *)) S(void, glTexParameteri, (E, E, I))
-S(unsigned, glGetError, (void)) S(void, glAlphaFunc, (E, F)) S(void, glClientActiveTexture, (E))
+S(unsigned, glGetError, (void)) S(void, glAlphaFunc, (E, F)) S(void, glClientActiveTexture, (E)) S(void, glTexEnvi, (E, E, I))
 
 static double now(void) { struct timespec t; clock_gettime(CLOCK_MONOTONIC, &t); return t.tv_sec * 1e9 + t.tv_nsec; }
 static unsigned long (*draws)(void);
@@ -73,7 +79,7 @@ int main(int argc, char **argv) {
     LOAD(glEnableClientState) LOAD(glDisableClientState) LOAD(glDrawArrays) LOAD(glGenBuffers) LOAD(glBindBuffer) LOAD(glBufferData)
     LOAD(glGenLists) LOAD(glNewList) LOAD(glEndList) LOAD(glCallList) LOAD(glFinish) LOAD(glViewport) LOAD(glMatrixMode) LOAD(glLoadIdentity)
     LOAD(glOrtho) LOAD(glEnable) LOAD(glDisable) LOAD(glBindTexture) LOAD(glGenTextures) LOAD(glTexImage2D) LOAD(glTexParameteri)
-    LOAD(glGetError) LOAD(glAlphaFunc) LOAD(glClientActiveTexture)
+    LOAD(glGetError) LOAD(glAlphaFunc) LOAD(glClientActiveTexture) LOAD(glTexEnvi)
     if (shim) { void *h = dlopen(shim, RTLD_NOW | RTLD_LOCAL); if (h) draws = (unsigned long (*)(void))dlsym(h, "shim_draw_count"); }
     void *es = dlopen("libGLESv2.so.2", RTLD_NOW | RTLD_LOCAL);
     void (*es_depthmask)(unsigned char) = (void (*)(unsigned char))dlsym(es, "glDepthMask");
@@ -155,6 +161,25 @@ int main(int argc, char **argv) {
     glFinish(); dstart(); t = now();
     for (int f = 0; f < FR; ++f) { for (int i = 0; i < LC; ++i) { glPushMatrix(); glTranslatef(0, 0, 0.0001f * i); glCallList(lst); glPopMatrix(); } glFinish(); }
     printf("display list (60 quads compiled from 60 Tessellator draws): %.1f ns/call | ES draws/call: %.2f\n", (now() - t) / (FR * LC), dget() / (double)(FR * LC));
+    /* 7: state churn (entity rendering): per draw toggle LIGHTING / FOG / texenv MODULATE vs COMBINE (GL defaults make the
+     *    COMBINE state equal to MODULATE, like RenderLivingBase.unsetBrightness), then one client-array quad */
+    glVertexPointer(3, GL_FLOAT, 24, &q[0].x); glTexCoordPointer(2, GL_FLOAT, 24, &q[0].u); glColorPointer(4, GL_UNSIGNED_BYTE, 24, q[0].c);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY); glEnableClientState(GL_COLOR_ARRAY); glEnable(GL_TEXTURE_2D);
+    const int SD = 2000;
+    for (int pass = 0; pass < 2; ++pass) {                         /* pass 0 builds every program, pass 1 is timed */
+        glFinish(); dstart(); t = now();
+        for (int f = 0; f < (pass ? FR : 1); ++f) {
+            for (int i = 0; i < SD; ++i) {
+                if (i & 1) glEnable(GL_LIGHTING); else glDisable(GL_LIGHTING);
+                if (i & 2) glEnable(GL_FOG); else glDisable(GL_FOG);
+                glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, (i & 4) ? GL_COMBINE : GL_MODULATE);
+                glDrawArrays(GL_QUADS, 0, 4);
+            }
+            glFinish();
+        }
+    }
+    printf("state churn (lighting/fog/texenv toggled per draw): %.1f ns/draw | ES draws/frame: %.0f\n", (now() - t) / (FR * SD), dget() / (double)FR);
+    glDisable(GL_LIGHTING); glDisable(GL_FOG); glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); glDisable(GL_TEXTURE_2D);
     printf("GL error at end: 0x%x\n", glGetError());
     return 0;
 }

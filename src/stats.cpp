@@ -48,7 +48,9 @@ void stats_clear(GLbitfield mask) {
     if (!(mask & GL_COLOR_BUFFER_BIT)) return;
     const uint64_t t = now_us();
     Stats &s = g.st;
-    if (!s.t_win) { s.t_win = t; s.ring_prev = ring_used(); }
+    if (!s.t_win) {                                // first frame: start counting here (init work is in the init log)
+        s = Stats{}; s.on = true; s.t_win = t; s.ring_prev = ring_used();
+    }
     GLint fb = 0;
     es.glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &fb);
     if (fb == 0) {

@@ -394,7 +394,7 @@ OGL_EXPORT void glColorMaterial(GLenum face, GLenum mode) { ORY_DL(glColorMateri
 static void fog_set(GLenum pname, const GLfloat *p) {
     Ffp &f = g.f;
     switch (pname) {
-    case GL_FOG_MODE: { GLenum m = (GLenum)p[0]; if (m != f.fog_mode) { f.fog_mode = m; key_dirty(); } return; }
+    case GL_FOG_MODE: { GLenum m = (GLenum)p[0]; if (m != f.fog_mode) { f.fog_mode = m; f.v_fog = next_ver(); } return; }
     case GL_FOG_COORD_SRC: { GLenum m = (GLenum)p[0]; if (m != f.fog_src) { f.fog_src = m; key_dirty(); } return; }
     case GL_FOG_DISTANCE_MODE_NV: { GLenum m = (GLenum)p[0]; if (m != f.fog_dist) { f.fog_dist = m; key_dirty(); } return; }
     case GL_FOG_DENSITY: f.fog_density = p[0]; break;

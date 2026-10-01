@@ -209,6 +209,74 @@ gl.glColor4f(1, 1, 0, 1); quad(60, 60, 64, 64)               # constant change -
 ok = close(C.px(1, 1), (0, 255, 0, 255)) and close(C.px(6, 6), (0, 0, 0, 255)) and close(C.px(57, 57), (0, 255, 0, 255)) and close(C.px(62, 62), (255, 255, 0, 255))
 check('T12 immediate batching (65 primitives) + constant-change split', ok, (C.px(1, 1), C.px(6, 6), C.px(62, 62)))
 
+# ---- T14 fog EXP2 + LINEAR/EXP2/EXP switches reuse one program (equation selected by uniform)
+import glob
+def nprog(): return len(glob.glob(os.path.join(os.environ['ORYON_CACHE_DIR'], 'ffp-*.bin')))
+reset()
+gl.glEnable(e['GL_FOG']); gl.glFogfv(e['GL_FOG_COLOR'], P(farr(0, 0, 1, 1))); gl.glFogf(e['GL_FOG_DENSITY'], 0.3)
+gl.glFogf(e['GL_FOG_START'], 0); gl.glFogf(e['GL_FOG_END'], 10)
+gl.glTranslatef(0, 0, -5); gl.glColor4f(1, 0, 0, 1)
+gl.glFogi(e['GL_FOG_MODE'], e['GL_LINEAR']); quad(0, 0, 64, 64); n0 = nprog(); fa = C.px(32, 32)
+gl.glFogi(e['GL_FOG_MODE'], e['GL_EXP2']); quad(0, 0, 64, 64); fb = C.px(32, 32)
+gl.glFogi(e['GL_FOG_MODE'], e['GL_EXP']); quad(0, 0, 64, 64); fc = C.px(32, 32); n1 = nprog()
+x2, x1 = math.exp(-(0.3 * 5) ** 2), math.exp(-0.3 * 5)
+check('T14 fog EXP2 + mode switches without a new program',
+      close(fa, (128, 0, 128, 255)) and close(fb, (round(255 * x2), 0, round(255 * (1 - x2)), 255)) and
+      close(fc, (round(255 * x1), 0, round(255 * (1 - x1)), 255)) and n1 == n0, (fa, fb, fc, n0, n1))
+gl.glFogi(e['GL_FOG_MODE'], e['GL_LINEAR']); gl.glDisable(e['GL_FOG'])
+
+# ---- T15 RenderLivingBase.setBrightness / unsetBrightness texenv sequences as recovered from the 1.12.2 bytecode
+#      (units 0, 1 = lightmap, 2 = brightness texture). After unset, units 0/1 stay in a COMBINE state equal to
+#      MODULATE: same pixels and no new program compared with plain MODULATE.
+reset()
+gl.glActiveTexture(e['GL_TEXTURE0']); mktex(1, 1, [0xFF80C040]); gl.glEnable(e['GL_TEXTURE_2D'])
+gl.glActiveTexture(e['GL_TEXTURE1']); mktex(1, 1, [0xFFC0C0C0]); gl.glEnable(e['GL_TEXTURE_2D'])
+gl.glActiveTexture(e['GL_TEXTURE0'])
+def draw_lm():
+    gl.glColor4f(1, 1, 1, 1)
+    gl.glBegin(e['GL_QUADS'])
+    for (x, y) in [(0, 0), (64, 0), (64, 64), (0, 64)]:
+        gl.glTexCoord2f(0.5, 0.5); gl.glMultiTexCoord2f(e['GL_TEXTURE1'], 0.5, 0.5); gl.glVertex2f(x, y)
+    gl.glEnd()
+draw_lm(); ref = C.px(32, 32); n0 = nprog()
+def seq(*kv):
+    for k, v in zip(kv[0::2], kv[1::2]): env(k, v)
+gl.glActiveTexture(e['GL_TEXTURE0']); gl.glEnable(e['GL_TEXTURE_2D'])
+seq('GL_TEXTURE_ENV_MODE', 'GL_COMBINE', 'GL_COMBINE_RGB', 'GL_MODULATE', 'GL_SOURCE0_RGB', 'GL_TEXTURE0', 'GL_SOURCE1_RGB', 'GL_PRIMARY_COLOR',
+    'GL_OPERAND0_RGB', 'GL_SRC_COLOR', 'GL_OPERAND1_RGB', 'GL_SRC_COLOR', 'GL_COMBINE_ALPHA', 'GL_REPLACE', 'GL_SOURCE0_ALPHA', 'GL_TEXTURE0',
+    'GL_OPERAND0_ALPHA', 'GL_SRC_ALPHA')
+gl.glActiveTexture(e['GL_TEXTURE1']); gl.glEnable(e['GL_TEXTURE_2D'])
+seq('GL_TEXTURE_ENV_MODE', 'GL_COMBINE', 'GL_COMBINE_RGB', 'GL_INTERPOLATE', 'GL_SOURCE0_RGB', 'GL_CONSTANT', 'GL_SOURCE1_RGB', 'GL_PREVIOUS',
+    'GL_SOURCE2_RGB', 'GL_CONSTANT', 'GL_OPERAND0_RGB', 'GL_SRC_COLOR', 'GL_OPERAND1_RGB', 'GL_SRC_COLOR', 'GL_OPERAND2_RGB', 'GL_SRC_ALPHA',
+    'GL_COMBINE_ALPHA', 'GL_REPLACE', 'GL_SOURCE0_ALPHA', 'GL_PREVIOUS', 'GL_OPERAND0_ALPHA', 'GL_SRC_ALPHA')
+gl.glTexEnvfv(TE, e['GL_TEXTURE_ENV_COLOR'], P(farr(1, 0, 0, 0.3)))
+gl.glActiveTexture(e['GL_TEXTURE2']); mktex(1, 1, [0xFFFFFFFF]); gl.glEnable(e['GL_TEXTURE_2D'])
+seq('GL_TEXTURE_ENV_MODE', 'GL_COMBINE', 'GL_COMBINE_RGB', 'GL_MODULATE', 'GL_SOURCE0_RGB', 'GL_PREVIOUS', 'GL_SOURCE1_RGB', 'GL_TEXTURE1',
+    'GL_OPERAND0_RGB', 'GL_SRC_COLOR', 'GL_OPERAND1_RGB', 'GL_SRC_COLOR', 'GL_COMBINE_ALPHA', 'GL_REPLACE', 'GL_SOURCE0_ALPHA', 'GL_PREVIOUS',
+    'GL_OPERAND0_ALPHA', 'GL_SRC_ALPHA')
+gl.glActiveTexture(e['GL_TEXTURE0'])
+draw_lm(); hurt = C.px(32, 32); n_hurt = nprog()
+gl.glActiveTexture(e['GL_TEXTURE0']); gl.glEnable(e['GL_TEXTURE_2D'])
+seq('GL_TEXTURE_ENV_MODE', 'GL_COMBINE', 'GL_COMBINE_RGB', 'GL_MODULATE', 'GL_SOURCE0_RGB', 'GL_TEXTURE0', 'GL_SOURCE1_RGB', 'GL_PRIMARY_COLOR',
+    'GL_OPERAND0_RGB', 'GL_SRC_COLOR', 'GL_OPERAND1_RGB', 'GL_SRC_COLOR', 'GL_COMBINE_ALPHA', 'GL_MODULATE', 'GL_SOURCE0_ALPHA', 'GL_TEXTURE0',
+    'GL_SOURCE1_ALPHA', 'GL_PRIMARY_COLOR', 'GL_OPERAND0_ALPHA', 'GL_SRC_ALPHA', 'GL_OPERAND1_ALPHA', 'GL_SRC_ALPHA')
+gl.glActiveTexture(e['GL_TEXTURE1'])
+seq('GL_TEXTURE_ENV_MODE', 'GL_COMBINE', 'GL_COMBINE_RGB', 'GL_MODULATE', 'GL_OPERAND0_RGB', 'GL_SRC_COLOR', 'GL_OPERAND1_RGB', 'GL_SRC_COLOR',
+    'GL_SOURCE0_RGB', 'GL_TEXTURE', 'GL_SOURCE1_RGB', 'GL_PREVIOUS', 'GL_COMBINE_ALPHA', 'GL_MODULATE', 'GL_OPERAND0_ALPHA', 'GL_SRC_ALPHA',
+    'GL_SOURCE0_ALPHA', 'GL_TEXTURE')
+gl.glActiveTexture(e['GL_TEXTURE2']); gl.glDisable(e['GL_TEXTURE_2D'])
+seq('GL_TEXTURE_ENV_MODE', 'GL_COMBINE', 'GL_COMBINE_RGB', 'GL_MODULATE', 'GL_OPERAND0_RGB', 'GL_SRC_COLOR', 'GL_OPERAND1_RGB', 'GL_SRC_COLOR',
+    'GL_SOURCE0_RGB', 'GL_TEXTURE', 'GL_SOURCE1_RGB', 'GL_PREVIOUS', 'GL_COMBINE_ALPHA', 'GL_MODULATE', 'GL_OPERAND0_ALPHA', 'GL_SRC_ALPHA',
+    'GL_SOURCE0_ALPHA', 'GL_TEXTURE')
+gl.glActiveTexture(e['GL_TEXTURE0'])
+draw_lm(); after = C.px(32, 32); n1 = nprog()
+t0c, lm = (128 / 255, 192 / 255, 64 / 255), 192 / 255
+exp_hurt = tuple(round(255 * ((0.3 * r + 0.7 * c) * lm)) for r, c in zip((1, 0, 0), t0c)) + (255,)
+check('T15 setBrightness/unsetBrightness: hurt tint, then MODULATE-equal COMBINE reuses the MODULATE program',
+      close(hurt, exp_hurt, 2) and close(after, ref, 1) and n_hurt == n0 + 1 and n1 == n_hurt, (ref, hurt, exp_hurt, after, n0, n_hurt, n1))
+for u in ('GL_TEXTURE2', 'GL_TEXTURE1', 'GL_TEXTURE0'):
+    gl.glActiveTexture(e[u]); env('GL_TEXTURE_ENV_MODE', 'GL_MODULATE'); gl.glDisable(e['GL_TEXTURE_2D'])
+
 err = gl.glGetError()
 check('T13 no GL error after suite', err == 0, hex(err))
 C.close()

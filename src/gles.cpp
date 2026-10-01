@@ -20,9 +20,10 @@ void log(const char *fmt, ...) {
     va_list ap; va_start(ap, fmt); vsnprintf(buf, sizeof buf, fmt, ap); va_end(ap);
 #ifdef __ANDROID__
     __android_log_write(ANDROID_LOG_INFO, "Oryon", buf);
-#else
-    fprintf(stderr, "[Oryon] %s\n", buf);
 #endif
+    // Launchers (Pojav/Zalith family) copy the game's stdio into latestlog.txt but filter logcat tags,
+    // so the same line also goes to stderr (unbuffered). Only init/error paths call this.
+    fprintf(stderr, "[Oryon] %s\n", buf);
 }
 
 namespace {
@@ -126,7 +127,8 @@ void ctx_init() {
     g.hooks &= ~HOOK_INIT;
     vertex_init();
     while (es.glGetError() != GL_NO_ERROR) {}           // never leak init-time state into the app's error flag
-    log("init: %s | %s | ES ext mask 0x%x | desktop ext %d", ver, rend ? rend : "?", g.escaps, g.ext_count);
+    log("init " ORYON_VERSION ": %s | %s | ES ext mask 0x%x | desktop ext %d | stream %s | max tex %d",
+        ver, rend ? rend : "?", g.escaps, g.ext_count, g.rv.persistent ? "persistent" : "map-unsync", g.es_max_tex_size);
 }
 
 void run_hooks() {

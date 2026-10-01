@@ -1,6 +1,7 @@
 {
 "features": {
 "AMD_debug_output": {
+"always": false,
 "lists": [
 [
 "glDebugMessageEnableAMD",
@@ -9,9 +10,11 @@
 "glGetDebugMessageLogAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_draw_buffers_blend": {
+"always": false,
 "lists": [
 [
 "glBlendFuncIndexedAMD",
@@ -20,18 +23,22 @@
 "glBlendEquationSeparateIndexedAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_framebuffer_multisample_advanced": {
+"always": false,
 "lists": [
 [
 "glRenderbufferStorageMultisampleAdvancedAMD",
 "glNamedRenderbufferStorageMultisampleAdvancedAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_gpu_shader_int64": {
+"always": false,
 "lists": [
 [
 "glUniform1i64NV",
@@ -70,25 +77,31 @@
 "glProgramUniform4ui64vNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "AMD_interleaved_elements": {
+"always": false,
 "lists": [
 [
 "glVertexAttribParameteriAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_occlusion_query_event": {
+"always": false,
 "lists": [
 [
 "glQueryObjectParameteruiAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_performance_monitor": {
+"always": false,
 "lists": [
 [
 "glGetPerfMonitorGroupsAMD",
@@ -104,43 +117,53 @@
 "glGetPerfMonitorCounterDataAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_sample_positions": {
+"always": false,
 "lists": [
 [
 "glSetMultisamplefvAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_sparse_texture": {
+"always": false,
 "lists": [
 [
 "glTexStorageSparseAMD",
 "glTextureStorageSparseAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_stencil_operation_extended": {
+"always": false,
 "lists": [
 [
 "glStencilOpValueAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "AMD_vertex_shader_tessellator": {
+"always": false,
 "lists": [
 [
 "glTessellationFactorAMD",
 "glTessellationModeAMD"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_ES2_compatibility": {
+"always": false,
 "lists": [
 [
 "glReleaseShaderCompiler",
@@ -150,25 +173,31 @@
 "glClearDepthf"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_ES3_1_compatibility": {
+"always": false,
 "lists": [
 [
 "glMemoryBarrierByRegion"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_ES3_2_compatibility": {
+"always": false,
 "lists": [
 [
 "glPrimitiveBoundingBoxARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_base_instance": {
+"always": false,
 "lists": [
 [
 "glDrawArraysInstancedBaseInstance",
@@ -176,9 +205,11 @@
 "glDrawElementsInstancedBaseVertexBaseInstance"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_bindless_texture": {
+"always": false,
 "lists": [
 [
 "glGetTextureHandleARB",
@@ -199,35 +230,43 @@
 "glGetVertexAttribLui64vARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_blend_func_extended": {
+"always": false,
 "lists": [
 [
 "glBindFragDataLocationIndexed",
 "glGetFragDataIndex"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_buffer_storage": {
+"always": false,
 "lists": [
 [
 "glBufferStorage",
 "glNamedBufferStorageEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_cl_event": {
+"always": false,
 "lists": [
 [
 "glCreateSyncFromCLeventARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_clear_buffer_object": {
+"always": false,
 "lists": [
 [
 "glClearBufferData",
@@ -236,67 +275,83 @@
 "glClearNamedBufferSubDataEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_clear_texture": {
+"always": false,
 "lists": [
 [
 "glClearTexSubImage",
 "glClearTexImage"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_clip_control": {
+"always": false,
 "lists": [
 [
 "glClipControl"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_color_buffer_float": {
+"always": false,
 "lists": [
 [
 "glClampColorARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_compute_shader": {
+"always": false,
 "lists": [
 [
 "glDispatchCompute",
 "glDispatchComputeIndirect"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_compute_variable_group_size": {
+"always": false,
 "lists": [
 [
 "glDispatchComputeGroupSizeARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_copy_buffer": {
+"always": false,
 "lists": [
 [
 "glCopyBufferSubData"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_copy_image": {
+"always": false,
 "lists": [
 [
 "glCopyImageSubData"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_debug_output": {
+"always": false,
 "lists": [
 [
 "glDebugMessageControlARB",
@@ -305,9 +360,11 @@
 "glGetDebugMessageLogARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_direct_state_access": {
+"always": false,
 "lists": [
 [
 "glCreateTransformFeedbacks",
@@ -409,17 +466,21 @@
 "glGetQueryBufferObjectuiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_draw_buffers": {
+"always": false,
 "lists": [
 [
 "glDrawBuffersARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_draw_buffers_blend": {
+"always": false,
 "lists": [
 [
 "glBlendEquationiARB",
@@ -428,9 +489,11 @@
 "glBlendFuncSeparateiARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_draw_elements_base_vertex": {
+"always": false,
 "lists": [
 [
 "glDrawElementsBaseVertex",
@@ -439,27 +502,33 @@
 "glMultiDrawElementsBaseVertex"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_draw_indirect": {
+"always": false,
 "lists": [
 [
 "glDrawArraysIndirect",
 "glDrawElementsIndirect"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_draw_instanced": {
+"always": false,
 "lists": [
 [
 "glDrawArraysInstancedARB",
 "glDrawElementsInstancedARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_framebuffer_no_attachments": {
+"always": false,
 "lists": [
 [
 "glFramebufferParameteri",
@@ -468,9 +537,11 @@
 "glGetNamedFramebufferParameterivEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_framebuffer_object": {
+"always": false,
 "lists": [
 [
 "glIsRenderbuffer",
@@ -495,9 +566,11 @@
 "glGenerateMipmap"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_geometry_shader4": {
+"always": false,
 "lists": [
 [
 "glProgramParameteriARB",
@@ -506,9 +579,11 @@
 "glFramebufferTextureFaceARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_get_program_binary": {
+"always": false,
 "lists": [
 [
 "glGetProgramBinary",
@@ -516,26 +591,32 @@
 "glProgramParameteri"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_get_texture_sub_image": {
+"always": false,
 "lists": [
 [
 "glGetTextureSubImage",
 "glGetCompressedTextureSubImage"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_gl_spirv": {
+"always": false,
 "lists": [
 [
 "glSpecializeShaderARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_gpu_shader_fp64": {
+"always": false,
 "lists": [
 [
 "glUniform1d",
@@ -558,9 +639,11 @@
 "glGetUniformdv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_gpu_shader_int64": {
+"always": false,
 "lists": [
 [
 "glUniform1i64ARB",
@@ -601,9 +684,11 @@
 "glGetnUniformui64vARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_imaging": {
+"always": false,
 "lists": [
 [
 "glColorTable",
@@ -644,42 +729,52 @@
 "glBlendEquation"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_indirect_parameters": {
+"always": false,
 "lists": [
 [
 "glMultiDrawArraysIndirectCountARB",
 "glMultiDrawElementsIndirectCountARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_instanced_arrays": {
+"always": false,
 "lists": [
 [
 "glVertexAttribDivisorARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_internalformat_query": {
+"always": false,
 "lists": [
 [
 "glGetInternalformativ"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_internalformat_query2": {
+"always": false,
 "lists": [
 [
 "glGetInternalformati64v"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_invalidate_subdata": {
+"always": false,
 "lists": [
 [
 "glInvalidateTexSubImage",
@@ -690,18 +785,22 @@
 "glInvalidateSubFramebuffer"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_map_buffer_range": {
+"always": false,
 "lists": [
 [
 "glMapBufferRange",
 "glFlushMappedBufferRange"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_matrix_palette": {
+"always": false,
 "lists": [
 [
 "glCurrentPaletteMatrixARB",
@@ -711,9 +810,11 @@
 "glMatrixIndexPointerARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_multi_bind": {
+"always": false,
 "lists": [
 [
 "glBindBuffersBase",
@@ -724,26 +825,32 @@
 "glBindVertexBuffers"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_multi_draw_indirect": {
+"always": false,
 "lists": [
 [
 "glMultiDrawArraysIndirect",
 "glMultiDrawElementsIndirect"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_multisample": {
+"always": false,
 "lists": [
 [
 "glSampleCoverageARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_multitexture": {
+"always": false,
 "lists": [
 [
 "glActiveTextureARB",
@@ -782,9 +889,11 @@
 "glMultiTexCoord4dvARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_occlusion_query": {
+"always": false,
 "lists": [
 [
 "glGenQueriesARB",
@@ -797,34 +906,42 @@
 "glGetQueryObjectuivARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_parallel_shader_compile": {
+"always": false,
 "lists": [
 [
 "glMaxShaderCompilerThreadsARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_point_parameters": {
+"always": false,
 "lists": [
 [
 "glPointParameterfARB",
 "glPointParameterfvARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_polygon_offset_clamp": {
+"always": false,
 "lists": [
 [
 "glPolygonOffsetClamp"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_program_interface_query": {
+"always": false,
 "lists": [
 [
 "glGetProgramInterfaceiv",
@@ -835,17 +952,21 @@
 "glGetProgramResourceLocationIndex"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_provoking_vertex": {
+"always": false,
 "lists": [
 [
 "glProvokingVertex"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_robustness": {
+"always": false,
 "lists": [
 [
 "glGetMapdv",
@@ -882,9 +1003,11 @@
 "glGetnUniformdvARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_sample_locations": {
+"always": false,
 "lists": [
 [
 "glFramebufferSampleLocationsfvARB",
@@ -892,17 +1015,21 @@
 "glEvaluateDepthValuesARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_sample_shading": {
+"always": false,
 "lists": [
 [
 "glMinSampleShadingARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_sampler_objects": {
+"always": false,
 "lists": [
 [
 "glGenSamplers",
@@ -921,9 +1048,11 @@
 "glGetSamplerParameterIuiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_separate_shader_objects": {
+"always": false,
 "lists": [
 [
 "glUseProgramStages",
@@ -989,26 +1118,32 @@
 "glGetProgramPipelineInfoLog"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_shader_atomic_counters": {
+"always": false,
 "lists": [
 [
 "glGetActiveAtomicCounterBufferiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_shader_image_load_store": {
+"always": false,
 "lists": [
 [
 "glBindImageTexture",
 "glMemoryBarrier"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_shader_objects": {
+"always": false,
 "lists": [
 [
 "glDeleteObjectARB",
@@ -1052,17 +1187,21 @@
 "glGetShaderSourceARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_shader_storage_buffer_object": {
+"always": false,
 "lists": [
 [
 "glShaderStorageBlockBinding"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_shader_subroutine": {
+"always": false,
 "lists": [
 [
 "glGetSubroutineUniformLocation",
@@ -1075,9 +1214,11 @@
 "glGetProgramStageiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_shading_language_include": {
+"always": false,
 "lists": [
 [
 "glNamedStringARB",
@@ -1088,26 +1229,32 @@
 "glGetNamedStringivARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_sparse_buffer": {
+"always": false,
 "lists": [
 [
 "glBufferPageCommitmentARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_sparse_texture": {
+"always": false,
 "lists": [
 [
 "glTexPageCommitmentARB",
 "glTexturePageCommitmentEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_sync": {
+"always": false,
 "lists": [
 [
 "glFenceSync",
@@ -1119,43 +1266,53 @@
 "glGetSynciv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_tessellation_shader": {
+"always": false,
 "lists": [
 [
 "glPatchParameteri",
 "glPatchParameterfv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_texture_barrier": {
+"always": false,
 "lists": [
 [
 "glTextureBarrier"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_texture_buffer_object": {
+"always": false,
 "lists": [
 [
 "glTexBufferARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_texture_buffer_range": {
+"always": false,
 "lists": [
 [
 "glTexBufferRange",
 "glTextureBufferRangeEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_texture_compression": {
+"always": false,
 "lists": [
 [
 "glCompressedTexImage3DARB",
@@ -1167,9 +1324,11 @@
 "glGetCompressedTexImageARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_texture_multisample": {
+"always": false,
 "lists": [
 [
 "glTexImage2DMultisample",
@@ -1178,9 +1337,11 @@
 "glSampleMaski"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_texture_storage": {
+"always": false,
 "lists": [
 [
 "glTexStorage1D",
@@ -1191,9 +1352,11 @@
 "glTextureStorage3DEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_texture_storage_multisample": {
+"always": false,
 "lists": [
 [
 "glTexStorage2DMultisample",
@@ -1202,17 +1365,21 @@
 "glTextureStorage3DMultisampleEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_texture_view": {
+"always": false,
 "lists": [
 [
 "glTextureView"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_timer_query": {
+"always": false,
 "lists": [
 [
 "glQueryCounter",
@@ -1220,9 +1387,11 @@
 "glGetQueryObjectui64v"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_transform_feedback2": {
+"always": false,
 "lists": [
 [
 "glBindTransformFeedback",
@@ -1234,9 +1403,11 @@
 "glDrawTransformFeedback"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_transform_feedback3": {
+"always": false,
 "lists": [
 [
 "glDrawTransformFeedbackStream",
@@ -1245,18 +1416,22 @@
 "glGetQueryIndexediv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_transform_feedback_instanced": {
+"always": false,
 "lists": [
 [
 "glDrawTransformFeedbackInstanced",
 "glDrawTransformFeedbackStreamInstanced"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_transpose_matrix": {
+"always": false,
 "lists": [
 [
 "glLoadTransposeMatrixfARB",
@@ -1265,9 +1440,11 @@
 "glMultTransposeMatrixdARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_uniform_buffer_object": {
+"always": false,
 "lists": [
 [
 "glGetUniformIndices",
@@ -1282,9 +1459,11 @@
 "glUniformBlockBinding"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_vertex_array_object": {
+"always": false,
 "lists": [
 [
 "glBindVertexArray",
@@ -1293,9 +1472,11 @@
 "glIsVertexArray"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_vertex_attrib_64bit": {
+"always": false,
 "lists": [
 [
 "glVertexAttribL1d",
@@ -1311,9 +1492,11 @@
 "glVertexArrayVertexAttribLOffsetEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_vertex_attrib_binding": {
+"always": false,
 "lists": [
 [
 "glBindVertexBuffer",
@@ -1330,9 +1513,11 @@
 "glVertexArrayVertexBindingDivisorEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_vertex_blend": {
+"always": false,
 "lists": [
 [
 "glWeightfvARB",
@@ -1347,9 +1532,11 @@
 "glVertexBlendARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_vertex_buffer_object": {
+"always": false,
 "lists": [
 [
 "glBindBufferARB",
@@ -1365,9 +1552,11 @@
 "glGetBufferPointervARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_vertex_program": {
+"always": false,
 "lists": [
 [
 "glVertexAttrib1sARB",
@@ -1434,9 +1623,11 @@
 "glIsProgramARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_vertex_shader": {
+"always": false,
 "lists": [
 [
 "glVertexAttrib1fARB",
@@ -1487,9 +1678,11 @@
 "glGetVertexAttribPointervARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_vertex_type_2_10_10_10_rev": {
+"always": false,
 "lists": [
 [
 "glVertexP2ui",
@@ -1534,9 +1727,11 @@
 "glVertexAttribP4uiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "ARB_viewport_array": {
+"always": false,
 "lists": [
 [
 "glViewportArrayv",
@@ -1551,9 +1746,11 @@
 "glGetDoublei_v"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "ARB_window_pos": {
+"always": false,
 "lists": [
 [
 "glWindowPos2iARB",
@@ -1574,18 +1771,22 @@
 "glWindowPos3dvARB"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_EGL_image_storage": {
+"always": false,
 "lists": [
 [
 "glEGLImageTargetTexStorageEXT",
 "glEGLImageTargetTextureStorageEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "EXT_bindable_uniform": {
+"always": false,
 "lists": [
 [
 "glUniformBufferEXT",
@@ -1593,59 +1794,73 @@
 "glGetUniformOffsetEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_blend_color": {
+"always": false,
 "lists": [
 [
 "glBlendColorEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_blend_equation_separate": {
+"always": false,
 "lists": [
 [
 "glBlendEquationSeparateEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_blend_func_separate": {
+"always": false,
 "lists": [
 [
 "glBlendFuncSeparateEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_blend_minmax": {
+"always": false,
 "lists": [
 [
 "glBlendEquationEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_compiled_vertex_array": {
+"always": false,
 "lists": [
 [
 "glLockArraysEXT",
 "glUnlockArraysEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_debug_label": {
+"always": false,
 "lists": [
 [
 "glLabelObjectEXT",
 "glGetObjectLabelEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_debug_marker": {
+"always": false,
 "lists": [
 [
 "glInsertEventMarkerEXT",
@@ -1653,17 +1868,21 @@
 "glPopGroupMarkerEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_depth_bounds_test": {
+"always": false,
 "lists": [
 [
 "glDepthBoundsEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_direct_state_access": {
+"always": false,
 "lists": [
 [
 "glClientAttribDefaultEXT",
@@ -1880,9 +2099,11 @@
 "glFlushMappedNamedBufferRangeEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "EXT_draw_buffers2": {
+"always": false,
 "lists": [
 [
 "glColorMaskIndexedEXT",
@@ -1893,52 +2114,64 @@
 "glIsEnabledIndexedEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_draw_instanced": {
+"always": false,
 "lists": [
 [
 "glDrawArraysInstancedEXT",
 "glDrawElementsInstancedEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_external_buffer": {
+"always": false,
 "lists": [
 [
 "glBufferStorageExternalEXT",
 "glNamedBufferStorageExternalEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "EXT_framebuffer_blit": {
+"always": false,
 "lists": [
 [
 "glBlitFramebufferEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_framebuffer_blit_layers": {
+"always": false,
 "lists": [
 [
 "glBlitFramebufferLayersEXT",
 "glBlitFramebufferLayerEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_framebuffer_multisample": {
+"always": false,
 "lists": [
 [
 "glRenderbufferStorageMultisampleEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_framebuffer_object": {
+"always": false,
 "lists": [
 [
 "glIsRenderbufferEXT",
@@ -1960,9 +2193,11 @@
 "glGenerateMipmapEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_geometry_shader4": {
+"always": false,
 "lists": [
 [
 "glProgramParameteriEXT",
@@ -1971,18 +2206,22 @@
 "glFramebufferTextureFaceEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_gpu_program_parameters": {
+"always": false,
 "lists": [
 [
 "glProgramEnvParameters4fvEXT",
 "glProgramLocalParameters4fvEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_gpu_shader4": {
+"always": false,
 "lists": [
 [
 "glVertexAttribI1iEXT",
@@ -2021,9 +2260,11 @@
 "glUniform4uivEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_memory_object": {
+"always": false,
 "lists": [
 [
 "glGetUnsignedBytevEXT",
@@ -2047,59 +2288,73 @@
 "glTextureStorageMem1DEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "EXT_memory_object_fd": {
+"always": false,
 "lists": [
 [
 "glImportMemoryFdEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_memory_object_win32": {
+"always": false,
 "lists": [
 [
 "glImportMemoryWin32HandleEXT",
 "glImportMemoryWin32NameEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_point_parameters": {
+"always": false,
 "lists": [
 [
 "glPointParameterfEXT",
 "glPointParameterfvEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_polygon_offset_clamp": {
+"always": false,
 "lists": [
 [
 "glPolygonOffsetClampEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_provoking_vertex": {
+"always": false,
 "lists": [
 [
 "glProvokingVertexEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_raster_multisample": {
+"always": false,
 "lists": [
 [
 "glRasterSamplesEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_secondary_color": {
+"always": false,
 "lists": [
 [
 "glSecondaryColor3bEXT",
@@ -2121,9 +2376,11 @@
 "glSecondaryColorPointerEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_semaphore": {
+"always": false,
 "lists": [
 [
 "glGetUnsignedBytevEXT",
@@ -2137,26 +2394,32 @@
 "glSignalSemaphoreEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_semaphore_fd": {
+"always": false,
 "lists": [
 [
 "glImportSemaphoreFdEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_semaphore_win32": {
+"always": false,
 "lists": [
 [
 "glImportSemaphoreWin32HandleEXT",
 "glImportSemaphoreWin32NameEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_separate_shader_objects": {
+"always": false,
 "lists": [
 [
 "glUseShaderProgramEXT",
@@ -2164,58 +2427,72 @@
 "glCreateShaderProgramEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_shader_framebuffer_fetch_non_coherent": {
+"always": false,
 "lists": [
 [
 "glFramebufferFetchBarrierEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_shader_image_load_store": {
+"always": false,
 "lists": [
 [
 "glBindImageTextureEXT",
 "glMemoryBarrierEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_stencil_clear_tag": {
+"always": false,
 "lists": [
 [
 "glStencilClearTagEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_stencil_two_side": {
+"always": false,
 "lists": [
 [
 "glActiveStencilFaceEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_texture_array": {
+"always": false,
 "lists": [
 [
 "glFramebufferTextureLayerEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_texture_buffer_object": {
+"always": false,
 "lists": [
 [
 "glTexBufferEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_texture_integer": {
+"always": false,
 "lists": [
 [
 "glClearColorIiEXT",
@@ -2226,9 +2503,11 @@
 "glGetTexParameterIuivEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_texture_storage": {
+"always": false,
 "lists": [
 [
 "glTexStorage1DEXT",
@@ -2239,18 +2518,22 @@
 "glTextureStorage3DEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "EXT_timer_query": {
+"always": false,
 "lists": [
 [
 "glGetQueryObjecti64vEXT",
 "glGetQueryObjectui64vEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_transform_feedback": {
+"always": false,
 "lists": [
 [
 "glBindBufferRangeEXT",
@@ -2264,9 +2547,11 @@
 "glGetBooleanIndexedvEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_vertex_attrib_64bit": {
+"always": false,
 "lists": [
 [
 "glVertexAttribL1dEXT",
@@ -2282,34 +2567,42 @@
 "glVertexArrayVertexAttribLOffsetEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "EXT_win32_keyed_mutex": {
+"always": false,
 "lists": [
 [
 "glAcquireKeyedMutexWin32EXT",
 "glReleaseKeyedMutexWin32EXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_window_rectangles": {
+"always": false,
 "lists": [
 [
 "glWindowRectanglesEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "EXT_x11_sync_object": {
+"always": false,
 "lists": [
 [
 "glImportSyncEXT"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL11": {
+"always": false,
 "lists": [
 [
 "glAccum",
@@ -2652,9 +2945,11 @@
 "glViewport"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "GL12": {
+"always": false,
 "lists": [
 [
 "glTexImage3D",
@@ -2663,9 +2958,11 @@
 "glDrawRangeElements"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL13": {
+"always": false,
 "lists": [
 [
 "glClientActiveTexture",
@@ -2718,9 +3015,11 @@
 "glActiveTexture"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "GL14": {
+"always": false,
 "lists": [
 [
 "glFogCoordf",
@@ -2774,9 +3073,11 @@
 "glBlendFuncSeparate"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "GL15": {
+"always": false,
 "lists": [
 [
 "glBindBuffer",
@@ -2800,9 +3101,11 @@
 "glGetQueryObjectuiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL20": {
+"always": false,
 "lists": [
 [
 "glCreateProgram",
@@ -2900,9 +3203,11 @@
 "glStencilMaskSeparate"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL21": {
+"always": false,
 "lists": [
 [
 "glUniformMatrix2x3fv",
@@ -2913,9 +3218,11 @@
 "glUniformMatrix4x3fv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL30": {
+"always": true,
 "lists": [
 [
 "glGetStringi",
@@ -3004,9 +3311,11 @@
 "glIsVertexArray"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL31": {
+"always": true,
 "lists": [
 [
 "glDrawArraysInstanced",
@@ -3023,9 +3332,11 @@
 "glUniformBlockBinding"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL32": {
+"always": true,
 "lists": [
 [
 "glGetBufferParameteri64v",
@@ -3049,9 +3360,11 @@
 "glGetSynciv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL33": {
+"always": true,
 "lists": [
 [
 "glVertexP2ui",
@@ -3116,9 +3429,11 @@
 "glVertexAttribP4uiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "GL40": {
+"always": false,
 "lists": [
 [
 "glBlendEquationi",
@@ -3169,9 +3484,11 @@
 "glGetQueryIndexediv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL41": {
+"always": false,
 "lists": [
 [
 "glReleaseShaderCompiler",
@@ -3264,9 +3581,11 @@
 "glGetDoublei_v"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL42": {
+"always": false,
 "lists": [
 [
 "glGetActiveAtomicCounterBufferiv",
@@ -3283,9 +3602,11 @@
 "glGetInternalformativ"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL43": {
+"always": false,
 "lists": [
 [
 "glClearBufferData",
@@ -3333,9 +3654,11 @@
 "glVertexBindingDivisor"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL44": {
+"always": false,
 "lists": [
 [
 "glBufferStorage",
@@ -3349,9 +3672,11 @@
 "glBindVertexBuffers"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL45": {
+"always": false,
 "lists": [
 [
 "glGetMapdv",
@@ -3475,9 +3800,11 @@
 "glGetnUniformuiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GL46": {
+"always": false,
 "lists": [
 [
 "glMultiDrawArraysIndirectCount",
@@ -3486,33 +3813,41 @@
 "glSpecializeShader"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GREMEDY_frame_terminator": {
+"always": false,
 "lists": [
 [
 "glFrameTerminatorGREMEDY"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "GREMEDY_string_marker": {
+"always": false,
 "lists": [
 [
 "glStringMarkerGREMEDY"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "INTEL_framebuffer_CMAA": {
+"always": false,
 "lists": [
 [
 "glApplyFramebufferAttachmentCMAAINTEL"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "INTEL_map_texture": {
+"always": false,
 "lists": [
 [
 "glSyncTextureINTEL",
@@ -3520,9 +3855,11 @@
 "glMapTexture2DINTEL"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "INTEL_performance_query": {
+"always": false,
 "lists": [
 [
 "glBeginPerfQueryINTEL",
@@ -3537,17 +3874,21 @@
 "glGetPerfQueryInfoINTEL"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "KHR_blend_equation_advanced": {
+"always": false,
 "lists": [
 [
 "glBlendBarrierKHR"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "KHR_debug": {
+"always": false,
 "lists": [
 [
 "glDebugMessageControl",
@@ -3562,17 +3903,21 @@
 "glGetObjectPtrLabel"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "KHR_parallel_shader_compile": {
+"always": false,
 "lists": [
 [
 "glMaxShaderCompilerThreadsKHR"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "KHR_robustness": {
+"always": false,
 "lists": [
 [
 "glGetGraphicsResetStatus",
@@ -3582,27 +3927,33 @@
 "glGetnUniformuiv"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "MESA_framebuffer_flip_y": {
+"always": false,
 "lists": [
 [
 "glFramebufferParameteriMESA",
 "glGetFramebufferParameterivMESA"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NVX_conditional_render": {
+"always": false,
 "lists": [
 [
 "glBeginConditionalRenderNVX",
 "glEndConditionalRenderNVX"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NVX_gpu_multicast2": {
+"always": false,
 "lists": [
 [
 "glAsyncCopyImageSubDataNVX",
@@ -3613,9 +3964,11 @@
 "glMulticastViewportPositionWScaleNVX"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NVX_progress_fence": {
+"always": false,
 "lists": [
 [
 "glCreateProgressFenceNVX",
@@ -3624,35 +3977,43 @@
 "glClientWaitSemaphoreui64NVX"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_alpha_to_coverage_dither_control": {
+"always": false,
 "lists": [
 [
 "glAlphaToCoverageDitherControlNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_bindless_multi_draw_indirect": {
+"always": false,
 "lists": [
 [
 "glMultiDrawArraysIndirectBindlessNV",
 "glMultiDrawElementsIndirectBindlessNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_bindless_multi_draw_indirect_count": {
+"always": false,
 "lists": [
 [
 "glMultiDrawArraysIndirectBindlessCountNV",
 "glMultiDrawElementsIndirectBindlessCountNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_bindless_texture": {
+"always": false,
 "lists": [
 [
 "glGetTextureHandleNV",
@@ -3670,26 +4031,32 @@
 "glIsImageHandleResidentNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_blend_equation_advanced": {
+"always": false,
 "lists": [
 [
 "glBlendParameteriNV",
 "glBlendBarrierNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_clip_space_w_scaling": {
+"always": false,
 "lists": [
 [
 "glViewportPositionWScaleNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_command_list": {
+"always": false,
 "lists": [
 [
 "glCreateStatesNV",
@@ -3711,50 +4078,62 @@
 "glCallCommandListNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_conditional_render": {
+"always": false,
 "lists": [
 [
 "glBeginConditionalRenderNV",
 "glEndConditionalRenderNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_conservative_raster": {
+"always": false,
 "lists": [
 [
 "glSubpixelPrecisionBiasNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_conservative_raster_dilate": {
+"always": false,
 "lists": [
 [
 "glConservativeRasterParameterfNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_conservative_raster_pre_snap_triangles": {
+"always": false,
 "lists": [
 [
 "glConservativeRasterParameteriNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_copy_image": {
+"always": false,
 "lists": [
 [
 "glCopyImageSubDataNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_depth_buffer_float": {
+"always": false,
 "lists": [
 [
 "glDepthRangedNV",
@@ -3762,17 +4141,21 @@
 "glDepthBoundsdNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_draw_texture": {
+"always": false,
 "lists": [
 [
 "glDrawTextureNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_draw_vulkan_image": {
+"always": false,
 "lists": [
 [
 "glDrawVkImageNV",
@@ -3782,9 +4165,11 @@
 "glSignalVkFenceNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_explicit_multisample": {
+"always": false,
 "lists": [
 [
 "glGetMultisamplefvNV",
@@ -3792,9 +4177,11 @@
 "glTexRenderbufferNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_fence": {
+"always": false,
 "lists": [
 [
 "glDeleteFencesNV",
@@ -3806,17 +4193,21 @@
 "glSetFenceNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_fragment_coverage_to_color": {
+"always": false,
 "lists": [
 [
 "glFragmentCoverageColorNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_framebuffer_mixed_samples": {
+"always": false,
 "lists": [
 [
 "glRasterSamplesEXT",
@@ -3825,17 +4216,21 @@
 "glCoverageModulationNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_framebuffer_multisample_coverage": {
+"always": false,
 "lists": [
 [
 "glRenderbufferStorageMultisampleCoverageNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_gpu_multicast": {
+"always": false,
 "lists": [
 [
 "glRenderGpuMaskNV",
@@ -3852,9 +4247,11 @@
 "glMulticastGetQueryObjectui64vNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_gpu_shader5": {
+"always": false,
 "lists": [
 [
 "glUniform1i64NV",
@@ -3893,9 +4290,11 @@
 "glProgramUniform4ui64vNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "NV_half_float": {
+"always": false,
 "lists": [
 [
 "glVertex2hNV",
@@ -3946,17 +4345,21 @@
 "glVertexAttribs4hvNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "NV_internalformat_sample_query": {
+"always": false,
 "lists": [
 [
 "glGetInternalformatSampleivNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_memory_attachment": {
+"always": false,
 "lists": [
 [
 "glGetMemoryObjectDetachedResourcesuivNV",
@@ -3967,9 +4370,11 @@
 "glNamedBufferAttachMemoryNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "NV_memory_object_sparse": {
+"always": false,
 "lists": [
 [
 "glBufferPageCommitmentMemNV",
@@ -3978,9 +4383,11 @@
 "glTexturePageCommitmentMemNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_mesh_shader": {
+"always": false,
 "lists": [
 [
 "glDrawMeshTasksNV",
@@ -3989,9 +4396,11 @@
 "glMultiDrawMeshTasksIndirectCountNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_path_rendering": {
+"always": false,
 "lists": [
 [
 "glPathCommandsNV",
@@ -4037,44 +4446,54 @@
 "glPointAlongPathNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_pixel_data_range": {
+"always": false,
 "lists": [
 [
 "glPixelDataRangeNV",
 "glFlushPixelDataRangeNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_point_sprite": {
+"always": false,
 "lists": [
 [
 "glPointParameteriNV",
 "glPointParameterivNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_primitive_restart": {
+"always": false,
 "lists": [
 [
 "glPrimitiveRestartNV",
 "glPrimitiveRestartIndexNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_query_resource": {
+"always": false,
 "lists": [
 [
 "glQueryResourceNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_query_resource_tag": {
+"always": false,
 "lists": [
 [
 "glGenQueryResourceTagNV",
@@ -4082,9 +4501,11 @@
 "glQueryResourceTagNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_sample_locations": {
+"always": false,
 "lists": [
 [
 "glFramebufferSampleLocationsfvNV",
@@ -4092,18 +4513,22 @@
 "glResolveDepthValuesNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_scissor_exclusive": {
+"always": false,
 "lists": [
 [
 "glScissorExclusiveArrayvNV",
 "glScissorExclusiveNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_shader_buffer_load": {
+"always": false,
 "lists": [
 [
 "glMakeBufferResidentNV",
@@ -4122,9 +4547,11 @@
 "glProgramUniformui64vNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_shading_rate_image": {
+"always": false,
 "lists": [
 [
 "glBindShadingRateImageNV",
@@ -4136,17 +4563,21 @@
 "glGetShadingRateSampleLocationivNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_texture_barrier": {
+"always": false,
 "lists": [
 [
 "glTextureBarrierNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_texture_multisample": {
+"always": false,
 "lists": [
 [
 "glTexImage2DMultisampleCoverageNV",
@@ -4157,9 +4588,11 @@
 "glTextureImage3DMultisampleCoverageNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_timeline_semaphore": {
+"always": false,
 "lists": [
 [
 "glCreateSemaphoresNV",
@@ -4167,9 +4600,11 @@
 "glGetSemaphoreParameterivNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_transform_feedback": {
+"always": false,
 "lists": [
 [
 "glBeginTransformFeedbackNV",
@@ -4186,9 +4621,11 @@
 "glTransformFeedbackStreamAttribsNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_transform_feedback2": {
+"always": false,
 "lists": [
 [
 "glBindTransformFeedbackNV",
@@ -4200,18 +4637,22 @@
 "glDrawTransformFeedbackNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_vertex_array_range": {
+"always": false,
 "lists": [
 [
 "glVertexArrayRangeNV",
 "glFlushVertexArrayRangeNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_vertex_attrib_integer_64bit": {
+"always": false,
 "lists": [
 [
 "glVertexAttribL1i64NV",
@@ -4235,9 +4676,11 @@
 "glVertexAttribLFormatNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 },
 "NV_vertex_buffer_unified_memory": {
+"always": false,
 "lists": [
 [
 "glBufferAddressRangeNV",
@@ -4254,23 +4697,28 @@
 "glGetIntegerui64i_vNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "NV_viewport_swizzle": {
+"always": false,
 "lists": [
 [
 "glViewportSwizzleNV"
 ]
 ],
+"needs_fns": false,
 "uses_fc": false
 },
 "OVR_multiview": {
+"always": false,
 "lists": [
 [
 "glFramebufferTextureMultiviewOVR",
 "glNamedFramebufferTextureMultiviewOVR"
 ]
 ],
+"needs_fns": false,
 "uses_fc": true
 }
 },
@@ -6942,5 +7390,16 @@
 "glClientWaitSemaphoreui64NVX",
 "glFramebufferTextureMultiviewOVR",
 "glNamedFramebufferTextureMultiviewOVR"
-]
+],
+"semantics": {
+"always_true": [
+"GL30",
+"GL31",
+"GL32",
+"GL33"
+],
+"checkFunctions": "always-true",
+"needs_fns": [],
+"reportMissing": true
+}
 }

@@ -115,6 +115,10 @@ def parse(data, want_code=True):
                 if aname == 'Code' and want_code and is_method:
                     ms, ml, cl = struct.unpack_from('>HHI', body, 0)
                     m.code = body[8:8+cl]; m.maxl = ml
+                    ne, = struct.unpack_from('>H', body, 8 + cl); q = 10 + cl; m.exc = []
+                    for _ in range(ne):
+                        sp, ep, hp, ct = struct.unpack_from('>HHHH', body, q); q += 8
+                        m.exc.append((sp, ep, hp, cf.cls(ct) if ct else None))
                 elif aname == 'ConstantValue' and not is_method:
                     m.const = cf.const(struct.unpack_from('>H', body, 0)[0])
                 elif aname in ('RuntimeInvisibleParameterAnnotations', 'RuntimeVisibleParameterAnnotations'):

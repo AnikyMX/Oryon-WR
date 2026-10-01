@@ -50,6 +50,55 @@ for m in CAPS.methods:
     # fc-dependent: detect if method tests the boolean 'fc' param (slot 3) -> iload_3
     uses_fc = any(op == 0x1d for pc, op, arg in ins)
     features[feat] = {'lists': lists, 'uses_fc': uses_fc}
+
+# ---------------------------------------------------------------- flag semantics of THIS LWJGL build (from bytecode, not upstream docs)
+# The Pojav-family fork changes org.lwjgl.system.Checks: checkFunctions(...) may always return true and
+# reportMissing(...) may return true. Each check_<feature> is evaluated symbolically under the jar's own
+# semantics: 'always' = flag true even when the feature is not advertised; 'needs_fns' = flag false when
+# advertised but an entry point is missing (upstream behaviour).
+CHECKS = lw['org/lwjgl/system/Checks']
+def _const_returns(m):
+    ins = list(jvm.decode(m.code)); out = set()
+    for k, (pc, op, arg) in enumerate(ins):
+        if op == 0xac:
+            if k and ins[k - 1][1] in (0x03, 0x04): out.add(ins[k - 1][1] == 0x04)
+            else: return None                      # returns a computed value
+    return out
+_cf_desc = {CAPS.ref(arg)[2] for m in CAPS.methods if m.name.startswith('check_')
+            for pc, op, arg in jvm.decode(m.code) if op == 0xb8 and CAPS.ref(arg)[1] == 'checkFunctions'}
+_cf = [m for m in CHECKS.methods if m.name == 'checkFunctions' and m.desc in _cf_desc]
+_cf_ret = [_const_returns(m) for m in _cf]
+CF_ALWAYS = bool(_cf) and all(r == {True} for r in _cf_ret)
+_rm = [m for m in CHECKS.methods if m.name == 'reportMissing']
+_rm_ret = _const_returns(_rm[0]) if _rm else {False}
+RM_VALUE = _rm_ret == {True}
+def _eval_check(m, advertised, fns_ok, fc=False):
+    ins = list(jvm.decode(m.code)); at = {pc: k for k, (pc, op, a) in enumerate(ins)}
+    k = 0; last = None; lastc = None
+    for _ in range(100000):
+        pc, op, arg = ins[k]
+        if op in (0xb6, 0xb7, 0xb8, 0xb9):
+            n = CAPS.ref(arg)[1]
+            if n == 'contains': last = advertised
+            elif n == 'checkFunctions': last = True if CF_ALWAYS else fns_ok
+            elif n == 'reportMissing': last = RM_VALUE
+        elif op == 0x1d: last = fc                     # iload_3: the 'fc' (forward-compatible) parameter
+        elif op in (0x03, 0x04): lastc = op == 0x04
+        elif op == 0x99 and not last: k = at[arg]; continue
+        elif op == 0x9a and last: k = at[arg]; continue
+        elif op == 0xa7: k = at[arg]; continue
+        elif op == 0xac: return lastc
+        k += 1
+    raise RuntimeError('check evaluation did not terminate: ' + m.name)
+for m in CAPS.methods:
+    if not m.name.startswith('check_'): continue
+    d = features[m.name[6:]]
+    d['always'] = _eval_check(m, False, False)
+    d['needs_fns'] = not _eval_check(m, True, False)
+    assert _eval_check(m, True, True), m.name
+CAP_SEMANTICS = {'checkFunctions': 'always-true' if CF_ALWAYS else 'real', 'reportMissing': RM_VALUE,
+                 'always_true': sorted(f for f, d in features.items() if d.get('always')),
+                 'needs_fns': sorted(f for f, d in features.items() if d.get('needs_fns'))}
 # Deprecated split: for features with 2 lists and fc usage, which list is guarded by fc?
 # Heuristic resolved from bytecode order: record raw lists; generator treats union as required (fc=false).
 
@@ -280,7 +329,7 @@ def dump(name, obj):
 dump('meta.json', {'mc_jar_sha256': sha(MC_JAR), 'lwjgl_jar_sha256': sha(LW_JAR),
                    'lwjgl_version': [c.const for c in lw['org/lwjgl/Version'].fields if c.name.startswith('VERSION_')]})
 dump('enums.json', enums)
-dump('caps.json', {'functions': cap_funcs, 'flags': cap_flags, 'features': features})
+dump('caps.json', {'functions': cap_funcs, 'flags': cap_flags, 'features': features, 'semantics': CAP_SEMANTICS})
 dump('natives.json', natives)
 dump('mc_gl_calls.json', mc_gl)
 dump('mc_required_gl.json', required)
@@ -299,4 +348,6 @@ print('MC -> lwjgl method refs %d, unresolved %d | field refs %d, unresolved %d'
 print('MC GL call targets (java methods) %d, sites %d | distinct native GL functions required %d' % (len(mc_gl), sum(direct_sites.values()), len(required)))
 print('MC GL java methods without native resolution: %d' % sum(1 for v in mc_gl.values() if not v['gl']))
 print('capability flags read by MC: %d | render-path flags: %d (ContextCapabilities = GLCapabilities by name)' % (len(caps_read), len(render_caps)))
+print('LWJGL flag semantics: checkFunctions %s | reportMissing -> %s | always-true features %d | function-gated features %d' % (
+      CAP_SEMANTICS['checkFunctions'], str(RM_VALUE).lower(), len(CAP_SEMANTICS['always_true']), len(CAP_SEMANTICS['needs_fns'])))
 print('shader files %d | versions %s' % (shader_info['files'], dict(shader_info['versions'])))

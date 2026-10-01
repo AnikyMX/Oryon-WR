@@ -109,11 +109,26 @@ for u in gd_bad: errors.append('gl_desktop.hpp value != jar ' + u)
 # coverage
 mc_missing = sorted(mc_req - set(exports))
 mc_stub = sorted(n for n in mc_req if cat.get(n, '') in ('stub', 'noop'))
+# LWJGL flags. Safety invariant: every feature LWJGL will flag true must have all its entry points exported,
+# otherwise LWJGL hands the app a NULL function address. Which features are flagged comes from the jar's own
+# semantics (caps.json 'semantics', derived from bytecode by jarscan.py): advertised ones plus 'always' ones.
+SEM = caps.get('semantics', {})
+fn_of = lambda key: [x for l in F.get(key, {'lists': []})['lists'] for x in l]
 flags = {}
 for f in ['GL11', 'GL12', 'GL13', 'GL14', 'GL15', 'GL20', 'GL21', 'GL30'] + [e for e in rep['extensions']]:
-    key = f
-    names = [x for l in F.get(key, {'lists': []})['lists'] for x in l]
-    flags[f] = all(x in exports for x in names)
+    flags[f] = all(x in exports for x in fn_of(f))
+always_gap = {}                         # always-true features (not advertised by Oryon) lacking exports
+for f in SEM.get('always_true', []):
+    if f in flags: continue
+    names = fn_of(f); have = sum(1 for x in names if x in exports)
+    if have < len(names): always_gap[f] = (have, len(names))
+mc_read = set(J('mc_caps_read.json')['read'])
+tok = lambda f: ('OpenGL' + f[2:]) if re.match(r'^GL\d\d$', f) else ('GL_' + f)
+gap_fns = {x for f in always_gap for x in fn_of(f) if x not in exports}
+mc_gap_flags = sorted(tok(f) for f in always_gap if tok(f) in mc_read)
+mc_gap_calls = sorted(gap_fns & mc_req)
+for x in mc_gap_flags: errors.append('MC reads always-true flag without exports: ' + x)
+for x in mc_gap_calls: errors.append('MC calls entry point of an always-true feature that is not exported: ' + x)
 
 # display-list hooks: every compilable command must start with ORY_DL(<name>...) and have a recorder
 dl_missing = []
@@ -142,8 +157,12 @@ print('exports: %d | ABI match jar JNI: %d | jar refs verified: %d (bad %d) | Na
 print('same-name GLES prototypes: %d checked, %d differ' % (sum(1 for n in exports if n in ES), strict_es))
 print('enums used: %d | unknown: %d | jar/ES conflicts: %d | gl_desktop.hpp bad: %d' % (len(used), len(enum_unknown), len(enum_conflict), len(gd_bad)))
 print('MC 1.12.2 GL functions: %d | exported: %d | still stub/noop: %d' % (len(mc_req), len(mc_req) - len(mc_missing), len(mc_stub)))
-print('LWJGL flags satisfiable: core %s | ext %d/%d' % (' '.join('%s=%s' % (k, 'Y' if v else 'N') for k, v in flags.items() if k.startswith('GL')),
+print('LWJGL flag semantics (bytecode): checkFunctions %s | reportMissing -> %s | always-true: %s' % (
+      SEM.get('checkFunctions', '?'), str(SEM.get('reportMissing', '?')).lower(), ' '.join(SEM.get('always_true', [])) or 'none'))
+print('advertised features fully exported: core %s | ext %d/%d' % (' '.join('%s=%s' % (k, 'Y' if v else 'N') for k, v in flags.items() if k.startswith('GL')),
       sum(1 for k, v in flags.items() if not k.startswith('GL') and v), sum(1 for k in flags if not k.startswith('GL'))))
+print('WARN always-true without exports: %s | MC 1.12.2 reads %d of these flags, calls %d of their functions' % (
+      ' '.join('%s %d/%d' % (f, a, b) for f, (a, b) in sorted(always_gap.items())) or 'none', len(mc_gap_flags), len(mc_gap_calls)))
 if elf_extra is not None: print('ELF dynsym: extra %d | missing %d' % (len(elf_extra), len(elf_missing)))
 print('display-list compilable commands: %d | hook+recorder OK: %d' % (len(set(dlspec.DL_SCALAR) | set(dlspec.DL_POINTER)), len(set(dlspec.DL_SCALAR) | set(dlspec.DL_POINTER)) - len(dl_missing)))
 print('categories:', rep['categories'])

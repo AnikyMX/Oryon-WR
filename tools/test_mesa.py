@@ -53,13 +53,21 @@ else:
     supported |= set(glGetString(E['GL_EXTENSIONS']).decode().split())
 fc = bool(geti('GL_CONTEXT_FLAGS') & E['GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT'])
 check(not fc, 'forward-compatible context reported')
-flags = {}
+# Flags follow the jar's own semantics (caps.json 'semantics', derived from bytecode): with the Pojav-family
+# Checks, a feature is flagged when advertised (entry points are not checked) and GL30..GL33 are always flagged.
+flags = {}; null_adv = []; null_always = []
 for feat, d in F.items():
     token = ('OpenGL' + feat[2:]) if re.match(r'^GL\d\d$', feat) else ('GL_' + feat)
-    if token not in supported: continue
-    flags[token] = all(sym(x) for l in d['lists'] for x in l)
+    fns_ok = all(sym(x) for l in d['lists'] for x in l)
+    if token in supported:
+        flags[token] = fns_ok if d.get('needs_fns', True) else True
+        if not fns_ok: null_adv.append(token)
+    elif d.get('always'):
+        flags[token] = True
+        if not fns_ok: null_always.append(token)
 for tok in supported:
     if tok.startswith('GL_') and tok[3:] not in F: flags[tok] = True     # extension without entry points
+check(not null_adv, 'advertised features with NULL entry points: %s' % null_adv)
 render = J('mc_caps_read.json')['render_path']
 missing_flags = [f for f in render if not flags.get(f)]
 check(not missing_flags, 'MC render-path flags false: %s' % missing_flags)
@@ -81,7 +89,8 @@ check(glGetError() == 0, 'GL error after smoke test')
 
 print('== MESA TEST (EGL %d.%d, %s) ==' % (ctx.egl_version[0], ctx.egl_version[1], glGetString(E['GL_RENDERER']).decode()))
 print('GL_VERSION "%s" -> LWJGL parse %d.%d | exts %d | fc=%s' % (ver.decode(), major, minor, len([s for s in supported if s.startswith('GL_')]), fc))
-print('LWJGL flags true: %d/%d | MC render-path flags true: %d/%d' % (sum(flags.values()), len(flags), len(render) - len(missing_flags), len(render)))
+print('LWJGL flags true: %d/%d (always-true without entry points: %s) | MC render-path flags true: %d/%d' % (
+      sum(flags.values()), len(flags), ' '.join(sorted(null_always)) or 'none', len(render) - len(missing_flags), len(render)))
 print('GetProcAddress exports: %s | clear readback: %s' % (gpa or 'none (dlsym path)', list(px)))
 ctx.close()
 print('RESULT:', 'PASS' if not fails else 'FAIL')

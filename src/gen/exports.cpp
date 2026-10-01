@@ -63,8 +63,6 @@ OGL_EXPORT void glBlendFuncSeparate(GLenum sfactorRGB, GLenum dfactorRGB, GLenum
 OGL_EXPORT void glBlitFramebuffer(GLint srcX0, GLint srcY0, GLint srcX1, GLint srcY1, GLint dstX0, GLint dstY0, GLint dstX1, GLint dstY1, GLbitfield mask, GLenum filter) { ORY_PROLOGUE(); ory::es.glBlitFramebuffer(srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter); }
 /* jar: GL30C.glCheckFramebufferStatus(I)I */
 OGL_EXPORT GLenum glCheckFramebufferStatus(GLenum target) { ORY_PROLOGUE(); return ory::es.glCheckFramebufferStatus(target); }
-/* jar: GL11C.glClear(I)V */
-OGL_EXPORT void glClear(GLbitfield mask) { ORY_DL(glClear, mask); ORY_PROLOGUE(); ory::es.glClear(mask); }
 /* jar: GL11.glClearAccum(FFFF)V */
 OGL_EXPORT void glClearAccum(GLfloat p0, GLfloat p1, GLfloat p2, GLfloat p3) { (void)p0; (void)p1; (void)p2; (void)p3;  }
 /* jar: GL30C.glClearBufferfi(IIFI)V */

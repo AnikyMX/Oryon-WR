@@ -164,7 +164,7 @@ OGL_EXPORT void glShaderSource(GLuint shader, GLsizei count, const GLchar *const
     char *tr = info ? glsl_translate(src, info->stage, info) : nullptr;
     const GLchar *p = tr ? tr : src;
     es.glShaderSource(shader, 1, &p, nullptr);
-    if (getenv("ORYON_DUMP_GLSL") && tr) log("translated shader %u:\n%s", shader, tr);
+    if (env_on("ORYON_DUMP_GLSL") && tr) log("translated shader %u:\n%s", shader, tr);
     free(tr); free(src);
 }
 /* jar: GL20C.glAttachShader(II)V */
@@ -197,6 +197,7 @@ OGL_EXPORT void glBindAttribLocation(GLuint program, GLuint index, const GLchar 
 /* jar: GL20C.glLinkProgram(I)V */
 OGL_EXPORT void glLinkProgram(GLuint program) {
     ORY_PROLOGUE();
+    StatTimer st_(g.st.link_n, g.st.link_us, &g.st.link_max);
     AppProg *P = pr_get(program, true);
     uint32_t reads = 1u << LOC_POS;
     if (P) {

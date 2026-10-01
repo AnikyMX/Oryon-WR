@@ -229,6 +229,7 @@ OGL_EXPORT void glDeleteTextures(GLsizei n, const GLuint *textures) {
 }
 
 static void tex_image(GLenum target, GLint level, GLint internal, GLsizei w, GLsizei h, GLint border, GLenum format, GLenum type, const void *pixels) {
+    if (pixels) { ++g.st.tex_n; g.st.tex_px += (uint64_t)(w > 0 ? w : 0) * (uint64_t)(h > 0 ? h : 0); }
     if (target == GL_PROXY_TEXTURE_2D || target == GL_PROXY_TEXTURE_1D) {
         bool ok = w >= 0 && h >= 0 && w <= g.es_max_tex_size && h <= g.es_max_tex_size && level >= 0;
         g.proxy2d.w = ok ? w : 0; g.proxy2d.h = ok ? h : 0; g.proxy2d.internal = ok ? (GLenum)internal : 0;
@@ -258,6 +259,7 @@ OGL_EXPORT void glTexImage1D(GLenum target, GLint level, GLint internalformat, G
 }
 
 static void tex_sub_image(GLenum target, GLint level, GLint xo, GLint yo, GLsizei w, GLsizei h, GLenum format, GLenum type, const void *pixels) {
+    ++g.st.tex_n; g.st.tex_px += (uint64_t)(w > 0 ? w : 0) * (uint64_t)(h > 0 ? h : 0);
     GLenum t = es_target(target);
     GLuint name = bound_tex(target);
     TexInfo *ti = tex_info(name, false);
@@ -422,6 +424,7 @@ OGL_EXPORT void glGetTexLevelParameterfv(GLenum target, GLint level, GLenum pnam
 /* jar: GL11C.nglGetTexImage(IIIIJ)V */
 OGL_EXPORT void glGetTexImage(GLenum target, GLint level, GLenum format, GLenum type, void *pixels) {
     ORY_PROLOGUE();
+    StatTimer st_(g.st.rb_n, g.st.rb_us);
     GLenum t = es_target(target);
     GLuint name = bound_tex(target);
     if (!name) { set_error(GL_INVALID_OPERATION); return; }
@@ -446,6 +449,7 @@ OGL_EXPORT void glGetTexImage(GLenum target, GLint level, GLenum format, GLenum 
 /* jar: GL11C.nglReadPixels(IIIIIIJ)V */
 OGL_EXPORT void glReadPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void *pixels) {
     ORY_PROLOGUE();
+    StatTimer st_(g.st.rb_n, g.st.rb_us);
     bool native = (format == GL_RGBA && type == GL_UNSIGNED_BYTE) || type == GL_FLOAT || type == GL_UNSIGNED_INT ||
                   format == GL_RGBA_INTEGER || format == GL_DEPTH_COMPONENT || format == GL_RED || format == GL_RG;
     if (native) { es.glReadPixels(x, y, width, height, format, type, pixels); return; }

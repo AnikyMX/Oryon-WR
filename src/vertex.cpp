@@ -30,7 +30,7 @@ static void ring_create(Ring &r, size_t size) {
     es.glGenBuffers(1, &r.buf);
     es_bind_copy_write(r.buf);
     r.size = size; r.seg = size / 4;
-    if ((g.escaps & ORY_ESCAP_BUFFER_STORAGE) && es.glBufferStorageEXT && !getenv("ORYON_NO_BUFFER_STORAGE")) {
+    if ((g.escaps & ORY_ESCAP_BUFFER_STORAGE) && es.glBufferStorageEXT && !env_on("ORYON_NO_BUFFER_STORAGE")) {
         const GLbitfield fl = GL_MAP_WRITE_BIT | GL_MAP_PERSISTENT_BIT_EXT | GL_MAP_COHERENT_BIT_EXT;
         es.glBufferStorageEXT(GL_COPY_WRITE_BUFFER, (GLsizeiptr)size, nullptr, fl);
         r.map = (uint8_t *)es.glMapBufferRange(GL_COPY_WRITE_BUFFER, 0, (GLsizeiptr)size, fl);
@@ -42,9 +42,12 @@ static void ring_create(Ring &r, size_t size) {
     }
     if (!r.persistent) es.glBufferData(GL_COPY_WRITE_BUFFER, (GLsizeiptr)size, nullptr, GL_STREAM_DRAW);
 }
-static void seg_wait(Ring &r, int s) {
+static __attribute__((noinline, cold)) void seg_wait(Ring &r, int s) {
     if (GLsync f = r.fence[s]) {
-        es.glClientWaitSync(f, GL_SYNC_FLUSH_COMMANDS_BIT, (GLuint64)2000000000ull);
+        const uint64_t t0 = now_us();
+        if (es.glClientWaitSync(f, GL_SYNC_FLUSH_COMMANDS_BIT, (GLuint64)2000000000ull) != GL_ALREADY_SIGNALED) {
+            ++g.st.wait_n; g.st.wait_us += now_us() - t0;    // the CPU actually waited for the GPU
+        }
         es.glDeleteSync(f); r.fence[s] = nullptr;
     }
 }
@@ -57,7 +60,7 @@ static uint8_t *ring_alloc(Ring &r, size_t bytes, size_t align, size_t *off) {
     if (!bytes || bytes > r.seg) return nullptr;
     size_t o = (r.head + align - 1) / align * align;
     bool wrapped = false;
-    if (o + bytes > r.size) { o = 0; wrapped = true; }
+    if (o + bytes > r.size) { o = 0; wrapped = true; ++r.wraps; }
     if (r.persistent) {
         int s0 = (int)(o / r.seg), s1 = (int)((o + bytes - 1) / r.seg);
         if (r.open_valid) {
@@ -88,14 +91,17 @@ static uint8_t *ring_alloc(Ring &r, size_t bytes, size_t align, size_t *off) {
 static inline void ring_commit(Ring &r) {
     if (!r.persistent) { es_bind_copy_write(r.buf); es.glUnmapBuffer(GL_COPY_WRITE_BUFFER); }
 }
+static __attribute__((noinline, cold)) void ring_upload_big(Ring &r, const void *src, size_t bytes, GLuint *buf, size_t *off) {
+    if (!r.big) es.glGenBuffers(1, &r.big);
+    es_bind_copy_write(r.big);
+    es.glBufferData(GL_COPY_WRITE_BUFFER, (GLsizeiptr)bytes, src, GL_STREAM_DRAW);
+    *buf = r.big; *off = 0; g.st.stream += bytes;
+}
 static void ring_upload(Ring &r, const void *src, size_t bytes, size_t align, GLuint *buf, size_t *off) {
     if (uint8_t *p = ring_alloc(r, bytes, align, off)) {
         memcpy(p, src, bytes); ring_commit(r); *buf = r.buf; return;
     }
-    if (!r.big) es.glGenBuffers(1, &r.big);
-    es_bind_copy_write(r.big);
-    es.glBufferData(GL_COPY_WRITE_BUFFER, (GLsizeiptr)bytes, src, GL_STREAM_DRAW);
-    *buf = r.big; *off = 0;
+    ring_upload_big(r, src, bytes, buf, off);
 }
 
 // ------------------------------------------------------------------ static quad index buffer (0,1,2, 0,2,3)
@@ -866,6 +872,7 @@ OGL_EXPORT void glDeleteBuffers(GLsizei n, const GLuint *buffers) {
 /* jar: GL15C.nglBufferData(IJJI)V */
 OGL_EXPORT void glBufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage) {
     ORY_PROLOGUE(); sync_target(target);
+    if (data) { ++g.st.buf_n; g.st.buf_bytes += (uint64_t)size; }
     switch (usage) {                                     // desktop READ/COPY usages are hints; ES accepts all 9
     default: break;
     }
@@ -873,7 +880,8 @@ OGL_EXPORT void glBufferData(GLenum target, GLsizeiptr size, const void *data, G
 }
 /* jar: GL15C.nglBufferSubData(IJJJ)V */
 OGL_EXPORT void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data) {
-    ORY_PROLOGUE(); sync_target(target); es.glBufferSubData(target, offset, size, data);
+    ORY_PROLOGUE(); sync_target(target); ++g.st.buf_n; g.st.buf_bytes += (uint64_t)size;
+    es.glBufferSubData(target, offset, size, data);
 }
 /* jar: GL15C.nglGetBufferSubData(IJJJ)V */
 OGL_EXPORT void glGetBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, void *data) {

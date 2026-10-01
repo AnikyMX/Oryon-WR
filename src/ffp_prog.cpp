@@ -395,7 +395,8 @@ GLuint compile(GLenum type, const char *src) {
 
 Program *g_bucket[256];
 
-Program *create(const FfpKey &k, uint32_t h) {
+__attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
+    StatTimer st_(g.st.ffp_n, g.st.ffp_us, &g.st.ffp_max);
     SB vs{g_vs, 0, sizeof g_vs}, fs{g_fs, 0, sizeof g_fs};
     g_vs[0] = g_fs[0] = 0;
     uint32_t amask = 0;

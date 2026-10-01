@@ -46,7 +46,7 @@
 "glCheckFramebufferStatus": "passthrough",
 "glCheckFramebufferStatusEXT": "alias:glCheckFramebufferStatus",
 "glClampColor": "handwritten",
-"glClear": "passthrough",
+"glClear": "handwritten",
 "glClearAccum": "stub",
 "glClearBufferfi": "passthrough",
 "glClearBufferfv": "passthrough",
@@ -791,9 +791,9 @@
 },
 "categories": {
 "alias": 80,
-"handwritten": 186,
+"handwritten": 187,
 "noop": 22,
-"passthrough": 133,
+"passthrough": 132,
 "stub": 45,
 "variant": 322
 },
@@ -922,6 +922,11 @@
 "glClampColor": {
 "file": "misc.cpp",
 "params": "GLenum target, GLenum clamp",
+"ret": "void"
+},
+"glClear": {
+"file": "stats.cpp",
+"params": "GLbitfield mask",
 "ret": "void"
 },
 "glClearDepth": {

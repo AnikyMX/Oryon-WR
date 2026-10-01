@@ -108,6 +108,7 @@ struct Ring {
     GLuint buf; size_t size, head, seg; uint8_t *map; bool persistent;
     GLsync fence[4]; int open_first, open_last; bool open_valid;
     GLuint big;                          // oversize fallback buffer (orphaned per use)
+    uint64_t wraps;                      // ring consumption = wraps * size + head (ORYON_STATS)
 };
 struct Bind {
     GLuint app_array = 0, es_array = 0;
@@ -145,6 +146,25 @@ struct DlState { GLenum mode = 0; GLuint index = 0, base = 0; DList *cur = nullp
 struct TexInfo { GLint internal; GLint w, h; uint16_t swz; uint8_t fmt, order, legacy, alpha_one, gen_mipmap, depth_mode, valid; };
 
 struct Program;
+// ------------------------------------------------------------------ opt-in diagnostics (ORYON_STATS=1)
+// Counters are plain increments on paths that already do far more work; the clock is read only around rare,
+// expensive events (program builds, links, display-list builds, fence waits, readbacks). Report: src/stats.cpp.
+struct Stats {
+    bool on = false;
+    uint64_t t_win = 0, t_frame = 0;                 // microseconds (CLOCK_MONOTONIC)
+    uint32_t frames = 0, worst_us = 0;
+    uint32_t es_draws = 0;
+    uint64_t stream = 0;                             // oversize uploads (rings are measured via head/wraps)
+    uint64_t ring_prev = 0;                          // ring consumption at the previous report
+    uint32_t ffp_n = 0, ffp_max = 0; uint64_t ffp_us = 0;
+    uint32_t link_n = 0, link_max = 0; uint64_t link_us = 0;
+    uint32_t dl_n = 0; uint64_t dl_us = 0;
+    uint32_t wait_n = 0; uint64_t wait_us = 0;
+    uint32_t tex_n = 0; uint64_t tex_px = 0;
+    uint32_t buf_n = 0; uint64_t buf_bytes = 0;
+    uint32_t rb_n = 0; uint64_t rb_us = 0;
+};
+
 struct Ctx {
     uint32_t hooks = HOOK_INIT;          // slow-path triggers checked by ORY_PROLOGUE
     GLenum error = 0;                    // emulated error flag (reported before driver errors)
@@ -176,6 +196,7 @@ struct Ctx {
     struct { GLint w, h; GLenum internal; } proxy2d{0, 0, 0};
     GLint unpack_row_length = 0, unpack_skip_rows = 0, unpack_skip_pixels = 0, unpack_alignment = 4;
     GLint pack_alignment = 4, pack_row_length = 0;
+    Stats st;
 };
 
 extern Ctx g;
@@ -185,6 +206,19 @@ void ctx_defaults();
 ORY_INLINE void set_error(GLenum e) { if (!g.error) g.error = e; }
 ORY_INLINE uint32_t next_ver() { return ++g.serial; }
 ORY_INLINE void init_only() { if (UNLIKELY(g.hooks & HOOK_INIT)) ctx_init(); }
+bool env_on(const char *name);                   // set and not "", "0", "false", "off", "no"
+void stats_clear(GLbitfield mask);               // frame accounting + periodic report (ORYON_STATS only)
+void stats_install();                            // interpose ES draw entry points for counting
+ORY_INLINE uint64_t now_us() {
+    timespec t; clock_gettime(CLOCK_MONOTONIC, &t);
+    return (uint64_t)t.tv_sec * 1000000u + (uint64_t)t.tv_nsec / 1000u;
+}
+// Scoped timer for rare events: count, accumulated and (optionally) maximum duration.
+struct StatTimer {
+    uint32_t &n; uint64_t &acc; uint32_t *mx; uint64_t t0;
+    StatTimer(uint32_t &n_, uint64_t &acc_, uint32_t *mx_ = nullptr) : n(n_), acc(acc_), mx(mx_), t0(now_us()) {}
+    ~StatTimer() { uint64_t d = now_us() - t0; ++n; acc += d; if (mx && d > *mx) *mx = (uint32_t)d; }
+};
 void ffp_defaults();
 bool ffp_enable(GLenum cap, bool on);
 int ffp_is_enabled(GLenum cap);

@@ -9,6 +9,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 // desktop-only scalar types (ABI identical to LWJGL NativeType)
 typedef double GLdouble;

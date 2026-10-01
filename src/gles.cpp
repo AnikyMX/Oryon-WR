@@ -125,10 +125,13 @@ void ctx_init() {
     g.str_ext = (const GLubyte *)start;
     g.inited = true;
     g.hooks &= ~HOOK_INIT;
+    g.st.on = env_on("ORYON_STATS");
+    if (g.st.on) stats_install();
     vertex_init();
     while (es.glGetError() != GL_NO_ERROR) {}           // never leak init-time state into the app's error flag
     log("init " ORYON_VERSION ": %s | %s | ES ext mask 0x%x | desktop ext %d | stream %s | max tex %d",
         ver, rend ? rend : "?", g.escaps, g.ext_count, g.rv.persistent ? "persistent" : "map-unsync", g.es_max_tex_size);
+    if (g.st.on) log("stats enabled: one summary line per second (frame = colour clear of framebuffer 0)");
 }
 
 void run_hooks() {

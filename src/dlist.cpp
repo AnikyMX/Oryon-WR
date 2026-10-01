@@ -437,6 +437,7 @@ OGL_EXPORT void glNewList(GLuint list, GLenum mode) {
 OGL_EXPORT void glEndList(void) {
     ORY_PROLOGUE();
     if (!g.dl.mode) { set_error(GL_INVALID_OPERATION); return; }
+    StatTimer st_(g.st.dl_n, g.st.dl_us);
     DList *D = g.dl.cur;
     for (uint32_t i = 0; i < D->ngeom; ++i) geom_finalize(*D->geoms[i]);
     GLuint id = g.dl.index;

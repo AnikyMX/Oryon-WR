@@ -6,6 +6,9 @@
 #include "ffp_prog.hpp"
 #include <stdio.h>
 #include <stdarg.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace ory {
 bool g_prog_points = false;
@@ -395,16 +398,109 @@ GLuint compile(GLenum type, const char *src) {
 
 Program *g_bucket[256];
 
-__attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
-    StatTimer st_(g.st.ffp_n, g.st.ffp_us, &g.st.ffp_max);
+// ------------------------------------------------------------------ persistent program binary cache
+// One file per key: <dir>/ffp-<fnv64(key)>.bin = CacheHdr + key + driver binary. A binary is reused only when the
+// FNV-64 of (driver strings + generated VS + FS) matches, so a driver update or a generator change rebuilds instead
+// of loading stale code. Known keys are loaded at context init, so they never compile during play.
+struct CacheHdr { char magic[4]; uint32_t ver, key_size, fmt, len, pad; uint64_t src_hash; };
+static_assert(sizeof(CacheHdr) == 32, "cache header layout");
+const uint32_t kCacheVer = 1;
+char g_cache_dir[512];
+bool g_cache_on = false;
+uint64_t g_drv_hash = 0;
+GLint g_bin_fmt[16]; int g_nbin_fmt = 0;
+
+uint64_t fnv64(const void *d, size_t n, uint64_t h = 1469598103934665603ull) {
+    const uint8_t *p = (const uint8_t *)d;
+    for (size_t i = 0; i < n; ++i) { h ^= p[i]; h *= 1099511628211ull; }
+    return h;
+}
+uint64_t src_hash() { return fnv64(g_fs, strlen(g_fs), fnv64(g_vs, strlen(g_vs), g_drv_hash)); }
+void cache_path(const FfpKey &k, char *out, size_t n) {
+    snprintf(out, n, "%s/ffp-%016llx.bin", g_cache_dir, (unsigned long long)fnv64(&k, sizeof k));
+}
+bool fmt_known(GLenum f) { for (int i = 0; i < g_nbin_fmt; ++i) if ((GLenum)g_bin_fmt[i] == f) return true; return false; }
+// Oryon's own cache calls must not change what the app's glGetError() reports.
+struct ErrGuard {
+    GLenum pending;
+    ErrGuard() : pending(es.glGetError()) {}
+    ~ErrGuard() { while (es.glGetError() != GL_NO_ERROR) {} if (pending) set_error(pending); }
+};
+// Reads header + key + binary (malloc'd, caller frees); nullptr if missing or malformed.
+void *cache_read(const char *path, CacheHdr &H, FfpKey &K) {
+    FILE *f = fopen(path, "rb");
+    if (!f) return nullptr;
+    void *bin = nullptr;
+    if (fread(&H, sizeof H, 1, f) == 1 && !memcmp(H.magic, "ORYP", 4) && H.ver == kCacheVer && H.key_size == sizeof(FfpKey) &&
+        H.len > 0 && H.len <= (16u << 20) && fread(&K, sizeof K, 1, f) == 1 && (bin = malloc(H.len)) != nullptr &&
+        fread(bin, 1, H.len, f) != H.len) { free(bin); bin = nullptr; }
+    fclose(f);
+    return bin;
+}
+GLuint program_from_binary(GLenum fmt, const void *bin, GLsizei len) {
+    if (!fmt_known(fmt)) return 0;
+    GLuint p = es.glCreateProgram();
+    es.glProgramBinary(p, fmt, bin, len);
+    GLint ok = 0; es.glGetProgramiv(p, GL_LINK_STATUS, &ok);
+    if (!ok) { es.glDeleteProgram(p); return 0; }
+    return p;
+}
+void cache_store(GLuint p, const FfpKey &k, uint64_t sh) {
+    GLint len = 0; es.glGetProgramiv(p, GL_PROGRAM_BINARY_LENGTH, &len);
+    if (len <= 0 || len > (16 << 20)) return;
+    void *bin = malloc((size_t)len);
+    if (!bin) return;
+    GLsizei got = 0; GLenum fmt = 0;
+    es.glGetProgramBinary(p, len, &got, &fmt, bin);
+    if (got > 0) {
+        char path[600], tmp[610];
+        cache_path(k, path, sizeof path); snprintf(tmp, sizeof tmp, "%s.tmp", path);
+        CacheHdr H; memcpy(H.magic, "ORYP", 4);
+        H.ver = kCacheVer; H.key_size = sizeof(FfpKey); H.fmt = fmt; H.len = (uint32_t)got; H.pad = 0; H.src_hash = sh;
+        if (FILE *f = fopen(tmp, "wb")) {
+            bool ok = fwrite(&H, sizeof H, 1, f) == 1 && fwrite(&k, sizeof k, 1, f) == 1 && fwrite(bin, 1, (size_t)got, f) == (size_t)got;
+            ok = fclose(f) == 0 && ok;
+            if (!ok || rename(tmp, path) != 0) unlink(tmp);
+        }
+    }
+    free(bin);
+}
+
+// Compact description of a key for slow-compile diagnostics (ORYON_STATS only).
+void key_desc(const FfpKey &k, char *out, size_t n) {
+    SB s{out, 0, n}; out[0] = 0;
+    static const char *kTgt[] = {"-", "1D", "2D", "3D", "CUBE", "?", "?", "?"};
+    static const char *kEnv[] = {"off", "replace", "modulate", "decal", "blend", "add", "combine", "?"};
+    if (k.flags & FK_LIGHTING) s.addf("light x%d%s%s%s ", __builtin_popcount(k.light_on), (k.flags & FK_CM) ? " +colormat" : "",
+                                      (k.flags & FK_SPECULAR) ? " +spec" : "", (k.flags & FK_TWOSIDE) ? " +2side" : "");
+    for (int u = 0; u < k.nunits; ++u) {
+        uint32_t w = k.tu[u]; if (!(w & 7)) continue;
+        s.addf("t%d:%s/%s%s ", u, kTgt[w & 7], kEnv[(w >> 3) & 7], ((w >> 8) & 15) ? "+texgen" : "");
+    }
+    if (k.flags & FK_FOG) s.addf("fog:%s ", k.fog_mode == 1 ? "linear" : k.fog_mode == 3 ? "exp2" : "exp");
+    if (k.flags & FK_ALPHA) s.add("alphatest ");
+    if (k.flags & FK_FLAT) s.add("flat ");
+    if (k.flags & FK_COLORSUM) s.add("colorsum ");
+    if (k.flags & FK_POINTS) s.add("points ");
+    if (k.clip) s.addf("clip:%x ", k.clip);
+    if (!s.n) s.add("colour only");
+}
+
+uint32_t gen_sources(const FfpKey &k) {
     SB vs{g_vs, 0, sizeof g_vs}, fs{g_fs, 0, sizeof g_fs};
     g_vs[0] = g_fs[0] = 0;
     uint32_t amask = 0;
     gen_vs(vs, k, amask);
     gen_fs(fs, k);
+    return amask;
+}
+// Compiles + links g_vs/g_fs (timed as an FFP program build).
+GLuint compile_program(const FfpKey &k) {
+    StatTimer st_(g.st.ffp_n, g.st.ffp_us, &g.st.ffp_max);
     GLuint v = compile(GL_VERTEX_SHADER, g_vs), f = compile(GL_FRAGMENT_SHADER, g_fs);
-    if (!v || !f) { if (v) es.glDeleteShader(v); if (f) es.glDeleteShader(f); return nullptr; }
+    if (!v || !f) { if (v) es.glDeleteShader(v); if (f) es.glDeleteShader(f); return 0; }
     GLuint p = es.glCreateProgram();
+    if (g_cache_on) es.glProgramParameteri(p, GL_PROGRAM_BINARY_RETRIEVABLE_HINT, GL_TRUE);
     es.glAttachShader(p, v); es.glAttachShader(p, f);
     es.glLinkProgram(p);
     es.glDetachShader(p, v); es.glDetachShader(p, f);
@@ -412,8 +508,18 @@ __attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
     GLint ok = 0; es.glGetProgramiv(p, GL_LINK_STATUS, &ok);
     if (!ok) {
         char log[1024]; GLsizei l = 0; es.glGetProgramInfoLog(p, sizeof log, &l, log);
-        ory::log("FFP link failed: %s", log); es.glDeleteProgram(p); return nullptr;
+        ory::log("FFP link failed: %s", log); es.glDeleteProgram(p); return 0;
     }
+    if (UNLIKELY(g.st.on)) {
+        const uint64_t d = now_us() - st_.t0;
+        if (d >= g.stats_slow_us) {
+            char kd[256]; key_desc(k, kd, sizeof kd);
+            ory::log("slow ffp compile %.1f ms (vs %u B, fs %u B): %s", d / 1000.0, (unsigned)strlen(g_vs), (unsigned)strlen(g_fs), kd);
+        }
+    }
+    return p;
+}
+Program *finish(GLuint p, const FfpKey &k, uint32_t h, uint32_t amask) {
     Program *P = (Program *)calloc(1, sizeof(Program));
     P->id = p; P->hash = h; P->key = k; P->attr_mask = amask;
     P->u_mvp = es.glGetUniformLocation(p, "u_mvp");
@@ -437,6 +543,30 @@ __attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
     for (int i = 0; i < MAX_LIGHTS; ++i) if (k.light_on & (1u << i)) P->lidx[P->nl++] = (uint8_t)i;
     return P;
 }
+void insert(Program *P) { Program **b = &g_bucket[P->hash & 255]; P->next = *b; *b = P; }
+bool cached_in_memory(const FfpKey &k, uint32_t h) {
+    for (Program *p = g_bucket[h & 255]; p; p = p->next) if (p->hash == h && !memcmp(&p->key, &k, sizeof k)) return true;
+    return false;
+}
+
+__attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
+    const uint32_t amask = gen_sources(k);
+    GLuint p = 0;
+    if (g_cache_on) {
+        ErrGuard eg_;
+        const uint64_t sh = src_hash();
+        char path[600]; cache_path(k, path, sizeof path);
+        CacheHdr H; FfpKey K;
+        if (void *bin = cache_read(path, H, K)) {
+            if (H.src_hash == sh && !memcmp(&K, &k, sizeof k)) p = program_from_binary(H.fmt, bin, (GLsizei)H.len);
+            free(bin);
+        }
+        if (!p && (p = compile_program(k)) != 0) cache_store(p, k, sh);
+    } else {
+        p = compile_program(k);
+    }
+    return p ? finish(p, k, h, amask) : nullptr;
+}
 
 Program *lookup(const FfpKey &k) {
     uint32_t h = key_hash(k);
@@ -444,7 +574,7 @@ Program *lookup(const FfpKey &k) {
     for (Program *p = *b; p; p = p->next)
         if (p->hash == h && !memcmp(&p->key, &k, sizeof k)) return p;
     Program *p = create(k, h);
-    if (p) { p->next = *b; *b = p; }
+    if (p) insert(p);
     return p;
 }
 
@@ -528,5 +658,64 @@ Program *ffp_prepare(bool points) {
     es_use_program(P->id);
     upload(P);
     return P;
+}
+
+// Called once from ctx_init (current context, before the app draws). Chooses the cache directory, then loads every
+// cached program for this driver; a stale or rejected binary is rebuilt from its key right away (still at startup).
+void ffp_cache_init() {
+    if (env_on("ORYON_NO_PROGRAM_CACHE")) return;
+    GLint nf = 0;
+    es.glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &nf);
+    if (nf <= 0) { log("program cache off: driver exposes no program binary format"); return; }
+    GLint *fm = (GLint *)calloc((size_t)nf, sizeof(GLint));
+    if (!fm) return;
+    es.glGetIntegerv(GL_PROGRAM_BINARY_FORMATS, fm);
+    g_nbin_fmt = nf < 16 ? nf : 16;
+    memcpy(g_bin_fmt, fm, (size_t)g_nbin_fmt * sizeof(GLint));
+    free(fm);
+    const char *d = getenv("ORYON_CACHE_DIR"), *t = getenv("TMPDIR"), *hm = getenv("HOME");
+    if (d && *d) snprintf(g_cache_dir, sizeof g_cache_dir, "%s", d);
+    else if (t && *t) snprintf(g_cache_dir, sizeof g_cache_dir, "%s/oryon", t);
+    else if (hm && *hm) {
+        char parent[512]; snprintf(parent, sizeof parent, "%s/.cache", hm); mkdir(parent, 0700);
+        snprintf(g_cache_dir, sizeof g_cache_dir, "%s/.cache/oryon", hm);
+    } else { log("program cache off: no ORYON_CACHE_DIR, TMPDIR or HOME"); return; }
+    mkdir(g_cache_dir, 0700);
+    if (access(g_cache_dir, W_OK | X_OK) != 0) { log("program cache off: %s not writable", g_cache_dir); return; }
+    const char *ids[] = {(const char *)es.glGetString(GL_VENDOR), (const char *)es.glGetString(GL_RENDERER),
+                         (const char *)es.glGetString(GL_VERSION), (const char *)es.glGetString(GL_SHADING_LANGUAGE_VERSION), ORYON_VERSION};
+    uint64_t h = fnv64(&kCacheVer, sizeof kCacheVer);
+    for (const char *id : ids) if (id) h = fnv64(id, strlen(id) + 1, h);
+    g_drv_hash = h;
+    g_cache_on = true;
+    const uint64_t t0 = now_us();
+    int loaded = 0, rebuilt = 0, dropped = 0;
+    if (DIR *dp = opendir(g_cache_dir)) {
+        char path[800];
+        int seen = 0;
+        while (struct dirent *de = readdir(dp)) {
+            const char *n = de->d_name; size_t l = strlen(n);
+            if (strncmp(n, "ffp-", 4)) continue;
+            snprintf(path, sizeof path, "%s/%s", g_cache_dir, n);
+            if (l > 4 && !strcmp(n + l - 4, ".tmp")) { unlink(path); continue; }      // interrupted write
+            if (l < 8 || strcmp(n + l - 4, ".bin") || ++seen > 512) continue;
+            CacheHdr H; FfpKey K;
+            void *bin = cache_read(path, H, K);
+            if (!bin) { unlink(path); ++dropped; continue; }
+            const uint32_t kh = key_hash(K);
+            if (cached_in_memory(K, kh)) { free(bin); continue; }
+            const uint32_t amask = gen_sources(K);
+            const uint64_t sh = src_hash();
+            GLuint p = H.src_hash == sh ? program_from_binary(H.fmt, bin, (GLsizei)H.len) : 0;
+            free(bin);
+            if (p) ++loaded;
+            else if ((p = compile_program(K)) != 0) { cache_store(p, K, sh); ++rebuilt; }
+            else { unlink(path); ++dropped; continue; }
+            insert(finish(p, K, kh, amask));
+        }
+        closedir(dp);
+    }
+    while (es.glGetError() != GL_NO_ERROR) {}
+    log("program cache %s: %d loaded, %d rebuilt, %d dropped in %.1f ms", g_cache_dir, loaded, rebuilt, dropped, (now_us() - t0) / 1000.0);
 }
 } // namespace ory

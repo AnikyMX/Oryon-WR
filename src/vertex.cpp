@@ -872,7 +872,7 @@ OGL_EXPORT void glDeleteBuffers(GLsizei n, const GLuint *buffers) {
 /* jar: GL15C.nglBufferData(IJJI)V */
 OGL_EXPORT void glBufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage) {
     ORY_PROLOGUE(); sync_target(target);
-    if (data) { ++g.st.buf_n; g.st.buf_bytes += (uint64_t)size; }
+    StatUpload su_(g.st.buf_n, g.st.buf_max, g.st.buf_bytes, g.st.buf_us, data ? (uint64_t)size : 0);
     switch (usage) {                                     // desktop READ/COPY usages are hints; ES accepts all 9
     default: break;
     }
@@ -880,7 +880,8 @@ OGL_EXPORT void glBufferData(GLenum target, GLsizeiptr size, const void *data, G
 }
 /* jar: GL15C.nglBufferSubData(IJJJ)V */
 OGL_EXPORT void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data) {
-    ORY_PROLOGUE(); sync_target(target); ++g.st.buf_n; g.st.buf_bytes += (uint64_t)size;
+    ORY_PROLOGUE(); sync_target(target);
+    StatUpload su_(g.st.buf_n, g.st.buf_max, g.st.buf_bytes, g.st.buf_us, (uint64_t)size);
     es.glBufferSubData(target, offset, size, data);
 }
 /* jar: GL15C.nglGetBufferSubData(IJJJ)V */

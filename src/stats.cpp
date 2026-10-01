@@ -34,11 +34,11 @@ static void report(uint64_t t) {
     const double secs = (double)(t - s.t_win) / 1e6, f = s.frames ? (double)s.frames : 1.0;
     log("stats %.2fs: %u frames (%.0f fps, worst %.1f ms) | ES draws %.0f/f | stream %.1f KB/f | "
         "ffp prog +%u (%.1f ms, max %.1f) | glsl link +%u (%.1f ms, max %.1f) | dlist +%u (%.1f ms) | "
-        "ring wait %u (%.1f ms) | tex up %u (%.2f Mpx) | buf up %u (%.2f MB) | readback %u (%.1f ms)",
+        "ring wait %u (%.1f ms) | tex up %u (%.2f Mpx, %.1f ms, max %.1f) | buf up %u (%.2f MB, %.1f ms, max %.1f) | readback %u (%.1f ms)",
         secs, s.frames, s.frames / secs, s.worst_us / 1000.0, s.es_draws / f, (double)s.stream / 1024.0 / f,
         s.ffp_n, s.ffp_us / 1000.0, s.ffp_max / 1000.0, s.link_n, s.link_us / 1000.0, s.link_max / 1000.0,
-        s.dl_n, s.dl_us / 1000.0, s.wait_n, s.wait_us / 1000.0, s.tex_n, (double)s.tex_px / 1e6,
-        s.buf_n, (double)s.buf_bytes / 1048576.0, s.rb_n, s.rb_us / 1000.0);
+        s.dl_n, s.dl_us / 1000.0, s.wait_n, s.wait_us / 1000.0, s.tex_n, (double)s.tex_px / 1e6, s.tex_us / 1000.0, s.tex_max / 1000.0,
+        s.buf_n, (double)s.buf_bytes / 1048576.0, s.buf_us / 1000.0, s.buf_max / 1000.0, s.rb_n, s.rb_us / 1000.0);
     const uint64_t tf = s.t_frame;
     s = Stats{};
     s.on = true; s.t_frame = tf; s.t_win = t; s.ring_prev = used;

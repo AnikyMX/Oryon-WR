@@ -24,5 +24,6 @@ struct Program {
     uint8_t nl, lidx[MAX_LIGHTS];
 };
 Program *ffp_prepare(bool points);
+void ffp_cache_init();                   // load cached program binaries (ctx_init)
 extern bool g_prog_points;
 } // namespace ory

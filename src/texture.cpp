@@ -229,7 +229,7 @@ OGL_EXPORT void glDeleteTextures(GLsizei n, const GLuint *textures) {
 }
 
 static void tex_image(GLenum target, GLint level, GLint internal, GLsizei w, GLsizei h, GLint border, GLenum format, GLenum type, const void *pixels) {
-    if (pixels) { ++g.st.tex_n; g.st.tex_px += (uint64_t)(w > 0 ? w : 0) * (uint64_t)(h > 0 ? h : 0); }
+    StatUpload su_(g.st.tex_n, g.st.tex_max, g.st.tex_px, g.st.tex_us, pixels ? (uint64_t)(w > 0 ? w : 0) * (uint64_t)(h > 0 ? h : 0) : 0);
     if (target == GL_PROXY_TEXTURE_2D || target == GL_PROXY_TEXTURE_1D) {
         bool ok = w >= 0 && h >= 0 && w <= g.es_max_tex_size && h <= g.es_max_tex_size && level >= 0;
         g.proxy2d.w = ok ? w : 0; g.proxy2d.h = ok ? h : 0; g.proxy2d.internal = ok ? (GLenum)internal : 0;
@@ -259,7 +259,7 @@ OGL_EXPORT void glTexImage1D(GLenum target, GLint level, GLint internalformat, G
 }
 
 static void tex_sub_image(GLenum target, GLint level, GLint xo, GLint yo, GLsizei w, GLsizei h, GLenum format, GLenum type, const void *pixels) {
-    ++g.st.tex_n; g.st.tex_px += (uint64_t)(w > 0 ? w : 0) * (uint64_t)(h > 0 ? h : 0);
+    StatUpload su_(g.st.tex_n, g.st.tex_max, g.st.tex_px, g.st.tex_us, (uint64_t)(w > 0 ? w : 0) * (uint64_t)(h > 0 ? h : 0));
     GLenum t = es_target(target);
     GLuint name = bound_tex(target);
     TexInfo *ti = tex_info(name, false);

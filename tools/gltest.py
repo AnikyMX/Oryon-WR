@@ -1,6 +1,9 @@
 # tools/gltest.py -- test helpers: load liboryon.so via dlopen/dlsym (ctypes), Mesa EGL GLES 3.2 context,
 # GL entry points typed automatically from the jar-derived signature DB (tools/db/sigs.json).
 import os, sys, json, ctypes, struct, math
+import tempfile
+# Hermetic program cache per test process (exercises compile + store); tests may override ORYON_CACHE_DIR.
+os.environ.setdefault('ORYON_CACHE_DIR', tempfile.mkdtemp(prefix='oryon-cache-'))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import eglctx
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

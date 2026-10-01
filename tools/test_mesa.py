@@ -2,6 +2,8 @@
 # tools/test_mesa.py -- real-driver test: Mesa EGL + GLES 3.2 (llvmpipe). Loads liboryon.so exactly like the
 # launcher/LWJGL: dlopen() + dlsym(). Simulates LWJGL 3.3.6 GL.create()/createCapabilities() from the jar DB.
 import os, sys, re, json, ctypes
+import tempfile
+os.environ.setdefault('ORYON_CACHE_DIR', tempfile.mkdtemp(prefix='oryon-cache-'))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import eglctx, jvm
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

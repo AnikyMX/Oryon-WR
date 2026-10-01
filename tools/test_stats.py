@@ -68,9 +68,13 @@ NUM = r'([0-9.]+)'
 PAT = re.compile(r'\[Oryon\] stats ' + NUM + r's: (\d+) frames \(' + NUM + r' fps, worst ' + NUM + r' ms\) \| ES draws ' + NUM +
                  r'/f \| stream ' + NUM + r' KB/f \| ffp prog \+(\d+) \(' + NUM + r' ms, max ' + NUM + r'\) \| glsl link \+(\d+) \(' +
                  NUM + r' ms, max ' + NUM + r'\) \| dlist \+(\d+) \(' + NUM + r' ms\) \| ring wait (\d+) \(' + NUM +
-                 r' ms\) \| tex up (\d+) \(' + NUM + r' Mpx\) \| buf up (\d+) \(' + NUM + r' MB\) \| readback (\d+) \(' + NUM + r' ms\)')
+                 r' ms\) \| tex up (\d+) \(' + NUM + r' Mpx, ' + NUM + r' ms, max ' + NUM + r'\) \| buf up (\d+) \(' + NUM + r' MB, ' + NUM + r' ms, max ' + NUM + r'\) \| readback (\d+) \(' + NUM + r' ms\)')
 
 rc, out, err = run({'ORYON_STATS': '1'}, 2.6)
+slow = [l for l in err.splitlines() if 'slow ffp compile' in l]
+rc_s, out_s, err_s = run({'ORYON_STATS': '1', 'ORYON_STATS_SLOW_MS': '0'}, 0.3)
+slow0 = [l for l in err_s.splitlines() if 'slow ffp compile' in l]
+check(len(slow0) >= 2 and any('t0:2D/modulate' in l for l in slow0), 'ORYON_STATS_SLOW_MS=0 should log every FFP compile with its key: %s' % slow0[:2])
 check(rc == 0, 'child failed rc=%d: %s' % (rc, err[-400:]))
 lines = [l for l in err.splitlines() if re.search(r'\] stats [0-9]', l)]
 rows = [PAT.search(l) for l in lines]
@@ -88,8 +92,8 @@ if rows and all(rows):
     check(sum(int(r.group(7)) for r in rows[1:]) == 0, 'FFP programs must be cached after the first window')
     check(int(r0.group(13)) == 1, 'exactly one display list built in the first window')
     check(all(int(r.group(17)) >= frames[i] - 1 for i, r in enumerate(rows)), 'tex uploads should be >= frames - 1')
-    check(all(int(r.group(19)) >= frames[i] - 1 for i, r in enumerate(rows)), 'buffer uploads should be >= frames - 1')
-    check(all(int(r.group(21)) >= frames[i] - 1 for i, r in enumerate(rows)), 'readbacks should be >= frames - 1')
+    check(all(int(r.group(21)) >= frames[i] - 1 for i, r in enumerate(rows)), 'buffer uploads should be >= frames - 1')
+    check(all(int(r.group(25)) >= frames[i] - 1 for i, r in enumerate(rows)), 'readbacks should be >= frames - 1')
 rc2, out2, err2 = run({}, 1.3)
 check(rc2 == 0 and not re.search(r'\] stats ', err2), 'stats must stay silent when ORYON_STATS is unset')
 rc3, out3, err3 = run({'ORYON_STATS': '0'}, 1.3)
@@ -97,6 +101,7 @@ check(rc3 == 0 and not re.search(r'\] stats ', err3), 'ORYON_STATS=0 must disabl
 
 print('== STATS TEST ==')
 for l in lines[:2]: print(l.split('] ', 1)[1])
+for l in slow0[:2]: print(l.split('] ', 1)[1])
 print('RESULT:', 'PASS' if not fails else 'FAIL')
 for f in fails: print('  -', f)
 sys.exit(1 if fails else 0)

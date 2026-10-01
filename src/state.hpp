@@ -160,8 +160,8 @@ struct Stats {
     uint32_t link_n = 0, link_max = 0; uint64_t link_us = 0;
     uint32_t dl_n = 0; uint64_t dl_us = 0;
     uint32_t wait_n = 0; uint64_t wait_us = 0;
-    uint32_t tex_n = 0; uint64_t tex_px = 0;
-    uint32_t buf_n = 0; uint64_t buf_bytes = 0;
+    uint32_t tex_n = 0, tex_max = 0; uint64_t tex_px = 0, tex_us = 0;
+    uint32_t buf_n = 0, buf_max = 0; uint64_t buf_bytes = 0, buf_us = 0;
     uint32_t rb_n = 0; uint64_t rb_us = 0;
 };
 
@@ -197,6 +197,7 @@ struct Ctx {
     GLint unpack_row_length = 0, unpack_skip_rows = 0, unpack_skip_pixels = 0, unpack_alignment = 4;
     GLint pack_alignment = 4, pack_row_length = 0;
     Stats st;
+    uint32_t stats_slow_us = 16000;      // ORYON_STATS_SLOW_MS: log FFP compiles slower than this
 };
 
 extern Ctx g;
@@ -214,6 +215,13 @@ ORY_INLINE uint64_t now_us() {
     return (uint64_t)t.tv_sec * 1000000u + (uint64_t)t.tv_nsec / 1000u;
 }
 // Scoped timer for rare events: count, accumulated and (optionally) maximum duration.
+// Upload accounting, active only with ORYON_STATS (one predictable branch otherwise).
+struct StatUpload {
+    uint32_t &n, &mx; uint64_t &amount, &us; uint64_t add, t0;
+    StatUpload(uint32_t &n_, uint32_t &mx_, uint64_t &amount_, uint64_t &us_, uint64_t add_)
+        : n(n_), mx(mx_), amount(amount_), us(us_), add(add_), t0(UNLIKELY(g.st.on) ? now_us() : 0) {}
+    ~StatUpload() { if (UNLIKELY(t0)) { uint64_t d = now_us() - t0; ++n; amount += add; us += d; if (d > mx) mx = (uint32_t)d; } }
+};
 struct StatTimer {
     uint32_t &n; uint64_t &acc; uint32_t *mx; uint64_t t0;
     StatTimer(uint32_t &n_, uint64_t &acc_, uint32_t *mx_ = nullptr) : n(n_), acc(acc_), mx(mx_), t0(now_us()) {}

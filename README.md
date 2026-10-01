@@ -16,6 +16,12 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
   `ORYON_STATS=1` (satu baris ringkasan per detik: fps, frame terburuk, draw ES, streaming, kompilasi program,
   link GLSL, display list, tunggu fence, upload tekstur/buffer, readback). Env boolean aktif bila diisi selain
   `0`/`false`/`off`/`no`. Log Oryon juga ditulis ke stderr agar masuk latestlog launcher.
+  `ORYON_STATS_SLOW_MS=<ms>` (default 16): dengan `ORYON_STATS`, setiap kompilasi program FFP yang lebih lama dicatat
+  beserta deskripsi state-nya.
+- Cache program FFP persisten: binary driver disimpan per kunci state di `ORYON_CACHE_DIR` (default `$TMPDIR/oryon`,
+  lalu `$HOME/.cache/oryon`) dan dimuat saat init konteks, jadi kombinasi state yang pernah muncul tidak dikompilasi
+  lagi saat bermain. Binary hanya dipakai bila hash (string driver + VS + FS hasil generator) cocok; file rusak dibuang,
+  file basi dibangun ulang. Matikan dengan `ORYON_NO_PROGRAM_CACHE=1`.
 - Asumsi: satu konteks GL aktif (Forge splash multi-thread sebaiknya dimatikan, seperti launcher lain).
 
 ## Build
@@ -25,7 +31,7 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
 ## Alur kerja (Python3; sumber kebenaran = kedua jar)
 `tools/jarscan.py` (jar → `tools/db`) → `tools/gen.py` (→ `src/gen`) → `tools/annotate.py` (anotasi jar + hook display list)
 → `tools/validate.py` (cross-reference) → `tools/test_mesa.py`, `test_ffp.py`, `test_dlist.py`, `test_glsl.py` (Mesa EGL + GLES 3.2),
-`tools/test_stats.py` (diagnostik), `tools/bench/` (overhead CPU). Path jar: `ORYON_MC_JAR`, `ORYON_LWJGL_JAR`.
+`tools/test_stats.py` (diagnostik), `tools/test_progcache.py` (cache program), `tools/bench/` (overhead CPU). Path jar: `ORYON_MC_JAR`, `ORYON_LWJGL_JAR`.
 
 ## Modul
 | File | Isi |

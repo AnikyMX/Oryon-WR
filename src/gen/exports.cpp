@@ -12,10 +12,12 @@ OGL_EXPORT void glActiveTexture(GLenum texture);
 OGL_EXPORT void glAttachShader(GLuint program, GLuint shader);
 OGL_EXPORT void glBindAttribLocation(GLuint program, GLuint index, const GLchar *name);
 OGL_EXPORT void glBindBuffer(GLenum target, GLuint buffer);
+OGL_EXPORT void glBindFramebuffer(GLenum target, GLuint framebuffer);
 OGL_EXPORT void glBufferData(GLenum target, GLsizeiptr size, const void *data, GLenum usage);
 OGL_EXPORT void glBufferSubData(GLenum target, GLintptr offset, GLsizeiptr size, const void *data);
 OGL_EXPORT void glClientActiveTexture(GLenum texture);
 OGL_EXPORT void glDeleteBuffers(GLsizei n, const GLuint *buffers);
+OGL_EXPORT void glDeleteFramebuffers(GLsizei n, const GLuint *framebuffers);
 OGL_EXPORT void glDetachShader(GLuint program, GLuint shader);
 OGL_EXPORT void glDisableVertexAttribArray(GLuint index);
 OGL_EXPORT void glEnableVertexAttribArray(GLuint index);
@@ -43,8 +45,6 @@ OGL_EXPORT void glBindBufferBase(GLenum target, GLuint index, GLuint buffer) { O
 OGL_EXPORT void glBindBufferRange(GLenum target, GLuint index, GLuint buffer, GLintptr offset, GLsizeiptr size) { ORY_PROLOGUE(); ory::es.glBindBufferRange(target, index, buffer, offset, size); }
 /* jar: GL30C.nglBindFragDataLocation(IIJ)V */
 OGL_EXPORT void glBindFragDataLocation(GLuint p0, GLuint p1, GLchar const * p2) { (void)p0; (void)p1; (void)p2;  }
-/* jar: GL30C.glBindFramebuffer(II)V */
-OGL_EXPORT void glBindFramebuffer(GLenum target, GLuint framebuffer) { ORY_PROLOGUE(); ory::es.glBindFramebuffer(target, framebuffer); }
 /* jar: GL30C.glBindRenderbuffer(II)V */
 OGL_EXPORT void glBindRenderbuffer(GLenum target, GLuint renderbuffer) { ORY_PROLOGUE(); ory::es.glBindRenderbuffer(target, renderbuffer); }
 /* jar: GL11.nglBitmap(IIFFFFJ)V */
@@ -169,8 +169,6 @@ OGL_EXPORT void glCopyTexSubImage3D(GLenum target, GLint level, GLint xoffset, G
 OGL_EXPORT GLuint glCreateProgram(void) { ORY_PROLOGUE(); return ory::es.glCreateProgram(); }
 /* jar: GL11C.glCullFace(I)V */
 OGL_EXPORT void glCullFace(GLenum mode) { ORY_DL(glCullFace, mode); ORY_PROLOGUE(); ory::es.glCullFace(mode); }
-/* jar: GL30C.nglDeleteFramebuffers(IJ)V */
-OGL_EXPORT void glDeleteFramebuffers(GLsizei n, const GLuint *framebuffers) { ORY_PROLOGUE(); ory::es.glDeleteFramebuffers(n, framebuffers); }
 /* jar: GL15C.nglDeleteQueries(IJ)V */
 OGL_EXPORT void glDeleteQueries(GLsizei n, const GLuint *ids) { ORY_PROLOGUE(); ory::es.glDeleteQueries(n, ids); }
 /* jar: GL30C.nglDeleteRenderbuffers(IJ)V */

@@ -336,6 +336,7 @@ bool prim_class(GLenum mode, uint32_t &n, GLenum &cls, uint32_t &nidx) {
 }
 static void imm_draw(const ImmLayout &L, const ImmConst &C, GLenum mode, const void *vd, size_t vbytes,
                      const void *id, size_t ibytes, GLenum itype, GLsizei nidx) {
+    if (UNLIKELY(g.hooks & HOOK_FB0_CLEAR)) fb0_clear_exec();     // recorded before this batch (no entry point ran it)
     uint32_t reads = program_prepare(mode == GL_POINTS);
     if (!reads) return;
     GLuint vb, ib; size_t voff, ioff;
@@ -358,7 +359,8 @@ static void imm_draw(const ImmLayout &L, const ImmConst &C, GLenum mode, const v
     for (int i = 0; i < na; ++i) am |= 1u << as[i].loc;
     set_enabled(V, am);
     set_consts(reads & ~am, C.col, C.nrm, C.col2, C.fog, C.tex);
-    es.glDrawElementsBaseVertex(mode, nidx, itype, (const void *)ioff, (GLint)(voff / L.stride));
+    // the index range is known (indices address the uploaded block): the driver need not scan the volatile ring
+    es.glDrawRangeElementsBaseVertex(mode, 0, (GLuint)(vbytes / L.stride) - 1, nidx, itype, (const void *)ioff, (GLint)(voff / L.stride));
 }
 void imm_flush() {
     Imm &I = g.imm;
@@ -595,7 +597,7 @@ static void draw_arrays_legacy(GLenum mode, GLint first, GLsizei count) {
     if (quads) {
         if (!quad_ibo_ensure(count)) return;
         if (V.element != g.quad_ibo) { es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g.quad_ibo); V.element = g.quad_ibo; }
-        es.glDrawElementsBaseVertex(GL_TRIANGLES, count / 4 * 6, g.quad_ibo_type, nullptr, base);
+        es.glDrawRangeElementsBaseVertex(GL_TRIANGLES, 0, (GLuint)count - 1, count / 4 * 6, g.quad_ibo_type, nullptr, base);
     } else {
         es.glDrawArrays(esmode, base, count);
     }
@@ -681,6 +683,10 @@ static void draw_elements_any(GLenum mode, GLsizei count, GLenum type, const voi
         sync_app_vao();
     }
     GLenum esmode = mode;
+    // Index range passed to the driver whenever Oryon knows it (client arrays: [B, E], which already bounds the
+    // upload; converted indices: their min/max), so it does not scan index data, notably in the volatile ring.
+    // An application's glDrawRangeElements range is not forwarded for buffer-backed arrays (as before).
+    GLint lo = client ? B : -1, hi = client ? E : -1;
     if (conv || (!ebo && legacy) || (!ebo && !legacy)) {
         // upload (converted) indices into the index ring
         GLuint ib; size_t ioff; GLsizei n; GLenum it = type;
@@ -688,6 +694,11 @@ static void draw_elements_any(GLenum mode, GLsizei count, GLenum type, const voi
             uint32_t *ci = (uint32_t *)malloc((size_t)count * 6 * 4);
             if (!ci) { free(tmp); set_error(GL_OUT_OF_MEMORY); return; }
             n = (GLsizei)convert_indices(ci, mode, isrc, type, count);
+            if (lo < 0 && n > 0) {
+                uint32_t mn = ci[0], mx = ci[0];
+                for (GLsizei i = 1; i < n; ++i) { if (ci[i] < mn) mn = ci[i]; if (ci[i] > mx) mx = ci[i]; }
+                lo = (GLint)mn; hi = (GLint)mx;
+            }
             ring_upload(g.ri, ci, (size_t)n * 4, 4, &ib, &ioff);
             free(ci); it = GL_UNSIGNED_INT; esmode = GL_TRIANGLES;
         } else {
@@ -696,17 +707,21 @@ static void draw_elements_any(GLenum mode, GLsizei count, GLenum type, const voi
         }
         if (legacy) {
             if (V->element != ib) { es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib); V->element = ib; }
-            es.glDrawElementsBaseVertex(esmode, n, it, (const void *)ioff, bv);
+            if (lo >= 0) es.glDrawRangeElementsBaseVertex(esmode, (GLuint)lo, (GLuint)hi, n, it, (const void *)ioff, bv);
+            else es.glDrawElementsBaseVertex(esmode, n, it, (const void *)ioff, bv);
         } else {
             es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
-            es.glDrawElements(esmode, n, it, (const void *)ioff);
+            if (lo >= 0) es.glDrawRangeElements(esmode, (GLuint)lo, (GLuint)hi, n, it, (const void *)ioff);
+            else es.glDrawElements(esmode, n, it, (const void *)ioff);
             es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
         }
     } else if (legacy) {
         if (V->element != ebo) { es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo); V->element = ebo; }
-        es.glDrawElementsBaseVertex(mode, count, type, indices, bv);
+        if (lo >= 0) es.glDrawRangeElementsBaseVertex(mode, (GLuint)lo, (GLuint)hi, count, type, indices, bv);
+        else es.glDrawElementsBaseVertex(mode, count, type, indices, bv);
     } else {
-        es.glDrawElements(mode, count, type, indices);
+        if (lo >= 0) es.glDrawRangeElements(mode, (GLuint)lo, (GLuint)hi, count, type, indices);
+        else es.glDrawElements(mode, count, type, indices);
     }
     free(tmp);
 }
@@ -719,7 +734,7 @@ static void draw_arrays_generic(GLenum mode, GLint first, GLsizei count) {
         count &= ~3;
         if (count <= 0 || !quad_ibo_ensure(count)) return;
         es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, g.quad_ibo);
-        es.glDrawElementsBaseVertex(GL_TRIANGLES, count / 4 * 6, g.quad_ibo_type, nullptr, first);
+        es.glDrawRangeElementsBaseVertex(GL_TRIANGLES, 0, (GLuint)count - 1, count / 4 * 6, g.quad_ibo_type, nullptr, first);
         es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, app_element_buffer());
         return;
     }

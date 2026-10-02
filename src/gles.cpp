@@ -42,6 +42,12 @@ void *open_first(const char *env, const char *const *names) {
     return nullptr;
 }
 
+// glDrawRangeElementsBaseVertex (ES 3.2) without driver support: the range is only a hint. Calls the driver entry
+// directly, so the ORYON_STATS draw counters see one draw.
+decltype(EsFuncs::glDrawElementsBaseVertex) s_dbv_driver = nullptr;
+void GL_APIENTRY draw_range_bv_fallback(GLenum mode, GLuint, GLuint, GLsizei count, GLenum type, const void *indices, GLint bv) {
+    s_dbv_driver(mode, count, type, indices, bv);
+}
 __attribute__((constructor)) void load_es() {
     static const char *const kGles[] = {"libGLESv3.so", "libGLESv2.so.2", "libGLESv2.so", nullptr};
     static const char *const kEgl[] = {"libEGL.so", "libEGL.so.1", nullptr};
@@ -56,6 +62,9 @@ __attribute__((constructor)) void load_es() {
         if (!p && gpa) p = gpa(e.name);
         *e.slot = p;
         if (!p && !e.ext) ++miss;
+    }
+    if (!es.glDrawRangeElementsBaseVertex && es.glDrawElementsBaseVertex) {
+        s_dbv_driver = es.glDrawElementsBaseVertex; es.glDrawRangeElementsBaseVertex = draw_range_bv_fallback;
     }
     ctx_defaults();
     if (!hg) log("no GLES library found (set ORYON_GLES_LIB)");
@@ -134,10 +143,11 @@ void ctx_init() {
         if (const char *ms = getenv("ORYON_STATS_SLOW_MS")) g.stats_slow_us = (uint32_t)(strtod(ms, nullptr) * 1000.0);
     }
     vertex_init();
+    fb_init();
     while (es.glGetError() != GL_NO_ERROR) {}           // never leak init-time state into the app's error flag
-    log("init " ORYON_VERSION ": %s | %s | ES ext mask 0x%x | desktop ext %d | stream %s | vertex %s | max tex %d",
+    log("init " ORYON_VERSION ": %s | %s | ES ext mask 0x%x | desktop ext %d | stream %s | vertex %s | fb0 clear %s | max tex %d",
         ver, rend ? rend : "?", g.escaps, g.ext_count, g.rv.persistent ? "persistent" : "map-unsync",
-        g.vbind ? "attrib-binding" : "attrib-pointer", g.es_max_tex_size);
+        g.vbind ? "attrib-binding" : "attrib-pointer", g.fbc.off ? "immediate" : "deferred", g.es_max_tex_size);
     if (g.st.on) {
         log("stats enabled: one summary line per second (frame = colour clear of framebuffer 0)");
         perf_install();
@@ -147,6 +157,7 @@ void ctx_init() {
 
 void run_hooks() {
     if (g.hooks & HOOK_INIT) ctx_init();
+    if (g.hooks & HOOK_FB0_CLEAR) fb0_clear_exec();     // recorded before any pending immediate-mode batch
     if (g.hooks & HOOK_FLUSH) imm_flush();
 }
 } // namespace ory

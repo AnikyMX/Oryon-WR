@@ -11,20 +11,28 @@ bool env_on(const char *name) {
     return v && *v && strcmp(v, "0") && strcasecmp(v, "false") && strcasecmp(v, "off") && strcasecmp(v, "no");
 }
 
-// ES draw calls are counted by interposing the three ES draw entry points used by Oryon, only when stats are
+// ES draw calls are counted by interposing the ES draw entry points used by Oryon, only when stats are
 // enabled, so the draw paths carry no extra instruction in normal runs.
 static decltype(EsFuncs::glDrawArrays) s_draw_arrays;
 static decltype(EsFuncs::glDrawElements) s_draw_elements;
 static decltype(EsFuncs::glDrawElementsBaseVertex) s_draw_elements_bv;
+static decltype(EsFuncs::glDrawRangeElements) s_draw_range;
+static decltype(EsFuncs::glDrawRangeElementsBaseVertex) s_draw_range_bv;
 uint64_t g_draws_total = 0;              // monotonic ES draw count (stats mode), read by the perf probes
 static void GL_APIENTRY cnt_draw_arrays(GLenum m, GLint f, GLsizei c) { ++g.st.es_draws; ++g_draws_total; s_draw_arrays(m, f, c); }
 static void GL_APIENTRY cnt_draw_elements(GLenum m, GLsizei c, GLenum t, const void *i) { ++g.st.es_draws; ++g_draws_total; s_draw_elements(m, c, t, i); }
 static void GL_APIENTRY cnt_draw_elements_bv(GLenum m, GLsizei c, GLenum t, const void *i, GLint b) { ++g.st.es_draws; ++g_draws_total; s_draw_elements_bv(m, c, t, i, b); }
+static void GL_APIENTRY cnt_draw_range(GLenum m, GLuint s, GLuint e, GLsizei c, GLenum t, const void *i) { ++g.st.es_draws; ++g_draws_total; s_draw_range(m, s, e, c, t, i); }
+static void GL_APIENTRY cnt_draw_range_bv(GLenum m, GLuint s, GLuint e, GLsizei c, GLenum t, const void *i, GLint b) {
+    ++g.st.es_draws; ++g_draws_total; s_draw_range_bv(m, s, e, c, t, i, b);
+}
 void stats_install() {
     if (s_draw_arrays) return;
     s_draw_arrays = es.glDrawArrays; es.glDrawArrays = cnt_draw_arrays;
     s_draw_elements = es.glDrawElements; es.glDrawElements = cnt_draw_elements;
     s_draw_elements_bv = es.glDrawElementsBaseVertex; es.glDrawElementsBaseVertex = cnt_draw_elements_bv;
+    s_draw_range = es.glDrawRangeElements; if (s_draw_range) es.glDrawRangeElements = cnt_draw_range;
+    s_draw_range_bv = es.glDrawRangeElementsBaseVertex; if (s_draw_range_bv) es.glDrawRangeElementsBaseVertex = cnt_draw_range_bv;
 }
 static uint64_t ring_used() { return g.rv.wraps * g.rv.size + g.rv.head + g.ri.wraps * g.ri.size + g.ri.head; }
 
@@ -64,11 +72,3 @@ void stats_clear(GLbitfield mask) {
 }
 
 } // namespace ory
-
-/* jar: GL11C.glClear(I)V */
-OGL_EXPORT void glClear(GLbitfield mask) {
-    ORY_DL(glClear, mask);
-    ORY_PROLOGUE();
-    if (UNLIKELY(ory::g.st.on)) ory::stats_clear(mask);
-    ory::es.glClear(mask);
-}

@@ -19,7 +19,7 @@
 "glBindBufferBase": "passthrough",
 "glBindBufferRange": "passthrough",
 "glBindFragDataLocation": "stub",
-"glBindFramebuffer": "passthrough",
+"glBindFramebuffer": "handwritten",
 "glBindFramebufferEXT": "alias:glBindFramebuffer",
 "glBindRenderbuffer": "passthrough",
 "glBindRenderbufferEXT": "alias:glBindRenderbuffer",
@@ -116,7 +116,7 @@
 "glCullFace": "passthrough",
 "glDeleteBuffers": "handwritten",
 "glDeleteBuffersARB": "alias:glDeleteBuffers",
-"glDeleteFramebuffers": "passthrough",
+"glDeleteFramebuffers": "handwritten",
 "glDeleteFramebuffersEXT": "alias:glDeleteFramebuffers",
 "glDeleteLists": "handwritten",
 "glDeleteObjectARB": "handwritten",
@@ -791,9 +791,9 @@
 },
 "categories": {
 "alias": 80,
-"handwritten": 187,
+"handwritten": 189,
 "noop": 22,
-"passthrough": 132,
+"passthrough": 130,
 "stub": 45,
 "variant": 322
 },
@@ -889,6 +889,11 @@
 "params": "GLenum target, GLuint buffer",
 "ret": "void"
 },
+"glBindFramebuffer": {
+"file": "fb.cpp",
+"params": "GLenum target, GLuint framebuffer",
+"ret": "void"
+},
 "glBindTexture": {
 "file": "texture.cpp",
 "params": "GLenum target, GLuint texture",
@@ -925,7 +930,7 @@
 "ret": "void"
 },
 "glClear": {
-"file": "stats.cpp",
+"file": "fb.cpp",
 "params": "GLbitfield mask",
 "ret": "void"
 },
@@ -982,6 +987,11 @@
 "glDeleteBuffers": {
 "file": "vertex.cpp",
 "params": "GLsizei n, const GLuint *buffers",
+"ret": "void"
+},
+"glDeleteFramebuffers": {
+"file": "fb.cpp",
+"params": "GLsizei n, const GLuint *framebuffers",
 "ret": "void"
 },
 "glDeleteLists": {

@@ -265,11 +265,12 @@ static void geom_finalize(DLGeom &G) {
 }
 static void geom_draw(const DLGeom &G) {
     if (!G.vao) return;
+    if (UNLIKELY(g.hooks & HOOK_FB0_CLEAR)) fb0_clear_exec();     // a replayed glClear precedes this geometry
     uint32_t reads = program_prepare(G.mode == GL_POINTS);
     if (!reads) return;
     es_bind_vao(G.vao);
     set_consts(reads & ~G.amask, g.cur.color, g.cur.normal, g.cur.color2, g.cur.fog, g.cur.tex);
-    es.glDrawElements(G.mode, G.nidx, G.itype, nullptr);
+    es.glDrawRangeElements(G.mode, 0, G.nverts - 1, G.nidx, G.itype, nullptr);   // indices address the list's vertices
     const ImmRec &r = G.fin; uint32_t v = G.fmask;                  // current := last captured vertex
     if (v & AB_COLOR) g.cur.color = Vec4{r.col[0], r.col[1], r.col[2], r.col[3]};
     if (v & AB_NORMAL) g.cur.normal = Vec4{r.nrm[0], r.nrm[1], r.nrm[2], 0};

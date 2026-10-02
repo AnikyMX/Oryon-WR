@@ -3,7 +3,7 @@
 #pragma once
 namespace ory {
 
-enum : uint32_t { HOOK_INIT = 1u << 0, HOOK_FLUSH = 1u << 1 };
+enum : uint32_t { HOOK_INIT = 1u << 0, HOOK_FLUSH = 1u << 1, HOOK_FB0_CLEAR = 1u << 2 };
 
 // ES-side capabilities discovered at first use (bit mask).
 enum : uint32_t {
@@ -149,6 +149,15 @@ struct DlState { GLenum mode = 0; GLuint index = 0, base = 0; DList *cur = nullp
 struct TexInfo { GLint internal; GLint w, h; uint16_t swz; uint8_t fmt, order, legacy, alpha_one, gen_mipmap, depth_mode, valid; };
 
 struct Program;
+// Framebuffer 0 clear kept pending until framebuffer 0 is used again (src/fb.cpp).
+struct Fb0Clear {
+    GLbitfield mask = 0;                 // pending clear (0 = none)
+    GLfloat color[4] = {0, 0, 0, 0}; GLfloat depth = 1.0f;   // clear values captured at the clear
+    bool deferred = false;               // pending while another framebuffer is bound
+    bool off = false;                    // ORYON_NO_DEFER_CLEAR=1
+    uint32_t n_clear = 0, n_defer = 0;   // framebuffer-0 clears / deferred ones (reported with ORYON_STATS)
+};
+struct FbBind { GLuint draw = 0, read = 0; };   // application framebuffer bindings (shadow)
 // ------------------------------------------------------------------ opt-in diagnostics (ORYON_STATS=1)
 // Counters are plain increments on paths that already do far more work; the clock is read only around rare,
 // expensive events (program builds, links, display-list builds, fence waits, readbacks). Report: src/stats.cpp.
@@ -203,6 +212,9 @@ struct Ctx {
     GLint pack_alignment = 4, pack_row_length = 0;
     Stats st;
     uint32_t stats_slow_us = 16000;      // ORYON_STATS_SLOW_MS: log FFP compiles slower than this
+    FbBind fb;
+    Fb0Clear fbc;
+    int32_t rt_countdown = 1;            // framebuffer-0 frames until the next render-thread scheduling check
 };
 
 extern Ctx g;
@@ -219,6 +231,11 @@ void perf_install();                             // GPU pass timeline/timer, sta
 extern uint64_t g_draws_total;                   // ES draws issued (stats mode only)
 void perf_boundary(uint64_t t);                  // frame start: colour clear of framebuffer 0
 void perf_report(uint64_t t0, uint64_t t1);      // end of a stats window
+void fb_init();                                  // framebuffer-0 clear deferral setup (src/fb.cpp)
+void fb0_clear_exec();                           // execute a pending framebuffer-0 clear now
+void rt_frame_tick();                            // render-thread scheduling: start / periodic check (src/sched.cpp)
+uint32_t big_core_mask();                        // fastest CPUs (bit per CPU < 32), 0 = uniform or unknown
+int rt_describe(char *out, size_t n);            // render-thread scheduling state for the stats line
 ORY_INLINE uint64_t now_us() {
     timespec t; clock_gettime(CLOCK_MONOTONIC, &t);
     return (uint64_t)t.tv_sec * 1000000u + (uint64_t)t.tv_nsec / 1000u;

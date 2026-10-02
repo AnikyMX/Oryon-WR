@@ -13,6 +13,7 @@ struct AppProg {
     GLuint id; AppProg *next;
     GLuint shaders[8]; int nsh;
     char bound[8][64]; int nbound;                  // explicit glBindAttribLocation names
+    bool loc0_bound;                                // some name was bound to location 0
     uint32_t reads;                                 // legacy locations read
     GLint u_mv, u_p, u_mvp, u_nm, u_tm, u_mvi, u_pi, u_mvpi, u_fogc, u_fogd, u_fogs, u_foge, u_fogsc;
     uint32_t s_mv, s_p, s_mvp_mv, s_mvp_p, s_nm, s_mvi, s_pi, s_mvpi_mv, s_mvpi_p, s_fog, s_tm;
@@ -192,7 +193,12 @@ OGL_EXPORT void glBindAttribLocation(GLuint program, GLuint index, const GLchar 
     ORY_PROLOGUE();
     char b[80];
     es.glBindAttribLocation(program, index, mapped_name(name, b, sizeof b));
-    if (AppProg *P = pr_get(program, true)) if (P->nbound < 8) { strncpy(P->bound[P->nbound], name, 63); P->bound[P->nbound][63] = 0; ++P->nbound; }
+    if (AppProg *P = pr_get(program, true)) {
+        if (index == 0) P->loc0_bound = true;
+        int k = 0;
+        while (k < P->nbound && strncmp(P->bound[k], name, 63)) ++k;
+        if (k < 8) { strncpy(P->bound[k], name, 63); P->bound[k][63] = 0; if (k == P->nbound) ++P->nbound; }
+    }
 }
 /* jar: GL20C.glLinkProgram(I)V */
 OGL_EXPORT void glLinkProgram(GLuint program) {
@@ -213,8 +219,7 @@ OGL_EXPORT void glLinkProgram(GLuint program) {
             if (!(b & GB_VERTEX) && s->nattrs > 0) {          // desktop aliasing: first attribute feeds from glVertexPointer
                 bool explicit_ = false;
                 for (int k = 0; k < P->nbound; ++k) if (!strcmp(P->bound[k], s->attrs[0])) explicit_ = true;
-                bool zero_taken = false;
-                for (int k = 0; k < P->nbound; ++k) zero_taken |= es.glGetAttribLocation(program, P->bound[k]) == 0;
+                const bool zero_taken = P->loc0_bound;        // recorded at bind time: the program is not linked yet
                 if (!explicit_ && !zero_taken) { char nb[80]; es.glBindAttribLocation(program, 0, mapped_name(s->attrs[0], nb, sizeof nb)); }
             }
         }

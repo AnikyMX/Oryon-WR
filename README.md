@@ -15,7 +15,10 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
 - Env opsional: `ORYON_GLES_LIB`, `ORYON_EGL_LIB` (driver kustom), `ORYON_NO_BUFFER_STORAGE=1`, `ORYON_DUMP_GLSL=1`,
   `ORYON_DUMP_FFP=1` (cetak sumber VS/FS program FFP yang dikompilasi), `ORYON_NO_VERTEX_BINDING=1` (kembali ke
   `glVertexAttribPointer` per atribut alih-alih vertex attribute binding ES 3.1), `ORYON_FFP_HIGHP=1` (varying texcoord
-  FFP selalu vec4 highp; default ukuran sesuai pemakaian, warna/fog mediump),
+  FFP selalu vec4 highp; default ukuran sesuai pemakaian, warna/fog mediump), `ORYON_NO_DEFER_CLEAR=1` (clear
+  framebuffer 0 langsung dieksekusi; default ditunda sampai framebuffer 0 dipakai lagi, lihat `fb.cpp`),
+  `ORYON_NO_AFFINITY=1` (render thread tidak dipin ke core besar), `ORYON_RENDER_NICE=<n>` (prioritas render thread,
+  default -10; `0` = tidak diubah), `ORYON_BIG_CORES=<mask hex>` (paksa daftar core besar, mis. `c0`),
   `ORYON_STATS=1` (satu baris ringkasan per detik: fps, frame terburuk, draw ES, streaming, kompilasi program,
   link GLSL, display list, tunggu fence, upload tekstur/buffer, readback). Env boolean aktif bila diisi selain
   `0`/`false`/`off`/`no`. Log Oryon juga ditulis ke stderr agar masuk latestlog launcher.
@@ -26,9 +29,12 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
     siap jalan tetapi menunggu CPU, dari `/proc/.../schedstat`), `big cores` (porsi sampel di core tercepat menurut
     `cpuinfo_max_freq`), `present` (dari pindah ke framebuffer 0 di akhir frame sampai awal frame berikutnya: blit,
     swap launcher, limiter fps, tick game; wall dan CPU), pembagian sampel CPU render thread (oryon / gl driver / jvm /
-    java JIT / libc / other; SIGPROF tiap 1 ms waktu CPU, granularitas tick kernel), CPU proses (core).
+    java JIT / libc / other; SIGPROF tiap 1 ms waktu CPU, granularitas tick kernel), CPU proses (core), dan status
+    penjadwalan render thread (`rt nice .. cpus 0x..`, berapa kali pin/nice dipasang ulang, thread baru yang
+    dilepas dari pin).
   - `calls`: panggilan ES per frame: draw, program, uniform, texture, VAO, bind buffer, attrib pointer, `vbuf`
-    (`glBindVertexBuffer`), `fmt` (`glVertexAttribFormat`/`Binding`).
+    (`glBindVertexBuffer`), `fmt` (`glVertexAttribFormat`/`Binding`), serta jumlah clear framebuffer 0 per jendela
+    dan yang ditunda.
   - `gpu`: waktu sibuk GPU per frame dari timeline fence EGL per render pass (batas pass = ganti framebuffer gambar
     dan awal frame; pass yang dikirim saat GPU idle dikurangi floor round-trip fence = persentil 25 pass idle tanpa
     draw), pembagian per framebuffer, % frame gpu-bound, dan lag (sisa kerja GPU saat frame berikutnya mulai).
@@ -39,6 +45,10 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
   lalu `$HOME/.cache/oryon`) dan dimuat saat init konteks, jadi kombinasi state yang pernah muncul tidak dikompilasi
   lagi saat bermain. Binary hanya dipakai bila hash (string driver + VS + FS hasil generator) cocok; file rusak dibuang,
   file basi dibangun ulang. Matikan dengan `ORYON_NO_PROGRAM_CACHE=1`.
+- Render thread (thread yang meng-clear framebuffer 0, yaitu thread render MC): saat frame pertama dipin ke core
+  tercepat (EAS `cpu_capacity` >= 60% maksimum, atau `cpuinfo_max_freq` tertinggi) dan dinaikkan ke nice -10 dengan
+  `SCHED_RESET_ON_FORK`; thread yang dibuatnya kemudian (server terintegrasi, chunk builder) mulai di nice 0 dan
+  mask CPU-nya dikembalikan. Pin/nice dipasang ulang bila sistem meresetnya (pindah cpuset). Log: `render thread ...`.
 - Asumsi: satu konteks GL aktif (Forge splash multi-thread sebaiknya dimatikan, seperti launcher lain).
 
 ## Build
@@ -50,6 +60,8 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
 → `tools/validate.py` (cross-reference) → `tools/test_mesa.py`, `test_ffp.py`, `test_dlist.py`, `test_glsl.py` (Mesa EGL + GLES 3.2),
 `tools/test_stats.py` (diagnostik), `tools/test_progcache.py` (cache program), `tools/test_perf.py` (probe GPU/CPU),
 `tools/test_calls.py` (anggaran panggilan ES jalur chunk VBO MC 1.12.2; `ORYON_SO_PREV` untuk pembanding),
+`tools/test_frame.py` (penundaan clear framebuffer 0 vs mode langsung, penjadwalan render thread),
+`tools/test_indexed.py` (semua jalur draw berindeks dengan rentang indeks),
 `tools/check_android.py` (kompilasi `-Werror` untuk aarch64-linux-android24 dengan header bionic, `ORYON_BIONIC`),
 `tools/bench/` (overhead CPU). Path jar: `ORYON_MC_JAR`, `ORYON_LWJGL_JAR`.
 
@@ -62,7 +74,9 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
 | `core.cpp` | error model, string/versi, kueri virtual `glGet*` |
 | `matrix.cpp` | stack MODELVIEW/PROJECTION/TEXTURE (CPU) |
 | `ffp.cpp`, `ffp_prog.cpp` | state fixed-function → kunci kanonik (COMBINE setara MODULATE/REPLACE dilebur, mode fog via uniform) → GLSL ES 3.20 ter-cache (memori + disk), uniform ber-versi, matriks MVP/MV/normal dalam satu `mat4[]`, varying berukuran pas (warna/fog mediump) |
-| `vertex.cpp` | immediate mode + batching, client array, ring streaming (persistent/fallback), QUADS via IBO + BaseVertex, vertex attribute binding ES 3.1 (satu `glBindVertexBuffer` per ganti VBO) |
+| `vertex.cpp` | immediate mode + batching, client array, ring streaming (persistent/fallback), QUADS via IBO + BaseVertex, vertex attribute binding ES 3.1 (satu `glBindVertexBuffer` per ganti VBO), `glDrawRangeElements[BaseVertex]` bila rentang indeks diketahui (driver tidak memindai indeks) |
+| `fb.cpp` | `glClear`/`glBindFramebuffer`: clear framebuffer 0 di awal frame ditunda ke pemakaian berikutnya framebuffer 0 (tanpa render pass clear terpisah dan tanpa load tile) |
+| `sched.cpp` | penjadwalan render thread di big.LITTLE: pin core besar, nice -10, lepas pin thread turunan |
 | `texture.cpp` | BGRA/8888_REV zero-copy via swizzle, format legacy, proxy, readback |
 | `dlist.cpp` | display list: op stream + geometri di-merge ke VBO/IBO/VAO per list |
 | `glsl.cpp`, `shader.cpp` | translator GLSL 1.10–1.50 → ES 3.20, builtin FFP, aliasing atribut |

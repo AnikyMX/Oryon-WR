@@ -11,7 +11,8 @@
 //    bound: it also contains whatever idle time follows the swap).
 //  * CPU: render-thread CPU time per frame, process CPU time, and a SIGPROF sampler on the render thread's CPU clock
 //    (period 1 ms, delivered at kernel-tick granularity) that attributes each sample to Oryon / GL driver / JVM /
-//    Java (JIT code) / libc / other by program counter, plus the share taken on the fastest cores; the render thread's
+//    Java (JIT code) / libc / other by program counter, plus the share taken on the fastest cores (src/sched.cpp) and the
+//    render-thread scheduling state (nice, CPU mask, re-applications); the render thread's
 //    run-queue wait (runnable but not running) from /proc schedstat; and the present segment (last switch to
 //    framebuffer 0 until the next frame start: blit, the app's eglSwapBuffers, frame-start work).
 //  * ES calls per frame (draw, program, uniform, texture, VAO, buffer bind, attribute pointer, vertex buffer binding,
@@ -317,8 +318,7 @@ int r_n[2] = {0, 0};
 int r_pub = -1;                          // published table, read by the handler (same thread as the builder)
 uint32_t r_smp[C_N];
 uint32_t r_cpu[16];                      // samples per CPU (sched_getcpu)
-uint32_t s_big_mask = 0;                 // CPUs with the highest cpuinfo_max_freq (0: uniform or unknown)
-uint32_t s_khz_max = 0, s_khz_min = 0;
+uint32_t s_big_mask = 0;                 // fastest CPUs (src/sched.cpp; 0: uniform or unknown)
 int s_sched_fd = -1;                     // /proc/self/task/<render tid>/schedstat
 uint64_t s_sched_run = 0, s_sched_wait = 0;
 bool s_sampler = false, s_sampler_tried = false;
@@ -424,16 +424,6 @@ bool sched_read(uint64_t &run, uint64_t &wait) {
     run = strtoull(b, &e, 10); wait = strtoull(e, nullptr, 10);
     return true;
 }
-void cores_probe() {                      // big cores = highest cpuinfo_max_freq (heterogeneous SoCs)
-    uint32_t f[16] = {}, mx = 0, mn = UINT32_MAX;
-    for (int i = 0; i < 16; ++i) {
-        char p[96]; snprintf(p, sizeof p, "/sys/devices/system/cpu/cpu%d/cpufreq/cpuinfo_max_freq", i);
-        if (FILE *fp = fopen(p, "r")) { unsigned v = 0; if (fscanf(fp, "%u", &v) == 1) f[i] = v; fclose(fp); }
-        if (f[i]) { if (f[i] > mx) mx = f[i]; if (f[i] < mn) mn = f[i]; }
-    }
-    if (mx && mn < mx) for (int i = 0; i < 16; ++i) if (f[i] == mx) s_big_mask |= 1u << i;
-    s_khz_max = mx; s_khz_min = mx ? mn : 0;
-}
 void sampler_start() {
     s_sampler_tried = true;
     {                                     // render-thread scheduler accounting (independent of the sampler)
@@ -441,7 +431,7 @@ void sampler_start() {
         s_sched_fd = open(p, O_RDONLY | O_CLOEXEC);
         if (!sched_read(s_sched_run, s_sched_wait)) { if (s_sched_fd >= 0) close(s_sched_fd); s_sched_fd = -1; }
     }
-    cores_probe();
+    s_big_mask = big_core_mask();
 #if defined(__aarch64__) || defined(__x86_64__)
     if (env_off("ORYON_STATS_PROFILE")) { s_sampler_why = "off (ORYON_STATS_PROFILE=0)"; return; }
     struct sigaction old;
@@ -542,9 +532,9 @@ void perf_boundary(uint64_t t) {
     const uint64_t cpu = clock_us(CLOCK_THREAD_CPUTIME_ID);
     if (!s_sampler_tried) {                             // first frame: measurement windows start here
         sampler_start();
-        char cores[80];
-        if (s_big_mask) snprintf(cores, sizeof cores, "big cores mask 0x%x (%u vs %u MHz)", s_big_mask, s_khz_max / 1000, s_khz_min / 1000);
-        else snprintf(cores, sizeof cores, "%s", s_khz_max ? "cores uniform" : "core frequencies unreadable");
+        char cores[48];
+        if (s_big_mask) snprintf(cores, sizeof cores, "big cores mask 0x%x", s_big_mask);
+        else snprintf(cores, sizeof cores, "cores uniform or unknown");
         log("perf: cpu sampler %s | schedstat %s | %s", s_sampler ? "SIGPROF every 1 ms of render-thread CPU time (kernel-tick granularity)" : s_sampler_why,
             s_sched_fd >= 0 ? "on" : "unavailable", cores);
         c_prog = c_unif = c_tex = c_vao = c_buf = c_attr = c_vbuf = c_fmt = 0;
@@ -598,16 +588,18 @@ void perf_report(uint64_t t0, uint64_t t1) {
         for (int i = 0; i < 16; ++i) __atomic_store_n(&r_cpu[i], 0u, __ATOMIC_RELAXED);
     }
     if (w.pres_n) snprintf(pres, sizeof pres, " | present %.1f ms/f (cpu %.1f)", w.pres_wall / 1000.0 / w.pres_n, w.pres_cpu / 1000.0 / w.pres_n);
+    char rts[112]; rt_describe(rts, sizeof rts);
     if (w.frames)
-        log("cpu %.2fs: frame %.1f ms | render thread %.1f ms/f (%.0f%%, cpu-bound %.0f%%)%s%s%s | [%s] | process %.2f cores",
+        log("cpu %.2fs: frame %.1f ms | render thread %.1f ms/f (%.0f%%, cpu-bound %.0f%%)%s%s%s | %s | [%s] | process %.2f cores",
             secs, w.period_us / 1000.0 / fr, w.cpu_us / 1000.0 / fr, w.period_us ? 100.0 * w.cpu_us / w.period_us : 0.0,
-            100.0 * w.cpu_bound / fr, sch, big, pres, smp, cores);
+            100.0 * w.cpu_bound / fr, sch, big, pres, rts, smp, cores);
     else
         log("cpu %.2fs: no frame boundary | [%s] | process %.2f cores", secs, smp, cores);
     if (w.frames)
-        log("calls %.2fs: per frame draw %.0f prog %.0f unif %.0f tex %.0f vao %.0f bind %.0f attr %.0f vbuf %.0f fmt %.0f",
+        log("calls %.2fs: per frame draw %.0f prog %.0f unif %.0f tex %.0f vao %.0f bind %.0f attr %.0f vbuf %.0f fmt %.0f | fb0 clears %u (deferred %u)",
             secs, (double)(g_draws_total - w_draws0) / fr, c_prog / fr, c_unif / fr, c_tex / fr, c_vao / fr, c_buf / fr, c_attr / fr,
-            c_vbuf / fr, c_fmt / fr);
+            c_vbuf / fr, c_fmt / fr, g.fbc.n_clear, g.fbc.n_defer);
+    g.fbc.n_clear = g.fbc.n_defer = 0;
     w_draws0 = g_draws_total;
     char busy[160], tim[96], lag[96];
     if (!s_fence) snprintf(busy, sizeof busy, "busy n/a (%s)", *s_gpu_why ? s_gpu_why : "no fence");

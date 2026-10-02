@@ -175,7 +175,13 @@ uint32_t key_hash(const FfpKey &k) {
 
 // ------------------------------------------------------------------ GLSL generation
 const char *kCoord = "stpq";
-void gen_vs(SB &s, const FfpKey &k, uint32_t &attr_mask) {
+bool g_ffp_highp = false;               // ORYON_FFP_HIGHP=1: highp vec4 varyings everywhere (pre-0.1 layout)
+// Varyings are sized to what the fragment stage reads (tilers write them to memory per vertex): s,t for 1D/2D,
+// s,t,p for 3D/cube, all four for projective lookups; colours and fog distance are mediump.
+int tc_n(uint32_t w) { return g_ffp_highp || ((w >> 24) & 1) ? 4 : ((w & 7) == 3 || (w & 7) == 4) ? 3 : 2; }
+const char *tc_sw(int n) { return n == 4 ? "" : n == 3 ? ".xyz" : ".xy"; }
+const char *lowp_v() { return g_ffp_highp ? "" : "mediump "; }
+void gen_vs(SB &s, const FfpKey &k, uint32_t &attr_mask, uint8_t &xf_n) {
     bool lit = k.flags & FK_LIGHTING;
     bool need_n = lit, need_eye = false, need_refl = false;
     for (int u = 0; u < k.nunits; ++u) {
@@ -200,26 +206,25 @@ void gen_vs(SB &s, const FfpKey &k, uint32_t &attr_mask) {
     for (int u = 0; u < k.nunits; ++u) {
         uint32_t w = k.tu[u]; if (!(w & 7)) continue;
         if (((w >> 8) & 15) != 15) { s.addf("layout(location=%d) in vec4 a_t%d;\n", LOC_TEX0 + u, u); attr_mask |= 1u << (LOC_TEX0 + u); }
-        s.addf("uniform mat4 u_tm%d;\nout highp vec4 v_t%d;\n", u, u);
+        s.addf("uniform mat4 u_tm%d;\nout highp vec%d v_t%d;\n", u, tc_n(w), u);
         if ((w >> 8) & 15) s.addf("uniform vec4 u_tg%d[8];\n", u);
     }
-    s.add("uniform mat4 u_mvp;\n");
-    if (need_eye) s.add("uniform mat4 u_mv;\n");
-    if (need_n) s.add("uniform mat3 u_nm;\n");
+    xf_n = need_n ? 3 : need_eye ? 2 : 1;
+    s.addf("uniform mat4 u_xf[%d];\n", (int)xf_n);
     int nl = 0; for (int i = 0; i < MAX_LIGHTS; ++i) if (k.light_on & (1u << i)) ++nl;
     if (lit) { if (nl) s.addf("uniform vec4 u_L[%d];\n", nl * 6); s.add("uniform vec4 u_M[11];\n"); }
     if (k.clip) s.add("uniform vec4 u_clip[6];\n");
     if (k.flags & FK_POINTS) s.add("uniform float u_psz;\n");
-    s.addf("%sout vec4 v_c;\n", fl);
-    if (lit && (k.flags & FK_TWOSIDE)) s.addf("%sout vec4 v_bc;\n", fl);
+    s.addf("%sout %svec4 v_c;\n", fl, lowp_v());
+    if (lit && (k.flags & FK_TWOSIDE)) s.addf("%sout %svec4 v_bc;\n", fl, lowp_v());
     bool sec = ((k.flags & FK_SEPSPEC) && (k.flags & FK_SPECULAR)) || (k.flags & FK_COLORSUM);
-    if (sec) s.addf("%sout vec3 v_s;\n", fl);
-    if (k.flags & FK_FOG) s.add("out highp float v_fz;\n");
+    if (sec) s.addf("%sout %svec3 v_s;\n", fl, lowp_v());
+    if (k.flags & FK_FOG) s.addf("out %s float v_fz;\n", g_ffp_highp ? "highp" : "mediump");
     for (int j = 0; j < MAX_CLIP_PLANES; ++j) if (k.clip & (1u << j)) s.addf("out highp float v_cd%d;\n", j);
-    s.add("void main() {\n  gl_Position = u_mvp * a_pos;\n");
-    if (need_eye) s.add("  vec4 ep = u_mv * a_pos;\n");
+    s.add("void main() {\n  gl_Position = u_xf[0] * a_pos;\n");
+    if (need_eye) s.add("  vec4 ep = u_xf[1] * a_pos;\n");
     if (need_n) {
-        s.add("  vec3 n = u_nm * a_nrm;\n");
+        s.add("  vec3 n = mat3(u_xf[2]) * a_nrm;\n");
         if (k.flags & FK_NORMALIZE) s.add("  n = normalize(n);\n");
     }
     if (lit) {
@@ -271,7 +276,7 @@ void gen_vs(SB &s, const FfpKey &k, uint32_t &attr_mask) {
     for (int u = 0; u < k.nunits; ++u) {
         uint32_t w = k.tu[u]; if (!(w & 7)) continue;
         uint32_t on = (w >> 8) & 15;
-        if (!on) { s.addf("  v_t%d = u_tm%d * a_t%d;\n", u, u, u); continue; }
+        if (!on) { s.addf("  v_t%d = (u_tm%d * a_t%d)%s;\n", u, u, u, tc_sw(tc_n(w))); continue; }
         if (on == 15) s.add("  { vec4 t = vec4(0.0, 0.0, 0.0, 1.0);\n");
         else s.addf("  { vec4 t = a_t%d;\n", u);
         for (int c = 0; c < 4; ++c) {
@@ -285,7 +290,7 @@ void gen_vs(SB &s, const FfpKey &k, uint32_t &attr_mask) {
             case GEN_REFLECT: s.addf("    t.%c = sr.%c;\n", kCoord[c], "xyzx"[c]); break;
             }
         }
-        s.addf("    v_t%d = u_tm%d * t; }\n", u, u);
+        s.addf("    v_t%d = (u_tm%d * t)%s; }\n", u, u, tc_sw(tc_n(w)));
     }
     if (k.flags & FK_FOG) {
         static const char *kFz[] = {"abs(ep.z)", "-ep.z", "length(ep.xyz)", "a_fog"};
@@ -314,7 +319,7 @@ void gen_fs(SB &s, const FfpKey &k) {
     if (lit && (k.flags & FK_TWOSIDE)) s.addf("%sin vec4 v_bc;\n", fl);
     bool sec = ((k.flags & FK_SEPSPEC) && (k.flags & FK_SPECULAR)) || (k.flags & FK_COLORSUM);
     if (sec) s.addf("%sin vec3 v_s;\n", fl);
-    if (k.flags & FK_FOG) s.add("in highp float v_fz;\nuniform vec4 u_fog[2];\n");
+    if (k.flags & FK_FOG) s.addf("in %s float v_fz;\nuniform vec4 u_fog[2];\n", g_ffp_highp ? "highp" : "mediump");
     for (int j = 0; j < MAX_CLIP_PLANES; ++j) if (k.clip & (1u << j)) s.addf("in highp float v_cd%d;\n", j);
     uint32_t used = 0;           // units whose texture is sampled (incl. crossbar)
     for (int u = 0; u < k.nunits; ++u) {
@@ -332,7 +337,7 @@ void gen_fs(SB &s, const FfpKey &k) {
     for (int u = 0; u < MAX_TEX_UNITS; ++u) {
         if (!(used & (1u << u))) continue;
         uint32_t w = u < k.nunits ? k.tu[u] : 0, tgt = w & 7;
-        s.addf("in highp vec4 v_t%d;\nuniform %s u_s%d;\n", u, tgt == 4 ? "samplerCube" : tgt == 3 ? "sampler3D" : "sampler2D", u);
+        s.addf("in highp vec%d v_t%d;\nuniform %s u_s%d;\n", tc_n(w), u, tgt == 4 ? "samplerCube" : tgt == 3 ? "sampler3D" : "sampler2D", u);
         uint32_t env = (w >> 3) & 7;
         bool need_ec = env == ENV_BLEND;
         if (env == ENV_COMBINE)
@@ -348,13 +353,14 @@ void gen_fs(SB &s, const FfpKey &k) {
         if (!(used & (1u << u))) continue;
         uint32_t w = u < k.nunits ? k.tu[u] : 0, tgt = w & 7;
         bool proj = (w >> 24) & 1;
-        if (tgt == 4) s.addf("  vec4 t%d = texture(u_s%d, v_t%d.stp);\n", u, u, u);
-        else if (tgt == 3) s.addf("  vec4 t%d = %s(u_s%d, v_t%d%s);\n", u, proj ? "textureProj" : "texture", u, u, proj ? "" : ".stp");
+        const int tn = tc_n(w);
+        if (tgt == 4) s.addf("  vec4 t%d = texture(u_s%d, v_t%d%s);\n", u, u, u, tn == 3 ? "" : ".stp");
+        else if (tgt == 3) s.addf("  vec4 t%d = %s(u_s%d, v_t%d%s);\n", u, proj ? "textureProj" : "texture", u, u, proj || tn == 3 ? "" : ".stp");
         else if (tgt == 1) {
             if (proj) s.addf("  vec4 t%d = texture(u_s%d, vec2(v_t%d.s / v_t%d.q, 0.0));\n", u, u, u, u);
             else s.addf("  vec4 t%d = texture(u_s%d, vec2(v_t%d.s, 0.0));\n", u, u, u);
         }
-        else s.addf("  vec4 t%d = %s(u_s%d, v_t%d%s);\n", u, proj ? "textureProj" : "texture", u, u, proj ? "" : ".st");
+        else s.addf("  vec4 t%d = %s(u_s%d, v_t%d%s);\n", u, proj ? "textureProj" : "texture", u, u, proj || tn == 2 ? "" : ".st");
     }
     for (int u = 0; u < k.nunits; ++u) {
         uint32_t w = k.tu[u]; if (!(w & 7)) continue;
@@ -530,17 +536,18 @@ void key_desc(const FfpKey &k, char *out, size_t n) {
     if (!s.n) s.add("colour only");
 }
 
-uint32_t gen_sources(const FfpKey &k) {
+uint32_t gen_sources(const FfpKey &k, uint8_t &xfn) {
     SB vs{g_vs, 0, sizeof g_vs}, fs{g_fs, 0, sizeof g_fs};
     g_vs[0] = g_fs[0] = 0;
     uint32_t amask = 0;
-    gen_vs(vs, k, amask);
+    gen_vs(vs, k, amask, xfn);
     gen_fs(fs, k);
     return amask;
 }
 // Compiles + links g_vs/g_fs (timed as an FFP program build).
 GLuint compile_program(const FfpKey &k) {
     StatTimer st_(g.st.ffp_n, g.st.ffp_us, &g.st.ffp_max);
+    if (UNLIKELY(env_on("ORYON_DUMP_FFP"))) ory::log("FFP program sources:\n%s\n----\n%s", g_vs, g_fs);
     GLuint v = compile(GL_VERTEX_SHADER, g_vs), f = compile(GL_FRAGMENT_SHADER, g_fs);
     if (!v || !f) { if (v) es.glDeleteShader(v); if (f) es.glDeleteShader(f); return 0; }
     GLuint p = es.glCreateProgram();
@@ -563,12 +570,10 @@ GLuint compile_program(const FfpKey &k) {
     }
     return p;
 }
-Program *finish(GLuint p, const FfpKey &k, uint32_t h, uint32_t amask) {
+Program *finish(GLuint p, const FfpKey &k, uint32_t h, uint32_t amask, uint8_t xfn) {
     Program *P = (Program *)calloc(1, sizeof(Program));
     P->id = p; P->hash = h; P->key = k; P->attr_mask = amask;
-    P->u_mvp = es.glGetUniformLocation(p, "u_mvp");
-    P->u_mv = es.glGetUniformLocation(p, "u_mv");
-    P->u_nm = es.glGetUniformLocation(p, "u_nm");
+    P->u_xf = es.glGetUniformLocation(p, "u_xf"); P->n_xf = xfn;
     P->u_L = es.glGetUniformLocation(p, "u_L");
     P->u_M = es.glGetUniformLocation(p, "u_M");
     P->u_fog = es.glGetUniformLocation(p, "u_fog");
@@ -596,18 +601,20 @@ bool cached_in_memory(const FfpKey &k, uint32_t h) {
 bool warm_key(const FfpKey &K, const CacheHdr *H, const void *bin, int &loaded, int &rebuilt) {
     const uint32_t kh = key_hash(K);
     if (cached_in_memory(K, kh)) return true;
-    const uint32_t amask = gen_sources(K);
+    uint8_t xfn = 1;
+    const uint32_t amask = gen_sources(K, xfn);
     const uint64_t sh = src_hash();
     GLuint p = (H && bin && H->src_hash == sh) ? program_from_binary(H->fmt, bin, (GLsizei)H->len) : 0;
     if (p) ++loaded;
     else if ((p = compile_program(K)) != 0) { cache_store(p, K, sh); ++rebuilt; }
     else return false;
-    insert(finish(p, K, kh, amask));
+    insert(finish(p, K, kh, amask, xfn));
     return true;
 }
 
 __attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
-    const uint32_t amask = gen_sources(k);
+    uint8_t xfn = 1;
+    const uint32_t amask = gen_sources(k, xfn);
     GLuint p = 0;
     if (g_cache_on) {
         ErrGuard eg_;
@@ -622,7 +629,7 @@ __attribute__((noinline, cold)) Program *create(const FfpKey &k, uint32_t h) {
     } else {
         p = compile_program(k);
     }
-    return p ? finish(p, k, h, amask) : nullptr;
+    return p ? finish(p, k, h, amask, xfn) : nullptr;
 }
 
 Program *lookup(const FfpKey &k) {
@@ -637,18 +644,22 @@ Program *lookup(const FfpKey &k) {
 
 void upload(Program *P) {
     Matrices &M = g.m; Ffp &f = g.f;
-    if (P->u_mvp >= 0 && (P->s_mvp_mv != M.mv_ver || P->s_mvp_p != M.p_ver)) {
+    if (P->u_xf >= 0 && (P->s_xf_mv != M.mv_ver || P->s_xf_p != M.p_ver)) {      // MVP [, MV [, normal]]: one call
         if (M.mvp_mv != M.mv_ver || M.mvp_p != M.p_ver) {
             mat_mul(M.mvp.m, M.p[M.p_top].m, M.mv[M.mv_top].m); M.mvp_mv = M.mv_ver; M.mvp_p = M.p_ver;
         }
-        es.glUniformMatrix4fv(P->u_mvp, 1, GL_FALSE, M.mvp.m);
-        P->s_mvp_mv = M.mv_ver; P->s_mvp_p = M.p_ver;
-    }
-    if (P->u_mv >= 0 && P->s_mv != M.mv_ver) { es.glUniformMatrix4fv(P->u_mv, 1, GL_FALSE, M.mv[M.mv_top].m); P->s_mv = M.mv_ver; }
-    if (P->u_nm >= 0 && P->s_nm != M.mv_ver) {
-        bool rs = (P->key.flags & FK_RESCALE) != 0;
-        if (M.nm_mv != M.mv_ver || M.nm_rescale != rs) { mat_normal(M.nm, M.mv[M.mv_top].m, rs); M.nm_mv = M.mv_ver; M.nm_rescale = rs; }
-        es.glUniformMatrix3fv(P->u_nm, 1, GL_FALSE, M.nm); P->s_nm = M.mv_ver;
+        GLfloat d[48];
+        memcpy(d, M.mvp.m, 64);
+        if (P->n_xf > 1) memcpy(d + 16, M.mv[M.mv_top].m, 64);
+        if (P->n_xf > 2) {
+            const bool rs = (P->key.flags & FK_RESCALE) != 0;
+            if (M.nm_mv != M.mv_ver || M.nm_rescale != rs) { mat_normal(M.nm, M.mv[M.mv_top].m, rs); M.nm_mv = M.mv_ver; M.nm_rescale = rs; }
+            GLfloat *o = d + 32;
+            for (int c = 0; c < 3; ++c) { o[c * 4] = M.nm[c * 3]; o[c * 4 + 1] = M.nm[c * 3 + 1]; o[c * 4 + 2] = M.nm[c * 3 + 2]; o[c * 4 + 3] = 0.0f; }
+            o[12] = o[13] = o[14] = 0.0f; o[15] = 1.0f;
+        }
+        es.glUniformMatrix4fv(P->u_xf, P->n_xf, GL_FALSE, d);
+        P->s_xf_mv = M.mv_ver; P->s_xf_p = M.p_ver;
     }
     for (int u = 0; u < P->key.nunits; ++u)
         if (P->u_tm[u] >= 0 && P->s_t[u] != M.t_ver[u]) {
@@ -721,6 +732,7 @@ Program *ffp_prepare(bool points) {
 // Called once from ctx_init (current context, before the app draws). Chooses the cache directory, then loads every
 // cached program for this driver; a stale or rejected binary is rebuilt from its key right away (still at startup).
 void ffp_cache_init() {
+    g_ffp_highp = env_on("ORYON_FFP_HIGHP");
     if (env_on("ORYON_NO_PROGRAM_CACHE")) return;
     GLint nf = 0;
     es.glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &nf);

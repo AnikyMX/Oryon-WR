@@ -135,8 +135,9 @@ void ctx_init() {
     }
     vertex_init();
     while (es.glGetError() != GL_NO_ERROR) {}           // never leak init-time state into the app's error flag
-    log("init " ORYON_VERSION ": %s | %s | ES ext mask 0x%x | desktop ext %d | stream %s | max tex %d",
-        ver, rend ? rend : "?", g.escaps, g.ext_count, g.rv.persistent ? "persistent" : "map-unsync", g.es_max_tex_size);
+    log("init " ORYON_VERSION ": %s | %s | ES ext mask 0x%x | desktop ext %d | stream %s | vertex %s | max tex %d",
+        ver, rend ? rend : "?", g.escaps, g.ext_count, g.rv.persistent ? "persistent" : "map-unsync",
+        g.vbind ? "attrib-binding" : "attrib-pointer", g.es_max_tex_size);
     if (g.st.on) {
         log("stats enabled: one summary line per second (frame = colour clear of framebuffer 0)");
         perf_install();

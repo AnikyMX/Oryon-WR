@@ -17,11 +17,11 @@ struct FfpKey {
 struct Program {
     GLuint id; uint32_t hash; FfpKey key; Program *next;
     uint32_t attr_mask;                  // attribute locations read (bit per LOC_*)
-    GLint u_mvp, u_mv, u_nm, u_L, u_M, u_fog, u_aref, u_psz, u_clip;
+    GLint u_xf, u_L, u_M, u_fog, u_aref, u_psz, u_clip;   // u_xf: mat4[n_xf] = MVP, MV, normal matrix (one upload)
     GLint u_tm[MAX_TEX_UNITS], u_ec[MAX_TEX_UNITS], u_tg[MAX_TEX_UNITS];
-    uint32_t s_mvp_mv, s_mvp_p, s_mv, s_nm, s_light, s_mat, s_fog, s_alpha, s_env, s_gen, s_clip, s_point;
+    uint32_t s_xf_mv, s_xf_p, s_light, s_mat, s_fog, s_alpha, s_env, s_gen, s_clip, s_point;
     uint32_t s_t[MAX_TEX_UNITS];
-    uint8_t nl, lidx[MAX_LIGHTS];
+    uint8_t nl, lidx[MAX_LIGHTS], n_xf;
 };
 Program *ffp_prepare(bool points);
 void ffp_cache_init();                   // load cached program binaries (ctx_init)

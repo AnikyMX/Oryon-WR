@@ -3,15 +3,19 @@
 //    gets an EGL fence + flush; a helper thread records when each fence signals. The GPU interval a pass occupied in the
 //    in-order queue is busy_i = done_i - max(submit_i, done_{i-1}) (render-pass granularity, which is what tilers allow).
 //    A pass submitted to an idle GPU also carries the fence round trip (flush, signal, wake-up). That floor is the
-//    25th percentile of the last 64 idle-submit latencies (frame-end fences of frames the GPU had already finished
-//    are pure round trips) and is subtracted from idle-submitted passes (and printed).
-//  * GPU timer (GL_EXT_disjoint_timer_query): the same passes bracketed by GL_TIME_ELAPSED_EXT queries. The last pass of
+//    25th percentile of recent idle-submitted passes that contain no draw call (pure round trips) and is subtracted
+//    from idle-submitted passes (and printed); without such samples it stays 0.
+//  * GPU timer (GL_EXT_disjoint_timer_query, opt-in ORYON_STATS_TIMER=1): the same passes bracketed by GL_TIME_ELAPSED_EXT
+//    queries. On Mali the result spans the CPU recording of the pass as well, so it is off by default. The last pass of
 //    a frame ends at the app's eglSwapBuffers, which Oryon cannot see, so it is reported apart as "tail" (an upper
 //    bound: it also contains whatever idle time follows the swap).
 //  * CPU: render-thread CPU time per frame, process CPU time, and a SIGPROF sampler on the render thread's CPU clock
 //    (period 1 ms, delivered at kernel-tick granularity) that attributes each sample to Oryon / GL driver / JVM /
-//    Java (JIT code) / libc / other by program counter.
-//  * State calls per frame (program, uniform, texture, VAO, buffer, attribute pointer) by interposing the ES table.
+//    Java (JIT code) / libc / other by program counter, plus the share taken on the fastest cores; the render thread's
+//    run-queue wait (runnable but not running) from /proc schedstat; and the present segment (last switch to
+//    framebuffer 0 until the next frame start: blit, the app's eglSwapBuffers, frame-start work).
+//  * ES calls per frame (draw, program, uniform, texture, VAO, buffer bind, attribute pointer, vertex buffer binding,
+//    attribute format/binding) by interposing the ES table.
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE 1
 #endif
@@ -22,6 +26,9 @@
 #include <EGL/eglext.h>
 #include <ctype.h>
 #include <dlfcn.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <sched.h>
 #include <link.h>
 #include <pthread.h>
 #include <signal.h>
@@ -71,6 +78,8 @@ struct Pass {
     uint8_t fence;                       // 0 none, 1 pending, 2 signalled, 3 failed
     uint8_t timer;                       // 0 none, 1 issued, 2 result read
     bool tail, qbad;
+    uint32_t ndraw;                      // draw calls recorded in the pass
+    uint64_t draws0;
     uint8_t age;                         // boundaries waited for an unavailable timer result
 };
 Pass p_ring[kRing];
@@ -86,7 +95,7 @@ struct Frame {
     bool closed, done, fence_bad, timer_bad, has_tail, has_lag;
 };
 Frame f_ring[kFrames];
-uint32_t fl_ring[64], fl_n = 0, fl_i = 0, s_floor = 0;   // recent idle-submit fence latencies, 25th percentile
+uint32_t fl_ring[64], fl_n = 0, fl_i = 0, s_floor = 0;   // idle-submitted empty-pass fence latencies, 25th percentile
 uint32_t f_cur = 0;                      // open frame id (0 = none yet)
 uint64_t f_t0 = 0, f_cpu0 = 0, last_done = 0;
 GLuint draw_fb = 0;
@@ -98,8 +107,11 @@ struct Win {
     uint32_t lags, lag_max; uint64_t lag_us;
     GLuint fb_id[3]; uint64_t fb_us[3], fb_other;
     uint32_t disjoint, overflow, fence_fail;
+    uint32_t pres_n; uint64_t pres_wall, pres_cpu;
 };
 Win w;
+uint64_t t_pres = 0, cpu_pres = 0;     // last switch to framebuffer 0 in the open frame
+uint64_t w_draws0 = 0;
 
 Frame &frame_rec(uint32_t id) { return f_ring[id % kFrames]; }
 
@@ -143,7 +155,7 @@ void settle(Pass &P) {
     if (P.fence == 2) {
         const bool idle = P.submit >= last_done;         // nothing queued on the GPU when this pass was submitted
         const uint32_t raw = P.done > (idle ? P.submit : last_done) ? (uint32_t)(P.done - (idle ? P.submit : last_done)) : 0;
-        if (idle) floor_add(raw);
+        if (idle && P.ndraw == 0) floor_add(raw);       // pure round trip: nothing to execute
         const uint32_t busy = idle ? (raw > s_floor ? raw - s_floor : 0) : raw;
         if (P.done > last_done) last_done = P.done;
         F.busy_us += busy;
@@ -171,7 +183,7 @@ void pass_open(GLuint fb) {
     if (p_head - p_tail >= kRing) { ++w.overflow; F.fence_bad = F.timer_bad = true; return; }
     Pass &P = p_ring[p_head & kMask];
     P.frame = f_cur; P.fb = fb; P.submit = P.done = 0; P.sync = EGL_NO_SYNC_KHR; P.gpu_ns = 0;
-    P.fence = 0; P.timer = 0; P.tail = P.qbad = false; P.age = 0;
+    P.fence = 0; P.timer = 0; P.tail = P.qbad = false; P.age = 0; P.draws0 = g_draws_total; P.ndraw = 0;
     if (s_timer) { es.glBeginQuery(GL_TIME_ELAPSED_EXT, P.q); P.timer = 1; }
     ++F.passes; p_open = true;
 }
@@ -186,7 +198,7 @@ void pass_close(bool tail) {
         if (P.fence == 3) ++w.fence_fail;
         es.glFlush();                                    // submit the pass now: its start is not delayed by batching
     }
-    P.submit = now_us(); P.tail = tail;
+    P.submit = now_us(); P.tail = tail; P.ndraw = (uint32_t)(g_draws_total - P.draws0);
     pthread_mutex_lock(&p_mu);
     ++p_head;
     if (!s_fence) p_wait = p_head;
@@ -266,20 +278,22 @@ void GL_APIENTRY w_bind_fb(GLenum target, GLuint fb) {
         o_bind_fb(target, fb);
         draw_fb = fb;
         if (cut) pass_open(fb);
+        if (fb == 0 && f_cur) { t_pres = now_us(); cpu_pres = clock_us(CLOCK_THREAD_CPUTIME_ID); }
         return;
     }
     o_bind_fb(target, fb);
 }
 
 // ------------------------------------------------------------------ state call counters (ES table interposition)
-uint32_t c_prog = 0, c_unif = 0, c_tex = 0, c_vao = 0, c_buf = 0, c_attr = 0;
+uint32_t c_prog = 0, c_unif = 0, c_tex = 0, c_vao = 0, c_buf = 0, c_attr = 0, c_vbuf = 0, c_fmt = 0;
 template <auto *Orig, uint32_t *Ctr, typename R, typename... A>
 R GL_APIENTRY counted(A... a) { ++*Ctr; return (*Orig)(a...); }
 template <auto *Orig, uint32_t *Ctr, typename R, typename... A>
 void hook(R (GL_APIENTRY *&slot)(A...)) { if (slot) { *Orig = slot; slot = &counted<Orig, Ctr, R, A...>; } }
 #define ORY_COUNTED(X) \
     X(glUseProgram, c_prog) X(glBindTexture, c_tex) X(glBindVertexArray, c_vao) X(glBindBuffer, c_buf) \
-    X(glVertexAttribPointer, c_attr) X(glVertexAttribIPointer, c_attr) \
+    X(glVertexAttribPointer, c_attr) X(glVertexAttribIPointer, c_attr) X(glBindVertexBuffer, c_vbuf) \
+    X(glVertexAttribFormat, c_fmt) X(glVertexAttribBinding, c_fmt) \
     X(glUniform1f, c_unif) X(glUniform1fv, c_unif) X(glUniform1i, c_unif) X(glUniform1iv, c_unif) \
     X(glUniform1ui, c_unif) X(glUniform1uiv, c_unif) X(glUniform2f, c_unif) X(glUniform2fv, c_unif) \
     X(glUniform2i, c_unif) X(glUniform2iv, c_unif) X(glUniform2ui, c_unif) X(glUniform2uiv, c_unif) \
@@ -302,6 +316,11 @@ Range r_tab[2][kRanges];
 int r_n[2] = {0, 0};
 int r_pub = -1;                          // published table, read by the handler (same thread as the builder)
 uint32_t r_smp[C_N];
+uint32_t r_cpu[16];                      // samples per CPU (sched_getcpu)
+uint32_t s_big_mask = 0;                 // CPUs with the highest cpuinfo_max_freq (0: uniform or unknown)
+uint32_t s_khz_max = 0, s_khz_min = 0;
+int s_sched_fd = -1;                     // /proc/self/task/<render tid>/schedstat
+uint64_t s_sched_run = 0, s_sched_wait = 0;
 bool s_sampler = false, s_sampler_tried = false;
 const char *s_sampler_why = "";
 
@@ -362,6 +381,7 @@ inline uint8_t classify(const Range *t, int n, uintptr_t pc) {
 void on_prof(int, siginfo_t *si, void *ctx) {
     const int t = __atomic_load_n(&r_pub, __ATOMIC_ACQUIRE);
     if (t < 0) return;
+    const int saved_errno = errno;
     const ucontext_t *uc = (const ucontext_t *)ctx;
 #if defined(__aarch64__)
     const uintptr_t pc = (uintptr_t)uc->uc_mcontext.pc, ra = (uintptr_t)uc->uc_mcontext.regs[30];
@@ -375,7 +395,11 @@ void on_prof(int, siginfo_t *si, void *ctx) {
         if (r == C_ORYON || r == C_GL || r == C_JVM) c = r;
     }
     const int ov = si ? si->si_overrun : 0;          // expirations merged into this signal (tick granularity)
-    __atomic_fetch_add(&r_smp[c], 1u + (uint32_t)(ov > 0 && ov < 1000 ? ov : 0), __ATOMIC_RELAXED);
+    const uint32_t wgt = 1u + (uint32_t)(ov > 0 && ov < 1000 ? ov : 0);
+    __atomic_fetch_add(&r_smp[c], wgt, __ATOMIC_RELAXED);
+    const int cpu = sched_getcpu();
+    if ((unsigned)cpu < 16u) __atomic_fetch_add(&r_cpu[cpu], wgt, __ATOMIC_RELAXED);
+    errno = saved_errno;
 }
 struct KSigevent {                       // kernel ABI struct sigevent (64 bytes)
     union { int i; void *p; } value;
@@ -390,8 +414,34 @@ const int kSigevThreadId = 4;
 #endif
 #endif
 
+bool sched_read(uint64_t &run, uint64_t &wait) {
+    char b[96];
+    if (s_sched_fd < 0) return false;
+    const ssize_t n = pread(s_sched_fd, b, sizeof b - 1, 0);
+    if (n <= 0) return false;
+    b[n] = 0;
+    char *e = nullptr;
+    run = strtoull(b, &e, 10); wait = strtoull(e, nullptr, 10);
+    return true;
+}
+void cores_probe() {                      // big cores = highest cpuinfo_max_freq (heterogeneous SoCs)
+    uint32_t f[16] = {}, mx = 0, mn = UINT32_MAX;
+    for (int i = 0; i < 16; ++i) {
+        char p[96]; snprintf(p, sizeof p, "/sys/devices/system/cpu/cpu%d/cpufreq/cpuinfo_max_freq", i);
+        if (FILE *fp = fopen(p, "r")) { unsigned v = 0; if (fscanf(fp, "%u", &v) == 1) f[i] = v; fclose(fp); }
+        if (f[i]) { if (f[i] > mx) mx = f[i]; if (f[i] < mn) mn = f[i]; }
+    }
+    if (mx && mn < mx) for (int i = 0; i < 16; ++i) if (f[i] == mx) s_big_mask |= 1u << i;
+    s_khz_max = mx; s_khz_min = mx ? mn : 0;
+}
 void sampler_start() {
     s_sampler_tried = true;
+    {                                     // render-thread scheduler accounting (independent of the sampler)
+        char p[64]; snprintf(p, sizeof p, "/proc/self/task/%d/schedstat", (int)syscall(__NR_gettid));
+        s_sched_fd = open(p, O_RDONLY | O_CLOEXEC);
+        if (!sched_read(s_sched_run, s_sched_wait)) { if (s_sched_fd >= 0) close(s_sched_fd); s_sched_fd = -1; }
+    }
+    cores_probe();
 #if defined(__aarch64__) || defined(__x86_64__)
     if (env_off("ORYON_STATS_PROFILE")) { s_sampler_why = "off (ORYON_STATS_PROFILE=0)"; return; }
     struct sigaction old;
@@ -440,9 +490,9 @@ void perf_install() {
     es.glBindFramebuffer = w_bind_fb;
     p_proc_prev = clock_us(CLOCK_PROCESS_CPUTIME_ID); p_wall_prev = now_us();
     if (env_off("ORYON_STATS_GPU")) { s_gpu_why = "off (ORYON_STATS_GPU=0)"; log("perf: gpu probes %s", s_gpu_why); return; }
-    // GPU timer queries
-    const char *tq = "no GL_EXT_disjoint_timer_query";
-    if (g.escaps & ORY_ESCAP_TIMER_QUERY) {
+    // GPU timer queries (opt-in: on Mali they also span the CPU recording of a pass)
+    const char *tq = env_on("ORYON_STATS_TIMER") ? "no GL_EXT_disjoint_timer_query" : "off (ORYON_STATS_TIMER=1 enables)";
+    if ((g.escaps & ORY_ESCAP_TIMER_QUERY) && env_on("ORYON_STATS_TIMER")) {
         es.glGetQueryiv(GL_TIME_ELAPSED_EXT, GL_QUERY_COUNTER_BITS_EXT, &s_timer_bits);
         if (s_timer_bits > 0) {
             GLuint q[kRing + 1] = {};
@@ -490,10 +540,17 @@ void perf_install() {
 // Frame start (colour clear of framebuffer 0), called before the clear executes.
 void perf_boundary(uint64_t t) {
     const uint64_t cpu = clock_us(CLOCK_THREAD_CPUTIME_ID);
-    if (!s_sampler_tried) {
+    if (!s_sampler_tried) {                             // first frame: measurement windows start here
         sampler_start();
-        log("perf: cpu sampler %s", s_sampler ? "SIGPROF every 1 ms of render-thread CPU time (kernel-tick granularity)" : s_sampler_why);
+        char cores[80];
+        if (s_big_mask) snprintf(cores, sizeof cores, "big cores mask 0x%x (%u vs %u MHz)", s_big_mask, s_khz_max / 1000, s_khz_min / 1000);
+        else snprintf(cores, sizeof cores, "%s", s_khz_max ? "cores uniform" : "core frequencies unreadable");
+        log("perf: cpu sampler %s | schedstat %s | %s", s_sampler ? "SIGPROF every 1 ms of render-thread CPU time (kernel-tick granularity)" : s_sampler_why,
+            s_sched_fd >= 0 ? "on" : "unavailable", cores);
+        c_prog = c_unif = c_tex = c_vao = c_buf = c_attr = c_vbuf = c_fmt = 0;
+        w_draws0 = g_draws_total;
     }
+    if (t_pres) { ++w.pres_n; w.pres_wall += t - t_pres; w.pres_cpu += cpu - cpu_pres; t_pres = 0; }
     if (f_cur) {
         pass_close(true);                                // tail: the app's swap already submitted it
         Frame &F = frame_rec(f_cur);
@@ -527,13 +584,31 @@ void perf_report(uint64_t t0, uint64_t t1) {
     } else {
         snprintf(smp, sizeof smp, "sampler %s", s_sampler_tried ? s_sampler_why : "pending");
     }
+    char sch[96] = "", big[48] = "", pres[64] = "";
+    uint64_t run = 0, wait = 0;
+    if (sched_read(run, wait)) {
+        snprintf(sch, sizeof sch, " | runnable-waiting %.1f ms/f", (double)(wait - s_sched_wait) / 1e6 / fr);
+        s_sched_run = run; s_sched_wait = wait;
+    }
+    if (s_sampler && s_big_mask) {
+        uint64_t tb = 0, ta = 0;
+        for (int i = 0; i < 16; ++i) { const uint32_t v = __atomic_exchange_n(&r_cpu[i], 0u, __ATOMIC_RELAXED); ta += v; if (s_big_mask & (1u << i)) tb += v; }
+        if (ta) snprintf(big, sizeof big, " | big cores %.0f%%", 100.0 * tb / ta);
+    } else {
+        for (int i = 0; i < 16; ++i) __atomic_store_n(&r_cpu[i], 0u, __ATOMIC_RELAXED);
+    }
+    if (w.pres_n) snprintf(pres, sizeof pres, " | present %.1f ms/f (cpu %.1f)", w.pres_wall / 1000.0 / w.pres_n, w.pres_cpu / 1000.0 / w.pres_n);
     if (w.frames)
-        log("cpu %.2fs: frame %.1f ms | render thread %.1f ms/f (%.0f%%, cpu-bound %.0f%%) [%s] | process %.2f cores | "
-            "calls/f prog %.0f unif %.0f tex %.0f vao %.0f buf %.0f attr %.0f",
+        log("cpu %.2fs: frame %.1f ms | render thread %.1f ms/f (%.0f%%, cpu-bound %.0f%%)%s%s%s | [%s] | process %.2f cores",
             secs, w.period_us / 1000.0 / fr, w.cpu_us / 1000.0 / fr, w.period_us ? 100.0 * w.cpu_us / w.period_us : 0.0,
-            100.0 * w.cpu_bound / fr, smp, cores, c_prog / fr, c_unif / fr, c_tex / fr, c_vao / fr, c_buf / fr, c_attr / fr);
+            100.0 * w.cpu_bound / fr, sch, big, pres, smp, cores);
     else
         log("cpu %.2fs: no frame boundary | [%s] | process %.2f cores", secs, smp, cores);
+    if (w.frames)
+        log("calls %.2fs: per frame draw %.0f prog %.0f unif %.0f tex %.0f vao %.0f bind %.0f attr %.0f vbuf %.0f fmt %.0f",
+            secs, (double)(g_draws_total - w_draws0) / fr, c_prog / fr, c_unif / fr, c_tex / fr, c_vao / fr, c_buf / fr, c_attr / fr,
+            c_vbuf / fr, c_fmt / fr);
+    w_draws0 = g_draws_total;
     char busy[160], tim[96], lag[96];
     if (!s_fence) snprintf(busy, sizeof busy, "busy n/a (%s)", *s_gpu_why ? s_gpu_why : "no fence");
     else if (!w.gframes) snprintf(busy, sizeof busy, "busy n/a (no settled frame)");
@@ -545,7 +620,7 @@ void perf_report(uint64_t t0, uint64_t t1) {
         if (w.fb_other && n > 0 && n < (int)sizeof busy) n += snprintf(busy + n, sizeof busy - n, " other %.1f", w.fb_other / 1000.0 / w.gframes);
         if (n > 0 && n < (int)sizeof busy) snprintf(busy + n, sizeof busy - n, "]");
     }
-    if (!s_timer) snprintf(tim, sizeof tim, "timer n/a");
+    if (!s_timer) snprintf(tim, sizeof tim, "timer off");
     else if (!w.tframes) snprintf(tim, sizeof tim, "timer n/a (no settled frame%s)", w.disjoint ? ", disjoint" : "");
     else {
         int n = fmt_ms(tim, sizeof tim, "timer", w.timer_us, w.tframes);
@@ -558,7 +633,7 @@ void perf_report(uint64_t t0, uint64_t t1) {
     log("gpu %.2fs: %s | %s | %s | %u frames%s", secs, busy, tim, lag, w.gframes > w.tframes ? w.gframes : w.tframes,
         w.overflow ? " (ring overflow)" : "");
     w = Win{};
-    c_prog = c_unif = c_tex = c_vao = c_buf = c_attr = 0;
+    c_prog = c_unif = c_tex = c_vao = c_buf = c_attr = c_vbuf = c_fmt = 0;
     if (s_sampler && ++p_reports % 5 == 0) ranges_build();   // pick up libraries loaded later
 }
 

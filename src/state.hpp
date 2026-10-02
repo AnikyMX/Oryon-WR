@@ -102,8 +102,11 @@ enum : int { CA_VERTEX = 0, CA_NORMAL, CA_COLOR, CA_COLOR2, CA_FOG, CA_TEX0, CA_
 struct ClientArray { const void *ptr; GLuint buf; GLint size; GLenum type; GLsizei stride; };
 
 // ------------------------------------------------------------------ ES object shadowing
-struct AttrCache { GLuint buf; GLint size; GLenum type; GLboolean norm; GLsizei stride; uintptr_t off; };
-struct Vao { GLuint id; uint32_t enabled; GLuint element; AttrCache a[LOC_COUNT]; };
+// Pointer mode (ES 3.0): buf/size/type/norm/stride/off = last glVertexAttribPointer. Binding mode (ES 3.1+): size/type/
+// norm/off = last glVertexAttribFormat (off = relative offset), binding = glVertexAttribBinding; buffers live in b[].
+struct AttrCache { GLuint buf; GLint size; GLenum type; GLboolean norm; GLsizei stride; uintptr_t off; GLuint binding; };
+struct VBind { GLuint buf; uintptr_t off; GLsizei stride; };        // glBindVertexBuffer slot
+struct Vao { GLuint id; uint32_t enabled; GLuint element; AttrCache a[LOC_COUNT]; VBind b[LOC_COUNT]; };
 struct Ring {
     GLuint buf; size_t size, head, seg; uint8_t *map; bool persistent;
     GLsync fence[4]; int open_first, open_last; bool open_valid;
@@ -186,6 +189,8 @@ struct Ctx {
     Vec4 es_const[LOC_COUNT];            // last glVertexAttrib4f value per location
     uint32_t es_const_valid = 0;
     Ring rv{}, ri{};
+    bool vbind = false;                  // ES 3.1 vertex attribute binding for Oryon's VAOs
+    GLint max_reloff = 2047;             // GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET
     GLuint quad_ibo = 0; GLsizei quad_ibo_verts = 0; GLenum quad_ibo_type = 0;
     Imm imm;
     DlState dl;
@@ -211,6 +216,7 @@ bool env_on(const char *name);                   // set and not "", "0", "false"
 void stats_clear(GLbitfield mask);               // frame accounting + periodic report (ORYON_STATS only)
 void stats_install();                            // interpose ES draw entry points for counting
 void perf_install();                             // GPU pass timeline/timer, state counters (src/perf.cpp)
+extern uint64_t g_draws_total;                   // ES draws issued (stats mode only)
 void perf_boundary(uint64_t t);                  // frame start: colour clear of framebuffer 0
 void perf_report(uint64_t t0, uint64_t t1);      // end of a stats window
 ORY_INLINE uint64_t now_us() {

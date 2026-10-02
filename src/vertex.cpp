@@ -129,13 +129,62 @@ static bool quad_ibo_ensure(GLsizei verts) {
 }
 
 // ------------------------------------------------------------------ VAO / attribute caches
-static void vao_create(Vao &v) { memset(&v, 0, sizeof v); es.glGenVertexArrays(1, &v.id); }
+static void vao_create(Vao &v) {
+    memset(&v, 0, sizeof v);
+    es.glGenVertexArrays(1, &v.id);
+    for (GLuint i = 0; i < LOC_COUNT; ++i) v.a[i].binding = i;   // ES default: attribute i reads binding i
+}
 static inline void set_attr(Vao &v, GLuint loc, GLuint buf, GLint size, GLenum type, GLboolean norm, GLsizei stride, uintptr_t off) {
     AttrCache &a = v.a[loc];
     if (a.buf != buf || a.size != size || a.type != type || a.norm != norm || a.stride != stride || a.off != off) {
         es_bind_array(buf);
         es.glVertexAttribPointer(loc, size, type, norm, stride, (const void *)off);
         a.buf = buf; a.size = size; a.type = type; a.norm = norm; a.stride = stride; a.off = off;
+    }
+}
+// ES 3.1 vertex attribute binding: the format of each location (size/type/normalized/relative offset) and its binding
+// slot are cached apart from the buffer bound to the slot. Attributes that share a buffer and stride share one slot, so
+// switching between VBOs with the same layout (Minecraft chunk sections) costs one glBindVertexBuffer instead of a
+// glBindBuffer plus one glVertexAttribPointer per attribute. Without ES 3.1 the pointer path above is used.
+struct AttrSrc { GLuint loc; GLint size; GLenum type; GLboolean norm; uintptr_t off; };
+static inline void set_fmt(Vao &v, GLuint loc, GLint size, GLenum type, GLboolean norm, GLuint rel, GLuint bi) {
+    AttrCache &a = v.a[loc];
+    if (a.size != size || a.type != type || a.norm != norm || a.off != rel) {
+        es.glVertexAttribFormat(loc, size, type, norm, rel);
+        a.size = size; a.type = type; a.norm = norm; a.off = rel;
+    }
+    if (a.binding != bi) { es.glVertexAttribBinding(loc, bi); a.binding = bi; }
+}
+static inline void set_vbuf(Vao &v, GLuint bi, GLuint buf, uintptr_t off, GLsizei stride) {
+    VBind &b = v.b[bi];
+    if (b.buf != buf || b.off != off || b.stride != stride) {
+        es.glBindVertexBuffer(bi, buf, (GLintptr)off, stride);
+        b.buf = buf; b.off = off; b.stride = stride;
+    }
+}
+// Points n attributes at 'buf' with a common stride (0 = each attribute tightly packed on its own).
+static void set_attrs(Vao &V, GLuint buf, GLsizei stride, const AttrSrc *a, int n) {
+    if (!g.vbind) {
+        for (int i = 0; i < n; ++i) set_attr(V, a[i].loc, buf, a[i].size, a[i].type, a[i].norm, stride, a[i].off);
+        return;
+    }
+    if (stride > 0 && n > 0) {                   // one slot for the group: binding index = lowest location
+        uintptr_t base = a[0].off, top = a[0].off; GLuint bi = a[0].loc;
+        for (int i = 1; i < n; ++i) {
+            if (a[i].off < base) base = a[i].off;
+            if (a[i].off > top) top = a[i].off;
+            if (a[i].loc < bi) bi = a[i].loc;
+        }
+        if (top - base <= (uintptr_t)g.max_reloff) {
+            for (int i = 0; i < n; ++i) set_fmt(V, a[i].loc, a[i].size, a[i].type, a[i].norm, (GLuint)(a[i].off - base), bi);
+            set_vbuf(V, bi, buf, base, stride);
+            return;
+        }
+    }
+    for (int i = 0; i < n; ++i) {                // own slot per attribute (binding index = location)
+        const GLsizei st = stride ? stride : a[i].size * type_size(a[i].type);
+        set_fmt(V, a[i].loc, a[i].size, a[i].type, a[i].norm, 0, a[i].loc);
+        set_vbuf(V, a[i].loc, buf, a[i].off, st);
     }
 }
 static inline void set_enabled(Vao &v, uint32_t mask) {
@@ -162,10 +211,18 @@ void set_consts(uint32_t need, const Vec4 &col, const Vec4 &nrm, const Vec4 &col
 }
 static void invalidate_buffer_refs(GLuint id) {
     Vao *vs[2] = {&g.vao_client, &g.vao_imm};
-    for (Vao *v : vs) for (AttrCache &a : v->a) if (a.buf == id) a.size = 0;
+    for (Vao *v : vs) {
+        for (AttrCache &a : v->a) if (a.buf == id) a.size = 0;
+        for (VBind &b : v->b) if (b.buf == id) b.stride = -1;   // a new buffer may reuse the name: rebind
+    }
 }
 
 void vertex_init() {
+    GLint maj = 0, mnr = 0;
+    es.glGetIntegerv(GL_MAJOR_VERSION, &maj); es.glGetIntegerv(GL_MINOR_VERSION, &mnr);
+    g.vbind = (maj > 3 || (maj == 3 && mnr >= 1)) && es.glBindVertexBuffer && es.glVertexAttribFormat && es.glVertexAttribBinding &&
+              !env_on("ORYON_NO_VERTEX_BINDING");
+    if (g.vbind) { GLint r = 0; es.glGetIntegerv(GL_MAX_VERTEX_ATTRIB_RELATIVE_OFFSET, &r); if (r > 0) g.max_reloff = r; }
     ring_create(g.rv, (size_t)8 << 20);
     ring_create(g.ri, (size_t)2 << 20);
     vao_create(g.vao_client);
@@ -288,14 +345,17 @@ static void imm_draw(const ImmLayout &L, const ImmConst &C, GLenum mode, const v
     Vao &V = g.vao_imm;
     es_bind_vao(V.id);
     if (V.element != ib) { es.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib); V.element = ib; }
-    uint32_t am = 1u << LOC_POS;
-    set_attr(V, LOC_POS, vb, L.pos_n, GL_FLOAT, GL_FALSE, L.stride, 0);
-    if (L.vary & AB_COLOR) { set_attr(V, LOC_COLOR, vb, 4, GL_UNSIGNED_BYTE, GL_TRUE, L.stride, L.off_col); am |= 1u << LOC_COLOR; }
-    if (L.vary & AB_NORMAL) { set_attr(V, LOC_NORMAL, vb, 3, GL_FLOAT, GL_FALSE, L.stride, L.off_nrm); am |= 1u << LOC_NORMAL; }
-    if (L.vary & AB_COLOR2) { set_attr(V, LOC_COLOR2, vb, 4, GL_UNSIGNED_BYTE, GL_TRUE, L.stride, L.off_col2); am |= 1u << LOC_COLOR2; }
-    if (L.vary & AB_FOG) { set_attr(V, LOC_FOG, vb, 1, GL_FLOAT, GL_FALSE, L.stride, L.off_fog); am |= 1u << LOC_FOG; }
+    AttrSrc as[LOC_COUNT]; int na = 0;
+    as[na++] = AttrSrc{LOC_POS, L.pos_n, GL_FLOAT, GL_FALSE, 0};
+    if (L.vary & AB_COLOR) as[na++] = AttrSrc{LOC_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, L.off_col};
+    if (L.vary & AB_NORMAL) as[na++] = AttrSrc{LOC_NORMAL, 3, GL_FLOAT, GL_FALSE, L.off_nrm};
+    if (L.vary & AB_COLOR2) as[na++] = AttrSrc{LOC_COLOR2, 4, GL_UNSIGNED_BYTE, GL_TRUE, L.off_col2};
+    if (L.vary & AB_FOG) as[na++] = AttrSrc{LOC_FOG, 1, GL_FLOAT, GL_FALSE, L.off_fog};
     for (int u = 0; u < MAX_TEX_UNITS; ++u)
-        if (L.vary & (AB_TEX0 << u)) { set_attr(V, (GLuint)(LOC_TEX0 + u), vb, L.tex_n[u], GL_FLOAT, GL_FALSE, L.stride, L.off_tex[u]); am |= 1u << (LOC_TEX0 + u); }
+        if (L.vary & (AB_TEX0 << u)) as[na++] = AttrSrc{(GLuint)(LOC_TEX0 + u), L.tex_n[u], GL_FLOAT, GL_FALSE, L.off_tex[u]};
+    set_attrs(V, vb, L.stride, as, na);
+    uint32_t am = 0;
+    for (int i = 0; i < na; ++i) am |= 1u << as[i].loc;
     set_enabled(V, am);
     set_consts(reads & ~am, C.col, C.nrm, C.col2, C.fog, C.tex);
     es.glDrawElementsBaseVertex(mode, nidx, itype, (const void *)ioff, (GLint)(voff / L.stride));
@@ -435,11 +495,17 @@ static uint32_t setup_legacy(Vao &V, uint32_t reads, GLint B, GLsizei n, GLint *
         if (!ca.buf) { ++nclient; if (ca.type == GL_DOUBLE) dbl = true; }
     }
     uint32_t mask = 0;
-    if (!nclient) {
+    if (!nclient) {                               // all from VBOs: one binding per (buffer, stride) group
+        bool done[CA_COUNT] = {};
         for (int i = 0; i < na; ++i) {
-            const A &a = arr[i];
-            set_attr(V, a.loc, a.c->buf, a.c->size, a.c->type, a.norm, a.c->stride, (uintptr_t)a.c->ptr);
-            mask |= 1u << a.loc;
+            if (done[i]) continue;
+            AttrSrc as[CA_COUNT]; int n = 0;
+            for (int j = i; j < na; ++j) {
+                if (done[j] || arr[j].c->buf != arr[i].c->buf || arr[j].c->stride != arr[i].c->stride) continue;
+                as[n++] = AttrSrc{arr[j].loc, arr[j].c->size, arr[j].c->type, arr[j].norm, (uintptr_t)arr[j].c->ptr};
+                done[j] = true; mask |= 1u << arr[j].loc;
+            }
+            set_attrs(V, arr[i].c->buf, arr[i].c->stride, as, n);
         }
         *es_base = B;
         return mask;
@@ -463,11 +529,13 @@ static uint32_t setup_legacy(Vao &V, uint32_t reads, GLint B, GLsizei n, GLint *
             size_t align = (S % 4) ? (size_t)S * 4 : (size_t)S;
             GLuint buf; size_t off;
             ring_upload(g.rv, minp + (size_t)B * (size_t)S, bytes, align, &buf, &off);
+            AttrSrc as[CA_COUNT];
             for (int i = 0; i < na; ++i) {
                 const A &a = arr[i];
-                set_attr(V, a.loc, buf, a.c->size, a.c->type, a.norm, S, (uintptr_t)((const uint8_t *)a.c->ptr - minp));
+                as[i] = AttrSrc{a.loc, a.c->size, a.c->type, a.norm, (uintptr_t)((const uint8_t *)a.c->ptr - minp)};
                 mask |= 1u << a.loc;
             }
+            set_attrs(V, buf, S, as, na);
             *es_base = (GLint)(off / (size_t)S);
             return mask;
         }
@@ -478,7 +546,10 @@ static uint32_t setup_legacy(Vao &V, uint32_t reads, GLint B, GLsizei n, GLint *
     GLsizei rows = mixed ? B + n : n;
     for (int i = 0; i < na; ++i) {
         const A &a = arr[i];
-        if (a.c->buf) { set_attr(V, a.loc, a.c->buf, a.c->size, a.c->type, a.norm, a.c->stride, (uintptr_t)a.c->ptr); mask |= 1u << a.loc; continue; }
+        if (a.c->buf) {
+            const AttrSrc s1{a.loc, a.c->size, a.c->type, a.norm, (uintptr_t)a.c->ptr};
+            set_attrs(V, a.c->buf, a.c->stride, &s1, 1); mask |= 1u << a.loc; continue;
+        }
         bool d = a.c->type == GL_DOUBLE;
         GLenum ty = d ? GL_FLOAT : a.c->type;
         GLsizei esz = d ? a.c->size * 4 : a.esz;
@@ -495,7 +566,8 @@ static uint32_t setup_legacy(Vao &V, uint32_t reads, GLint B, GLsizei n, GLint *
         }
         if (tmp) { ring_upload(g.rv, tmp, bytes, 4, &buf, &off); free(tmp); }
         else ring_commit(g.rv);
-        set_attr(V, a.loc, buf, a.c->size, ty, a.norm, esz, (uintptr_t)off);
+        const AttrSrc s1{a.loc, a.c->size, ty, a.norm, (uintptr_t)off};
+        set_attrs(V, buf, esz, &s1, 1);
         mask |= 1u << a.loc;
     }
     *es_base = mixed ? B : 0;                     // mixed: absolute rows; separate: rows start at 0

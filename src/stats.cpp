@@ -16,9 +16,10 @@ bool env_on(const char *name) {
 static decltype(EsFuncs::glDrawArrays) s_draw_arrays;
 static decltype(EsFuncs::glDrawElements) s_draw_elements;
 static decltype(EsFuncs::glDrawElementsBaseVertex) s_draw_elements_bv;
-static void GL_APIENTRY cnt_draw_arrays(GLenum m, GLint f, GLsizei c) { ++g.st.es_draws; s_draw_arrays(m, f, c); }
-static void GL_APIENTRY cnt_draw_elements(GLenum m, GLsizei c, GLenum t, const void *i) { ++g.st.es_draws; s_draw_elements(m, c, t, i); }
-static void GL_APIENTRY cnt_draw_elements_bv(GLenum m, GLsizei c, GLenum t, const void *i, GLint b) { ++g.st.es_draws; s_draw_elements_bv(m, c, t, i, b); }
+uint64_t g_draws_total = 0;              // monotonic ES draw count (stats mode), read by the perf probes
+static void GL_APIENTRY cnt_draw_arrays(GLenum m, GLint f, GLsizei c) { ++g.st.es_draws; ++g_draws_total; s_draw_arrays(m, f, c); }
+static void GL_APIENTRY cnt_draw_elements(GLenum m, GLsizei c, GLenum t, const void *i) { ++g.st.es_draws; ++g_draws_total; s_draw_elements(m, c, t, i); }
+static void GL_APIENTRY cnt_draw_elements_bv(GLenum m, GLsizei c, GLenum t, const void *i, GLint b) { ++g.st.es_draws; ++g_draws_total; s_draw_elements_bv(m, c, t, i, b); }
 void stats_install() {
     if (s_draw_arrays) return;
     s_draw_arrays = es.glDrawArrays; es.glDrawArrays = cnt_draw_arrays;

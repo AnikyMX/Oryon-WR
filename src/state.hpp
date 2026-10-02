@@ -11,7 +11,7 @@ enum : uint32_t {
     ORY_ESCAP_BGRA = 1u << 3, ORY_ESCAP_CLIP_DISTANCE = 1u << 4, ORY_ESCAP_POLYGON_MODE = 1u << 5,
     ORY_ESCAP_MULTI_DRAW = 1u << 6, ORY_ESCAP_DEPTH_CLAMP = 1u << 7, ORY_ESCAP_NORM16 = 1u << 8,
     ORY_ESCAP_COLOR_BUFFER_FLOAT = 1u << 9, ORY_ESCAP_BLEND_FUNC_EXTENDED = 1u << 10,
-    ORY_ESCAP_POLYGON_OFFSET_CLAMP = 1u << 11,
+    ORY_ESCAP_POLYGON_OFFSET_CLAMP = 1u << 11, ORY_ESCAP_TIMER_QUERY = 1u << 12,
 };
 
 // Reported desktop context (LWJGL parses GL_VERSION, then GL_MAJOR_VERSION/GL_MINOR_VERSION for >= 3.0).
@@ -210,11 +210,13 @@ ORY_INLINE void init_only() { if (UNLIKELY(g.hooks & HOOK_INIT)) ctx_init(); }
 bool env_on(const char *name);                   // set and not "", "0", "false", "off", "no"
 void stats_clear(GLbitfield mask);               // frame accounting + periodic report (ORYON_STATS only)
 void stats_install();                            // interpose ES draw entry points for counting
+void perf_install();                             // GPU pass timeline/timer, state counters (src/perf.cpp)
+void perf_boundary(uint64_t t);                  // frame start: colour clear of framebuffer 0
+void perf_report(uint64_t t0, uint64_t t1);      // end of a stats window
 ORY_INLINE uint64_t now_us() {
     timespec t; clock_gettime(CLOCK_MONOTONIC, &t);
     return (uint64_t)t.tv_sec * 1000000u + (uint64_t)t.tv_nsec / 1000u;
 }
-// Scoped timer for rare events: count, accumulated and (optionally) maximum duration.
 // Upload accounting, active only with ORYON_STATS (one predictable branch otherwise).
 struct StatUpload {
     uint32_t &n, &mx; uint64_t &amount, &us; uint64_t add, t0;
@@ -222,6 +224,7 @@ struct StatUpload {
         : n(n_), mx(mx_), amount(amount_), us(us_), add(add_), t0(UNLIKELY(g.st.on) ? now_us() : 0) {}
     ~StatUpload() { if (UNLIKELY(t0)) { uint64_t d = now_us() - t0; ++n; amount += add; us += d; if (d > mx) mx = (uint32_t)d; } }
 };
+// Scoped timer for rare events: count, accumulated and (optionally) maximum duration.
 struct StatTimer {
     uint32_t &n; uint64_t &acc; uint32_t *mx; uint64_t t0;
     StatTimer(uint32_t &n_, uint64_t &acc_, uint32_t *mx_ = nullptr) : n(n_), acc(acc_), mx(mx_), t0(now_us()) {}

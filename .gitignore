@@ -3,6 +3,7 @@ build-*/
 __pycache__/
 *.pyc
 tools/bench/bench
+tools/bench/perfprobe
 tools/bench/*.so
 # regenerable jar extraction (tools/jarscan.py); generator inputs are kept
 tools/db/natives.json

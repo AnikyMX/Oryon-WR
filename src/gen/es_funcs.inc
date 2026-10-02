@@ -358,6 +358,7 @@ ES_FN(void, glVertexAttribPointer, (GLuint index, GLint size, GLenum type, GLboo
 ES_FN(void, glVertexBindingDivisor, (GLuint bindingindex, GLuint divisor), 0)
 ES_FN(void, glViewport, (GLint x, GLint y, GLsizei width, GLsizei height), 0)
 ES_FN(void, glWaitSync, (GLsync sync, GLbitfield flags, GLuint64 timeout), 0)
+ES_FN(void, glGetQueryObjectui64vEXT, (GLuint id, GLenum pname, GLuint64 *params), 1)
 ES_FN(void, glBufferStorageEXT, (GLenum target, GLsizeiptr size, const void *data, GLbitfield flags), 1)
 ES_FN(void, glMultiDrawArraysEXT, (GLenum mode, const GLint *first, const GLsizei *count, GLsizei primcount), 1)
 ES_FN(void, glMultiDrawElementsEXT, (GLenum mode, const GLsizei *count, GLenum type, const void *const*indices, GLsizei primcount), 1)

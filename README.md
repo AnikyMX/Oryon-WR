@@ -18,6 +18,15 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
   `0`/`false`/`off`/`no`. Log Oryon juga ditulis ke stderr agar masuk latestlog launcher.
   `ORYON_STATS_SLOW_MS=<ms>` (default 16): dengan `ORYON_STATS`, setiap kompilasi program FFP yang lebih lama dicatat
   beserta deskripsi state-nya.
+- Probe performa (hanya dengan `ORYON_STATS=1`, dua baris tambahan per detik):
+  - `cpu`: waktu frame, waktu CPU render thread per frame (+ % frame cpu-bound), pembagian sampel CPU render thread
+    (oryon / gl driver / jvm / java JIT / libc / other; SIGPROF tiap 1 ms waktu CPU, granularitas tick kernel),
+    CPU proses (core), dan panggilan state per frame (program, uniform, texture, VAO, buffer, attrib pointer).
+  - `gpu`: waktu sibuk GPU per frame dari timeline fence EGL per render pass (batas pass = ganti framebuffer gambar
+    dan awal frame; dikurangi floor round-trip fence), pembagian per framebuffer, % frame gpu-bound, timer
+    `GL_TIME_ELAPSED_EXT` bila ada (pass terakhir sebelum swap dicetak terpisah sebagai batas atas `tail`), dan lag
+    (sisa kerja GPU saat frame berikutnya mulai).
+  - `ORYON_STATS_GPU=0` mematikan fence/timer query, `ORYON_STATS_PROFILE=0` mematikan sampler CPU.
 - Cache program FFP persisten: binary driver disimpan per kunci state di `ORYON_CACHE_DIR` (default `$TMPDIR/oryon`,
   lalu `$HOME/.cache/oryon`) dan dimuat saat init konteks, jadi kombinasi state yang pernah muncul tidak dikompilasi
   lagi saat bermain. Binary hanya dipakai bila hash (string driver + VS + FS hasil generator) cocok; file rusak dibuang,
@@ -31,13 +40,16 @@ Wrapper renderer Minecraft Java Edition di Android (fokus **1.12.2**, target s.d
 ## Alur kerja (Python3; sumber kebenaran = kedua jar)
 `tools/jarscan.py` (jar → `tools/db`) → `tools/gen.py` (→ `src/gen`) → `tools/annotate.py` (anotasi jar + hook display list)
 → `tools/validate.py` (cross-reference) → `tools/test_mesa.py`, `test_ffp.py`, `test_dlist.py`, `test_glsl.py` (Mesa EGL + GLES 3.2),
-`tools/test_stats.py` (diagnostik), `tools/test_progcache.py` (cache program), `tools/bench/` (overhead CPU). Path jar: `ORYON_MC_JAR`, `ORYON_LWJGL_JAR`.
+`tools/test_stats.py` (diagnostik), `tools/test_progcache.py` (cache program), `tools/test_perf.py` (probe GPU/CPU),
+`tools/check_android.py` (kompilasi `-Werror` untuk aarch64-linux-android24 dengan header bionic, `ORYON_BIONIC`),
+`tools/bench/` (overhead CPU). Path jar: `ORYON_MC_JAR`, `ORYON_LWJGL_JAR`.
 
 ## Modul
 | File | Isi |
 |---|---|
 | `gles.cpp` | loader GLES (dlopen/dlsym), init konteks lazy (hook tanpa biaya hot-path) |
 | `stats.cpp` | diagnostik opsional `ORYON_STATS` (nol instruksi tambahan di jalur draw saat mati) |
+| `perf.cpp` | probe `ORYON_STATS`: timeline fence GPU per pass, timer query, sampler CPU, penghitung state |
 | `core.cpp` | error model, string/versi, kueri virtual `glGet*` |
 | `matrix.cpp` | stack MODELVIEW/PROJECTION/TEXTURE (CPU) |
 | `ffp.cpp`, `ffp_prog.cpp` | state fixed-function → kunci kanonik (COMBINE setara MODULATE/REPLACE dilebur, mode fog via uniform) → GLSL ES 3.20 ter-cache (memori + disk), uniform ber-versi |

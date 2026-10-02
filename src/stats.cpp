@@ -39,6 +39,7 @@ static void report(uint64_t t) {
         s.ffp_n, s.ffp_us / 1000.0, s.ffp_max / 1000.0, s.link_n, s.link_us / 1000.0, s.link_max / 1000.0,
         s.dl_n, s.dl_us / 1000.0, s.wait_n, s.wait_us / 1000.0, s.tex_n, (double)s.tex_px / 1e6, s.tex_us / 1000.0, s.tex_max / 1000.0,
         s.buf_n, (double)s.buf_bytes / 1048576.0, s.buf_us / 1000.0, s.buf_max / 1000.0, s.rb_n, s.rb_us / 1000.0);
+    perf_report(s.t_win, t);
     const uint64_t tf = s.t_frame;
     s = Stats{};
     s.on = true; s.t_frame = tf; s.t_win = t; s.ring_prev = used;
@@ -56,6 +57,7 @@ void stats_clear(GLbitfield mask) {
     if (fb == 0) {
         if (s.t_frame && t - s.t_frame > s.worst_us) s.worst_us = (uint32_t)(t - s.t_frame);
         s.t_frame = t; ++s.frames;
+        perf_boundary(t);
     }
     if (t - s.t_win >= 1000000u) report(t);
 }

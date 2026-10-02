@@ -237,7 +237,7 @@ with open(os.path.join(GEN, 'dlist_gen.cpp'), 'w') as f:
     f.write(HDR + '#include "../oryon.hpp"\n\n' + '\n'.join(sorted(set(dl_ext))) + '\n\nnamespace ory {\n' + '\n'.join(dl_code) + '\n} // namespace ory\n')
 
 # ------------------------------------------------------------------ ES function table
-ES_EXT_USED = ['glBufferStorageEXT', 'glMultiDrawArraysEXT', 'glMultiDrawElementsEXT', 'glPolygonModeNV',
+ES_EXT_USED = ['glGetQueryObjectui64vEXT', 'glBufferStorageEXT', 'glMultiDrawArraysEXT', 'glMultiDrawElementsEXT', 'glPolygonModeNV',
                'glPolygonOffsetClampEXT', 'glBindFragDataLocationEXT', 'glClipControlEXT']
 with open(os.path.join(GEN, 'es_funcs.inc'), 'w') as f:
     f.write(HDR + '// ES_FN(ret, name, params, ext)\n')

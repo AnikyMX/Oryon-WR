@@ -103,6 +103,23 @@ enum_conflict = sorted(u for u in used if u in enums and u in ESDEF and enums[u]
 gd = open(os.path.join(SRC, 'gen', 'gl_desktop.hpp')).read()
 gd_bad = [n for n, v in re.findall(r'#define (GL_\w+) 0x([0-9A-F]+)', gd) if enums.get(n) != int(v, 16)]
 for u in enum_unknown: errors.append('unknown enum ' + u)
+# EGL (ORYON_STATS probes): tokens and entry points must exist in the Khronos EGL headers; types come from the
+# headers via decltype, so only names need checking. EGL constants are not in the LWJGL jar.
+EGLDEF = khr.egl_defines()
+egl_txt = {}
+for p in files():
+    t = open(p).read()
+    if 'EGL_' in t or '"egl' in t: egl_txt[p] = t
+egl_used = set(); egl_fns = set()
+for t in egl_txt.values():
+    egl_used |= set(re.findall(r'\bEGL_[A-Z0-9_]+\b', t))
+    egl_fns |= set(re.findall(r'"(egl[A-Z]\w+)"', t)) | set(re.findall(r'decltype\(&(egl[A-Z]\w+)\)', t))
+egl_used -= {'EGL_NO_PLATFORM_SPECIFIC_TYPES', 'EGL_EGLEXT_PROTOTYPES'}
+egl_hdr = ''.join(open(os.path.join(khr.INC, 'EGL', h)).read() for h in ('egl.h', 'eglext.h'))
+egl_unknown = sorted(u for u in egl_used if u not in EGLDEF and not re.search(r'#define\s+' + u + r'\b', egl_hdr))   # EGL_CAST() defines
+egl_fn_bad = sorted(f for f in egl_fns if not re.search(r'EGLAPIENTRY\s+' + f + r'\s*\(', egl_hdr))
+for u in egl_unknown: errors.append('unknown EGL token ' + u)
+for f in egl_fn_bad: errors.append('EGL entry point not declared in Khronos headers: ' + f)
 for u in enum_conflict: errors.append('enum value conflict jar/ES ' + u)
 for u in gd_bad: errors.append('gl_desktop.hpp value != jar ' + u)
 
@@ -156,6 +173,7 @@ print('== VALIDATION (src vs 1.12.2.jar + lwjgl-glfw-classes.jar) ==')
 print('exports: %d | ABI match jar JNI: %d | jar refs verified: %d (bad %d) | NativeType soft diffs: %d' % (len(exports), abi_ok, ref_ok, ref_bad, nt_mismatch))
 print('same-name GLES prototypes: %d checked, %d differ' % (sum(1 for n in exports if n in ES), strict_es))
 print('enums used: %d | unknown: %d | jar/ES conflicts: %d | gl_desktop.hpp bad: %d' % (len(used), len(enum_unknown), len(enum_conflict), len(gd_bad)))
+print('EGL (stats probes): tokens %d (unknown %d) | entry points %d (undeclared %d) vs Khronos headers' % (len(egl_used), len(egl_unknown), len(egl_fns), len(egl_fn_bad)))
 print('MC 1.12.2 GL functions: %d | exported: %d | still stub/noop: %d' % (len(mc_req), len(mc_req) - len(mc_missing), len(mc_stub)))
 print('LWJGL flag semantics (bytecode): checkFunctions %s | reportMissing -> %s | always-true: %s' % (
       SEM.get('checkFunctions', '?'), str(SEM.get('reportMissing', '?')).lower(), ' '.join(SEM.get('always_true', [])) or 'none'))

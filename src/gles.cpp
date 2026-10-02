@@ -47,6 +47,7 @@ __attribute__((constructor)) void load_es() {
     static const char *const kEgl[] = {"libEGL.so", "libEGL.so.1", nullptr};
     void *hg = open_first("ORYON_GLES_LIB", kGles);
     void *he = open_first("ORYON_EGL_LIB", kEgl);
+    g_egl_lib = he;
     typedef void *(*Gpa)(const char *);
     Gpa gpa = he ? (Gpa)dlsym(he, "eglGetProcAddress") : nullptr;
     int miss = 0;
@@ -71,6 +72,7 @@ const EsExtMap k_esext[] = {
     {"GL_EXT_texture_norm16", ORY_ESCAP_NORM16}, {"GL_EXT_color_buffer_float", ORY_ESCAP_COLOR_BUFFER_FLOAT},
     {"GL_EXT_blend_func_extended", ORY_ESCAP_BLEND_FUNC_EXTENDED},
     {"GL_EXT_polygon_offset_clamp", ORY_ESCAP_POLYGON_OFFSET_CLAMP},
+    {"GL_EXT_disjoint_timer_query", ORY_ESCAP_TIMER_QUERY},
 };
 struct DeskExt { const char *name; uint32_t need; };
 const DeskExt k_desk[] = {
@@ -135,7 +137,10 @@ void ctx_init() {
     while (es.glGetError() != GL_NO_ERROR) {}           // never leak init-time state into the app's error flag
     log("init " ORYON_VERSION ": %s | %s | ES ext mask 0x%x | desktop ext %d | stream %s | max tex %d",
         ver, rend ? rend : "?", g.escaps, g.ext_count, g.rv.persistent ? "persistent" : "map-unsync", g.es_max_tex_size);
-    if (g.st.on) log("stats enabled: one summary line per second (frame = colour clear of framebuffer 0)");
+    if (g.st.on) {
+        log("stats enabled: one summary line per second (frame = colour clear of framebuffer 0)");
+        perf_install();
+    }
     ffp_cache_init();
 }
 

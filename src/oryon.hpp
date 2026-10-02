@@ -41,6 +41,7 @@ struct EsFuncs {
 #undef ES_FN
 };
 extern EsFuncs es;
+extern void *g_egl_lib;                 // EGL library handle (load_es), used by the ORYON_STATS probes
 void log(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
 } // namespace ory
 
